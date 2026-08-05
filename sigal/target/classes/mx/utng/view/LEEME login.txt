@@ -1,0 +1,44 @@
+SIGAL - Pantalla de Login (solo esto)
+=========================================
+
+Archivos:
+- fx_login.fxml          -> la pantalla
+- styles.css              -> SOLO los estilos del login
+- img/logo.png             -> logo sin fondo
+- img/campus_login.jpg     -> foto de fondo del panel izquierdo
+- LoginController.java    -> controller (ojito de contraseña + botón)
+
+DÓNDE VA CADA COSA EN TU PROYECTO
+---------------------------------------
+tu-proyecto/
+└── src/
+    └── main/
+        ├── java/
+        │   └── app/
+        │       └── controllers/
+        │           └── LoginController.java
+        └── resources/
+            └── app/
+                └── view/
+                    ├── fx_login.fxml
+                    ├── styles.css
+                    └── img/
+                        ├── logo.png
+                        └── campus_login.jpg
+
+Si ya tienes un styles.css en tu carpeta view (por ejemplo el de
+otra pantalla), NO lo reemplaces: copia/pega el contenido de este
+styles.css al final del que ya tienes. Todas las clases de aquí
+empiezan con "login-" o "input-", así que no deberían pisar nada
+de tus otras pantallas.
+
+Si tu paquete no se llama "app", cambia:
+  - "package app.controllers;" en LoginController.java
+  - el fx:controller="app.controllers.LoginController" en fx_login.fxml
+
+QUÉ HACE EL CONTROLLER
+---------------------------------------
+- El ojito 👁 sí funciona: muestra/oculta la contraseña real.
+- Al presionar "Iniciar sesión" junta usuario/contraseña/
+  recordarme (por ahora los imprime en consola). El TODO en
+  onIniciarSesion() es donde conectas tu validación real.

@@ -1,0 +1,360 @@
+/* =========================================================
+   SIGAL - Tema "Oscuro"
+   Se aplica a nivel de Scene (ThemeManager.apply) y usa !important
+   porque cada pantalla (Asignaciones, Horarios, Profesores, Cuenta,
+   Espacios...) ya trae sus propios colores fijos en su .css local,
+   así que sin !important esas pantallas ganarían la pelea de cascada
+   y el tema nunca se vería fuera de Ajustes/Acerca.
+
+   IMPORTANTE: los nombres de clase de aquí abajo son los REALES que
+   usa cada pantalla (revisa fx_menu.fxml / styles_menu.css / etc.).
+   Antes esta sección usaba nombres que no existían en ningún FXML
+   (.sidebar, .topbar-title, .chip-title...) por eso no hacía nada.
+   ========================================================= */
+
+/* ---------- Fondo general (aplica a TODAS las pantallas) ---------- */
+.menu-root, .page-root, .ajustes-root, .acerca-root, .app-root, .menu-content-bg {
+    -fx-background-color: #0a0e1a !important;
+}
+
+/* ---------- Sidebar ---------- */
+.menu-sidebar {
+    -fx-background-color: rgba(10,14,26,0.95) !important;
+}
+.nav-item-label {
+    -fx-text-fill: #b7c3e0 !important;
+}
+.nav-item:hover .nav-item-label {
+    -fx-text-fill: white !important;
+}
+.nav-item-active .nav-item-label {
+    -fx-text-fill: white !important;
+}
+.menu-sidebar-tagline {
+    -fx-text-fill: #6c7aa0 !important;
+}
+
+/* ---------- Topbar / bienvenida ---------- */
+.menu-welcome-title, .menu-topchip-title, .chip-title, .topbar-title {
+    -fx-text-fill: white !important;
+}
+.menu-welcome-role, .menu-topchip-sub, .chip-sub, .topbar-sub {
+    -fx-text-fill: #8fa0c9 !important;
+}
+.menu-avatar-chevron {
+    -fx-text-fill: #8fa0c9 !important;
+}
+
+/* ---------- Tarjetas / paneles (todas las pantallas) ---------- */
+.card, .panel-card, .panel-card-compact {
+    -fx-background-color: rgba(15,20,40,0.7) !important;
+    -fx-border-color: rgba(120,150,255,0.45) !important;
+    -fx-border-width: 1.4 !important;
+}
+
+/* ---------- Ventanas de confirmación / alertas (Profesores, Horarios, Cuenta, Admin) ---------- */
+.themed-dialog, .dialog-reserva, .confirm-dialog {
+    -fx-background-color: #10152c !important;
+}
+.themed-dialog > *.header-panel, .dialog-reserva .header-panel, .confirm-dialog .header-panel {
+    -fx-background-color: #10152c !important;
+}
+.themed-dialog > *.content, .dialog-reserva .content, .confirm-dialog .content {
+    -fx-background-color: #10152c !important;
+}
+.themed-dialog .button-bar, .dialog-reserva .button-bar {
+    -fx-background-color: #10152c !important;
+}
+.page-title, .card-title, .panel-title, .empty-title, .modal-title,
+.notif-title, .save-title, .info-title, .theme-label, .field-value,
+.account-menu-name, .dialog-titulo {
+    -fx-text-fill: white !important;
+}
+.page-subtitle, .card-subtitle, .panel-subtitle-muted, .field-label,
+.stat-label, .results-label, .notif-desc, .save-subtitle, .footer-text,
+.account-menu-role, .empty-text, .cell-detalle-text, .legend-text,
+.legend-title, .dialog-subtitulo {
+    -fx-text-fill: #8fa0c9 !important;
+}
+
+/* ---------- Campos de formulario (todas las pantallas) ---------- */
+.input-box, .input-combo, .field-combo, .field-input, .input-date,
+.view-toggle-group {
+    -fx-background-color: #10152c !important;
+    -fx-border-color: rgba(120,150,255,0.25) !important;
+}
+.input-field, .field-input {
+    -fx-text-fill: #dbe2f5 !important;
+}
+
+/* ---------- Tablas ---------- */
+.data-table .column-header-background, .asig-table .column-header-background {
+    -fx-background-color: #0a0e1a !important;
+}
+.data-table .table-row-cell, .asig-table .table-row-cell {
+    -fx-background-color: #10152c !important;
+}
+.data-table .table-row-cell:odd, .asig-table .table-row-cell:odd {
+    -fx-background-color: #0a0e1a !important;
+}
+.data-table .table-cell, .asig-table .table-cell {
+    -fx-text-fill: #dbe2f5 !important;
+}
+
+/* =========================================================
+   A partir de aquí: colores propios de Ajustes / Acerca del
+   sistema (no compiten con ningún .css local porque esas dos
+   pantallas no cargan hoja de estilos propia).
+   ========================================================= */
+
+.sidebar-logo {
+    -fx-text-fill: #6fd3ff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #4fc3ff, 10, 0.3, 0, 0);
+}
+
+.sidebar-tagline {
+    -fx-text-fill: #6c7aa0;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-max-width: 180px;
+}
+
+.header-icon-box {
+    -fx-background-color: rgba(162,89,255,0.18);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(162,89,255,0.4);
+    -fx-border-radius: 14;
+    -fx-min-width: 52;
+    -fx-min-height: 52;
+    -fx-max-width: 52;
+    -fx-max-height: 52;
+}
+.header-icon {
+    -fx-font-size: 22px;
+}
+
+.ajustes-content, .acerca-content, .app-content {
+    -fx-background-color: #0a0e1a;
+}
+
+.avatar-circle {
+    -fx-fill: rgba(120,150,255,0.15);
+    -fx-stroke: #7b2ff7;
+    -fx-stroke-width: 1.5;
+}
+.avatar-icon {
+    -fx-font-size: 28px;
+}
+
+.link-button {
+    -fx-background-color: rgba(120,150,255,0.10);
+    -fx-text-fill: #6fd3ff;
+    -fx-font-size: 12.5px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 14 12 14;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.link-button:hover {
+    -fx-background-color: rgba(120,150,255,0.18);
+}
+
+/* notificaciones */
+.notif-row {
+    -fx-background-color: rgba(20,26,50,0.5);
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+    -fx-alignment: CENTER_LEFT;
+}
+.notif-icon-blue {
+    -fx-font-size: 16px;
+    -fx-background-color: rgba(79,195,255,0.18);
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+}
+.notif-icon-orange {
+    -fx-font-size: 16px;
+    -fx-background-color: rgba(255,180,60,0.18);
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+}
+.notif-icon-green {
+    -fx-font-size: 16px;
+    -fx-background-color: rgba(46,204,113,0.18);
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+}
+.notif-status {
+    -fx-text-fill: #4ee08a;
+    -fx-font-size: 9.5px;
+    -fx-font-weight: bold;
+}
+.notif-status-off {
+    -fx-text-fill: #6c7aa0;
+    -fx-font-size: 9.5px;
+    -fx-font-weight: bold;
+}
+
+.switch {
+    -fx-background-color: #47506b, white;
+    -fx-background-radius: 20, 18;
+    -fx-background-insets: 0, 3 25 3 3;
+    -fx-text-fill: transparent;
+    -fx-min-width: 46;
+    -fx-pref-width: 46;
+    -fx-max-width: 46;
+    -fx-min-height: 24;
+    -fx-pref-height: 24;
+    -fx-max-height: 24;
+    -fx-cursor: hand;
+}
+.switch:selected {
+    -fx-background-color: linear-gradient(to right, #7b2ff7, #4ee08a), white;
+    -fx-background-insets: 0, 3 3 3 25;
+}
+
+.info-box {
+    -fx-background-color: rgba(162,89,255,0.10);
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+    -fx-border-color: rgba(162,89,255,0.25);
+    -fx-border-radius: 10;
+}
+.info-text {
+    -fx-text-fill: #b7c3e0;
+    -fx-font-size: 10.5px;
+}
+
+/* temas */
+.theme-card {
+    -fx-background-color: rgba(20,26,50,0.5);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(120,150,255,0.2);
+    -fx-border-radius: 12;
+    -fx-padding: 18;
+    -fx-cursor: hand;
+}
+.theme-card:hover {
+    -fx-border-color: rgba(120,150,255,0.5);
+}
+.theme-card-selected {
+    -fx-background-color: rgba(123,47,247,0.15);
+    -fx-background-radius: 12;
+    -fx-border-color: #a259ff;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-padding: 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(162,89,255,0.45), 14, 0.25, 0, 3);
+}
+.theme-icon {
+    -fx-font-size: 22px;
+}
+
+/* guardar */
+.save-bar {
+    -fx-background-color: rgba(15,20,40,0.7);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(120,150,255,0.20);
+    -fx-border-radius: 14;
+    -fx-padding: 18 22 18 22;
+}
+.save-icon {
+    -fx-font-size: 20px;
+}
+.btn-guardar {
+    -fx-background-color: linear-gradient(to right, #7b2ff7 0%, #a259ff 100%);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12.5px;
+    -fx-background-radius: 10;
+    -fx-padding: 12 22 12 22;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(162,89,255,0.5), 14, 0.25, 0, 3);
+}
+.btn-guardar:hover {
+    -fx-effect: dropshadow(gaussian, rgba(162,89,255,0.8), 18, 0.3, 0, 4);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.brand-title {
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #4fc3ff, 12, 0.35, 0, 0);
+}
+.brand-subtitle {
+    -fx-text-fill: #b7c3e0;
+    -fx-font-size: 13px;
+}
+.divider {
+    -fx-background-color: linear-gradient(to right, #4fc3ff 0%, #a259ff 100%);
+    -fx-background-radius: 4;
+}
+.brand-desc {
+    -fx-text-fill: #b7c3e0;
+    -fx-font-size: 12.5px;
+}
+
+.info-row {
+    -fx-padding: 14 4 14 4;
+    -fx-alignment: TOP_LEFT;
+}
+.info-divider {
+    -fx-background-color: rgba(120,150,255,0.15);
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+}
+.info-icon-box {
+    -fx-background-color: rgba(162,89,255,0.15);
+    -fx-background-radius: 10;
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-max-width: 40;
+    -fx-max-height: 40;
+}
+.info-icon {
+    -fx-font-size: 16px;
+}
+
+.team-member {
+    -fx-text-fill: #b7c3e0;
+    -fx-font-size: 12px;
+}
+.team-group-label {
+    -fx-text-fill: #8fa0c9;
+    -fx-font-size: 12px;
+}
+.team-group-value {
+    -fx-text-fill: #a259ff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.confirm-dialog {
+    -fx-background-color: #141a30;
+}
+.confirm-dialog .content.label {
+    -fx-text-fill: #dbe2f5;
+    -fx-font-size: 13px;
+}
+.confirm-dialog .header-panel {
+    -fx-background-color: #141a30;
+}
+.confirm-dialog .button-bar .button {
+    -fx-background-color: rgba(120,150,255,0.15);
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.confirm-dialog .button-bar .button:hover {
+    -fx-background-color: rgba(120,150,255,0.3);
+}
+
+.scroll-pane, .scroll-pane .viewport, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}

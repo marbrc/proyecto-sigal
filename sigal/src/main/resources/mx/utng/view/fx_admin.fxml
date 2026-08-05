@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+
+<!--
+    fx_admin.fxml
+    Mini pantalla emergente "Acceso de Administrador" de SIGAL.
+    Controller: mx.utng.controller.AdminController
+    Estilos: styles_admin.css
+
+    Pensada para abrirse como una ventana aparte (un Stage nuevo,
+    tipo ventana modal), no como parte de otra pantalla más grande.
+    En el LEEME explico cómo abrirla desde otro botón.
+-->
+
+<VBox alignment="TOP_LEFT" prefWidth="480.0" spacing="26.0" styleClass="admin-card" stylesheets="@styles_admin.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AdminController">
+
+    <padding>
+        <Insets bottom="34.0" left="34.0" right="34.0" top="34.0" />
+    </padding>
+
+    <!-- ===== Encabezado: candado + título ===== -->
+    <HBox alignment="CENTER_LEFT" spacing="18.0">
+        <StackPane styleClass="admin-icon-box">
+            <Region styleClass="icon-lock icon-md" />
+         <Label styleClass="input-icon" text="👤" textFill="WHITE" />
+        </StackPane>
+        <VBox alignment="CENTER_LEFT" spacing="4.0">
+            <Label styleClass="admin-title" text="Acceso de Administrador" />
+            <Label styleClass="admin-subtitle" text="Ingrese sus credenciales para continuar" />
+        </VBox>
+    </HBox>
+
+    <!-- ===== Usuario ===== -->
+    <VBox spacing="10.0">
+        <Label styleClass="field-label" text="Usuario" />
+        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="input-box">
+            <Label styleClass="input-icon" text="👤" textFill="WHITE" />
+            <TextField fx:id="txtUsuario" promptText="Ingrese su usuario" styleClass="input-field" HBox.hgrow="ALWAYS" />
+        </HBox>
+    </VBox>
+
+    <!-- ===== Contraseña ===== -->
+    <VBox spacing="10.0">
+        <Label styleClass="field-label" text="Contraseña" />
+        <HBox alignment="CENTER" spacing="12.0" styleClass="input-box">
+            <Region styleClass="icon-lock icon-sm icon-muted" />
+            <StackPane HBox.hgrow="ALWAYS">
+                <PasswordField fx:id="pwdContrasena" promptText="Ingrese su contraseña" styleClass="input-field" />
+                <TextField fx:id="txtContrasenaVisible" managed="false" promptText="Ingrese su contraseña" styleClass="input-field" visible="false" />
+            </StackPane>
+           <Button fx:id="btnToggleContrasena"
+                    onAction="#onToggleContrasena"
+                    styleClass="input-eye-btn">
+
+                <graphic>
+                    <Label text="👁"
+                        style="-fx-text-fill: rgba(255,255,255,0.75);
+                                -fx-font-size: 15;" />
+    </graphic>
+
+</Button>
+        </HBox>
+    </VBox>
+
+    <Region minHeight="10.0" VBox.vgrow="ALWAYS" />
+
+    <!-- ===== Botones ===== -->
+    <HBox spacing="16.0">
+        <Button fx:id="btnCancelar" maxWidth="Infinity" onAction="#onCancelar" prefHeight="54.0" styleClass="admin-btn-secondary" text="Cancelar" HBox.hgrow="ALWAYS" />
+        <Button fx:id="btnIngresar" maxWidth="Infinity" onAction="#onIngresar" prefHeight="54.0" styleClass="admin-btn-primary" text="Ingresar" HBox.hgrow="ALWAYS" />
+    </HBox>
+
+</VBox>

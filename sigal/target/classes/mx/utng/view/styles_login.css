@@ -1,0 +1,265 @@
+/* =========================================================
+   ESTILOS DE LA PANTALLA DE LOGIN (fx_login.fxml)
+   ========================================================= */
+
+/* ---------------- ÍCONOS VECTORIALES (nítidos a cualquier tamaño) ---------------- */
+.icon-user {
+    -fx-shape: "M256 288c79.5 0 144-64.5 144-144S335.5 0 256 0 112 64.5 112 144s64.5 144 144 144zm128 32h-8.5c-36 17-76 27-119.5 27s-83.5-10-119.5-27H128C57.3 320 0 377.3 0 448v16c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48v-16c0-70.7-57.3-128-128-128z";
+    -fx-scale-shape: true;
+}
+.icon-lock {
+    -fx-shape: "M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zM224 400c-22.1 0-40-17.9-40-40s17.9-40 40-40 40 17.9 40 40-17.9 40-40 40zm104-176H120v-72c0-57.3 46.7-104 104-104s104 46.7 104 104v72z";
+    -fx-scale-shape: true;
+}
+.icon-eye {
+    -fx-shape: "M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 144.17 144.17 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z";
+    -fx-scale-shape: true;
+} 
+.icon-building {
+    -fx-shape: "M436.5 32h-393C19.5 32 0 51.5 0 75.5v385C0 460.5 19.5 480 43.5 480h393c24 0 43.5-19.5 43.5-43.5v-385C480 51.5 460.5 32 436.5 32zM192 432h-96v-64h96zm0-128h-96v-64h96zm0-128h-96V112h96zm128 256h-96v-64h96zm0-128h-96v-64h96zm0-128h-96V112h96zm128 256h-96v-64h96zm0-128h-96v-64h96zm0-128h-96V112h96z";
+    -fx-scale-shape: true;
+}
+
+.icon-eye-slash-line {
+    -fx-stroke: #93a0c4;
+    -fx-stroke-width: 2;
+    -fx-stroke-line-cap: round;
+}
+
+/* tamaños */
+.icon-tiny { -fx-min-width: 11; -fx-min-height: 11; -fx-max-width: 11; -fx-max-height: 11; }
+.icon-sm   { -fx-min-width: 16; -fx-min-height: 16; -fx-max-width: 16; -fx-max-height: 16; }
+.icon-md   { -fx-min-width: 20; -fx-min-height: 20; -fx-max-width: 20; -fx-max-height: 20; }
+.icon-lg   { -fx-min-width: 28; -fx-min-height: 28; -fx-max-width: 28; -fx-max-height: 28; }
+
+/* colores */
+.icon-muted  { -fx-background-color: #93a0c4; }
+.icon-white  { -fx-background-color: white; }
+.icon-accent { -fx-background-color: #4fa3ff; }
+
+
+.login-root {
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
+    -fx-background-color: radial-gradient(center 30% 20%, radius 90%, #101a3d, #050814);
+}
+
+/* ---------------- TARJETA ---------------- */
+.login-card {
+    -fx-background-color: #070c22;
+    -fx-background-radius: 26;
+    -fx-border-color: rgba(130,180,255,0.60);
+    -fx-border-width: 1.6;
+    -fx-border-radius: 26;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.65), 55, 0.35, 0, 22);
+}
+
+/* ---------------- PANEL IZQUIERDO ---------------- */
+.login-left {
+    -fx-background-color: #0a1330;
+    -fx-background-image: url("assets/campus_login.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-radius: 26 0 0 26;
+    -fx-background-insets: 0;
+}
+
+.login-left-overlay {
+    -fx-background-color: linear-gradient(to bottom, rgba(6,14,45,0.80) 0%, rgba(8,10,35,0.72) 45%, rgba(5,8,28,0.90) 100%);
+    -fx-background-radius: 26 0 0 26;
+}
+
+.login-tagline {
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6, 0.4, 0, 2);
+}
+
+.login-divider {
+    -fx-background-color: linear-gradient(to right, #4fc3ff 0%, #a259ff 100%);
+    -fx-background-radius: 4;
+}
+
+.login-info-chip {
+    -fx-background-color: rgba(10,18,45,0.72);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(120,150,255,0.25);
+    -fx-border-radius: 14;
+    -fx-padding: 14 18 14 14;
+}
+.login-info-icon-box {
+    -fx-background-color: #2f6bff;
+    -fx-background-radius: 50%;
+    -fx-min-width: 42;
+    -fx-min-height: 42;
+    -fx-max-width: 42;
+    -fx-max-height: 42;
+}
+.login-info-icon {
+    -fx-font-size: 18px;
+}
+.login-info-text {
+    -fx-text-fill: #dbe2f5;
+    -fx-font-size: 12.5px;
+}
+
+.login-utng-brand {
+    -fx-text-fill: #4fa3ff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+}
+.login-utng-sep {
+    -fx-background-color: rgba(150,170,220,0.35);
+}
+.login-utng-text {
+    -fx-text-fill: #c7cfe8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5px;
+}
+
+/* ---------------- PANEL DERECHO ---------------- */
+.login-right {
+    -fx-background-color: #0b1330;
+    -fx-background-radius: 0 26 26 0;
+}
+
+.login-avatar-box {
+    -fx-background-color: rgba(80,130,255,0.15);
+    -fx-border-color: #4fa3ff;
+    -fx-border-width: 1.6;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-min-width: 62;
+    -fx-min-height: 62;
+    -fx-max-width: 62;
+    -fx-max-height: 62;
+    -fx-effect: dropshadow(gaussian, rgba(79,163,255,0.45), 16, 0.3, 0, 0);
+}
+.login-avatar-icon {
+    -fx-font-size: 24px;
+}
+
+.login-title {
+    -fx-text-fill: white;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+.login-subtitle {
+    -fx-text-fill: #93a0c4;
+    -fx-font-size: 13.5px;
+}
+
+.field-label {
+    -fx-text-fill: #e4e9f7;
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+}
+
+.input-box {
+    -fx-background-color: rgba(15,22,50,0.85);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(120,150,255,0.30);
+    -fx-border-radius: 12;
+    -fx-padding: 4 16 4 16;
+    -fx-min-height: 52;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.35), 8, 0.2, 0, 2);
+}
+.input-box:hover {
+    -fx-border-color: rgba(120,170,255,0.60);
+}
+.input-box-focused {
+    -fx-border-color: #4fa3ff;
+    -fx-effect: dropshadow(gaussian, rgba(79,163,255,0.45), 16, 0.3, 0, 0);
+}
+.input-icon {
+    -fx-font-size: 15px;
+    -fx-opacity: 0.85;
+}
+.input-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #eef1fb;
+    -fx-font-size: 13.5px;
+    -fx-prompt-text-fill: #6c7aa0;
+    -fx-padding: 10 0 10 0;
+}
+.input-field:focused {
+    -fx-background-color: transparent;
+}
+.input-eye-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #8fa0c9;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+    -fx-padding: 4;
+}
+.input-eye-btn:hover {
+    -fx-text-fill: #6fd3ff;
+}
+
+.login-checkbox {
+    -fx-text-fill: #c7cfe8;
+    -fx-font-size: 12.5px;
+}
+.login-checkbox .box {
+    -fx-background-color: rgba(20,28,58,0.75);
+    -fx-border-color: rgba(120,150,255,0.4);
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+.login-checkbox:selected .mark {
+    -fx-background-color: #4fa3ff;
+}
+
+.login-forgot-link {
+    -fx-text-fill: #6fb8ff;
+    -fx-font-size: 12.5px;
+    -fx-border-color: transparent;
+}
+.login-forgot-link:hover {
+    -fx-text-fill: #a0d4ff;
+}
+
+.login-submit-btn {
+    -fx-background-color: linear-gradient(to right, #2f6bff 0%, #7b2ff7 100%);
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(90,60,240,0.55), 24, 0.35, 0, 8);
+}
+.login-submit-btn:hover {
+    -fx-background-color: linear-gradient(to right, #4380ff 0%, #9046ff 100%);
+    -fx-effect: dropshadow(gaussian, rgba(123,47,247,0.75), 26, 0.35, 0, 6);
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
+}
+.login-submit-btn:pressed {
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+
+.login-hr {
+    -fx-stroke: rgba(120,150,255,0.25);
+    -fx-stroke-width: 1;
+}
+.login-lock-small {
+    -fx-font-size: 11px;
+    -fx-opacity: 0.6;
+}
+.login-exclusive-text {
+    -fx-text-fill: #6c7aa0;
+    -fx-font-size: 11.5px;
+}
+
+.login-footer-text {
+    -fx-text-fill: #5a6690;
+    -fx-font-size: 11px;
+}
+.login-version-text {
+    -fx-text-fill: #4fa3ff;
+    -fx-font-size: 10.5px;
+}

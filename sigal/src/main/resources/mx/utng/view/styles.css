@@ -1,0 +1,318 @@
+/* =========================================================
+   SIGAL - Estilos pantalla de Bienvenida
+   Paleta: azul neón (#4fc3ff / #2fb8ff) + morado neón (#a259ff)
+   sobre fondo oscuro tipo laboratorio.
+   ========================================================= */
+
+.root {
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
+    -fx-background-color: transparent;
+}
+
+/* Capa oscura sobre la imagen de fondo, para que el texto se lea bien */
+.bg-overlay {
+    -fx-fill: linear-gradient(to bottom right, rgba(3,6,18,0.86) 0%, rgba(8,4,28,0.80) 100%);
+}
+
+/* ---------------- NAVBAR ---------------- */
+.navbar {
+    -fx-background-color: rgba(6,10,25,0.55);
+    -fx-border-color: transparent transparent rgba(140,170,255,0.15) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.brand-label {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+.nav-link {
+    -fx-text-fill: #b7c3e0;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-underline: false;
+}
+.nav-link:hover {
+    -fx-text-fill: #6fd3ff;
+}
+
+.nav-link-active {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent transparent #a259ff transparent;
+    -fx-border-width: 0 0 2 0;
+    -fx-underline: false;
+}
+
+.chip {
+    -fx-background-color: rgba(20,26,50,0.65);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(120,150,255,0.25);
+    -fx-border-radius: 10;
+    -fx-padding: 8 14 8 14;
+}
+.chip-icon {
+    -fx-font-size: 18px;
+}
+.chip-title {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+.chip-sub {
+    -fx-text-fill: #8fa0c9;
+    -fx-font-size: 10px;
+}
+
+/* ---------------- HERO ---------------- */
+.hero-title {
+    -fx-text-fill: white;
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+}
+
+
+.hero-subtitle {
+    -fx-text-fill: #e4e9f7;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+}
+
+.hero-subtitle-accent {
+    -fx-text-fill: #6fd3ff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+    -fx-effect: dropshadow(gaussian, #4fc3ff, 12, 0.4, 0, 0);
+}
+
+.hero-divider {
+    -fx-background-color: linear-gradient(to right, #4fc3ff 0%, #a259ff 100%);
+    -fx-background-radius: 4;
+}
+
+.hero-desc {
+    -fx-text-fill: #b7c3e0;
+    -fx-font-size: 14px;
+}
+
+/* ---------------- BOTONES ---------------- */
+.btn-primary {
+    -fx-background-color: linear-gradient(to right, #7b2ff7 0%, #a259ff 100%);
+    -fx-background-radius: 12;
+    -fx-padding: 0 22 0 22;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(162,89,255,0.55), 18, 0.25, 0, 4);
+}
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to right, #8e3ffc 0%, #b56bff 100%);
+    -fx-effect: dropshadow(gaussian, rgba(162,89,255,0.85), 24, 0.35, 0, 6);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+.btn-primary:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.btn-secondary {
+    -fx-background-color: rgba(20,30,55,0.65);
+    -fx-background-radius: 12;
+    -fx-border-color: #2fb8ff;
+    -fx-border-radius: 12;
+    -fx-border-width: 1.4;
+    -fx-padding: 0 22 0 22;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(47,184,255,0.35), 14, 0.2, 0, 3);
+}
+.btn-secondary:hover {
+    -fx-background-color: rgba(47,184,255,0.15);
+    -fx-effect: dropshadow(gaussian, rgba(47,184,255,0.65), 20, 0.3, 0, 5);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+.btn-secondary:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.btn-icon-box {
+    -fx-background-color: rgba(255,255,255,0.18);
+    -fx-background-radius: 10;
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+    -fx-max-width: 36;
+    -fx-max-height: 36;
+}
+.btn-icon {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.btn-icon-box-outline {
+    -fx-background-color: rgba(47,184,255,0.15);
+    -fx-background-radius: 10;
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+    -fx-max-width: 36;
+    -fx-max-height: 36;
+}
+.btn-icon-outline {
+    -fx-font-size: 15px;
+}
+
+.btn-chevron {
+    -fx-text-fill: rgba(255,255,255,0.55);
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.btn-title {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.btn-sub {
+    -fx-text-fill: rgba(255,255,255,0.75);
+    -fx-font-size: 10px;
+}
+
+/* ---------------- SIDEBAR / CARDS ---------------- */
+.sidebar {
+    -fx-padding: 20 30 20 0;
+}
+
+.card {
+    -fx-background-color: rgba(15,20,40,0.65);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(120,150,255,0.20);
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 16;
+}
+
+.card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.placeholder-text {
+    -fx-text-fill: #8fa0c9;
+    -fx-font-size: 11px;
+}
+
+.cal-weekday {
+    -fx-text-fill: #6c7aa0;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.cal-day {
+    -fx-text-fill: #d6ddf2;
+    -fx-font-size: 12.5px;
+    -fx-padding: 6;
+    -fx-background-radius: 50%;
+    -fx-min-width: 26;
+    -fx-alignment: center;
+}
+.cal-day:hover {
+    -fx-background-color: rgba(120,150,255,0.15);
+    -fx-cursor: hand;
+}
+
+.cal-day-today {
+    -fx-text-fill: white;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 6;
+    -fx-background-color: linear-gradient(to right, #7b2ff7 0%, #a259ff 100%);
+    -fx-background-radius: 50%;
+    -fx-min-width: 26;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(162,89,255,0.65), 10, 0.3, 0, 0);
+}
+
+.cal-nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #8fa0c9;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+}
+.cal-nav-btn:hover {
+    -fx-text-fill: #6fd3ff;
+}
+
+.reservation-row {
+    -fx-background-color: rgba(30,38,68,0.55);
+    -fx-background-radius: 10;
+    -fx-padding: 10 12 10 12;
+}
+.reservation-name {
+    -fx-text-fill: white;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+}
+.reservation-time {
+    -fx-text-fill: #8fa0c9;
+    -fx-font-size: 11px;
+}
+.badge-confirmed {
+    -fx-background-color: rgba(46,204,113,0.18);
+    -fx-text-fill: #4ee08a;
+    -fx-background-radius: 8;
+    -fx-padding: 3 10 3 10;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+.badge-pending {
+    -fx-background-color: rgba(255,180,60,0.18);
+    -fx-text-fill: #ffb84c;
+    -fx-background-radius: 8;
+    -fx-padding: 3 10 3 10;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+/* ---------------- FOOTER / QUOTE ---------------- */
+.footer-box {
+    -fx-background-color: rgba(4,7,18,0.35);
+}
+
+.quote-card {
+    -fx-background-color: rgba(15,20,40,0.6);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(120,150,255,0.2);
+    -fx-border-radius: 14;
+    -fx-padding: 16 22 16 22;
+}
+.quote-mark {
+    -fx-text-fill: #a259ff;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+.quote-text {
+    -fx-text-fill: #dbe2f5;
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+.quote-author {
+    -fx-text-fill: #8fa0c9;
+    -fx-font-size: 11px;
+}
+
+.dot {
+    -fx-fill: rgba(255,255,255,0.25);
+}
+.dot-active {
+    -fx-fill: #a259ff;
+}
+
+.footer-text {
+    -fx-text-fill: #6c7aa0;
+    -fx-font-size: 11px;
+}

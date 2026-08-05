@@ -1,0 +1,57 @@
+SIGAL - Pantalla de Menú / Dashboard (fx_menu)
+=================================================
+
+Archivos:
+- fx_menu.fxml          -> la pantalla
+- styles_menu.css        -> estilos (clases con prefijo menu-/stat-/panel-/modal-/nav-)
+- MenuController.java   -> lógica de la pantalla
+- DetalleItem.java      -> modelo de datos para las filas de la tabla del modal
+
+DÓNDE VA CADA COSITA
+---------------------------------------
+- fx_menu.fxml y styles_menu.css  -> junto a tus otros .fxml (carpeta view/assets
+  como ya esta armada) acordarme de que assets/logo.png exista ahí
+  (reutilizamos el mismo logo.png que ya usé en bienvenida/login).
+- MenuController.java y DetalleItem.java -> en mi carpeta de controllers,
+  junto a WelcomeController.java y LoginController.java.
+
+Si tu paquete no se llama "app", cambia:
+  - "package app.controllers;" en ambos .java
+  - el fx:controller="app.controllers.MenuController" en fx_menu.fxml
+
+QUÉ YA HACE
+---------------------------------------
+- Reloj, fecha y clima: igual que en las otras pantallas, se actualiza solo
+  cada segundo (el clima sigue fijo hasta que conectemos una API real).
+- Las 4 tarjetas (24, 12, 8, 3) SÍ son clickeables: al darles clic se abre
+  un modal más grande con transición (fade + escalado), con una tabla
+  editable de ese rubro:
+    - 24 Espacios registrados -> lista de laboratorios/aulas con su tipo
+      y capacidad.
+    - 12 Reservaciones hoy -> las reservaciones del día con su horario.
+    - 8 Espacios disponibles -> solo los que están libres ahorita.
+    - 3 Avisos activos -> el detalle de cada aviso.
+- Dentro del modal:
+    - Doble clic en cualquier celda para editarla ahí mismo.
+    - Botón "+ Agregar" -> añade una fila nueva vacía.
+    - Botón "Eliminar seleccionado" -> borra la fila marcada.
+    - Botón "Guardar cambios" -> por ahora solo imprime en consola
+      cuántas filas hay. Ahí es EXACTAMENTE donde conectas tu DAO
+      cuando tengas la tabla real en tu base de datos (el método se
+      llama onGuardarCambios() en MenuController.java, ya tiene el
+      comentario TODO marcado).
+    - Botón "✕" o clic fuera de la tarjeta (si luego lo agregamos)
+      para cerrar el modal.
+- El sidebar (Asignaciones, Registro de Espacios, Profesores, etc.)
+  ya tiene sus botones conectados a onNavGenerico(), que por ahora
+  solo imprime a qué pantalla querías ir. Ahí conectas después
+  App.cambiarEscena("fx_xxxxx") para cada una.
+- "Cerrar Sesión" ya está conectado a onCerrarSesion() (placeholder).
+
+PENDIENTE PARA CUANDO TENGAS TU BASE DE DATOS
+---------------------------------------
+Los datos de las tarjetas (espacios, reservaciones, disponibles, avisos)
+ahorita están escritos directo en el código (datos de ejemplo) dentro de
+MenuController.java, en los métodos onCardEspacios(), onCardReservaciones(),
+onCardDisponibles() y onCardAvisos(). Cuando tengas tu DAO, ahí reemplazas
+esas listas fijas por la consulta real a tu base de datos.

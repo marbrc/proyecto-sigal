@@ -1,0 +1,210 @@
+/* =========================================================
+   SIGAL - Estilos pantalla "Reportes"
+   Mismo lenguaje visual que Profesores/Horarios/Asignaciones
+   (fondo #060b22, acento #4fc3ff) para heredar el tema global
+   (theme_azul / theme_dark / theme_light).
+   ========================================================= */
+
+.page-root {
+    -fx-background-color: #060b22;
+}
+
+.scroll-limpio, .scroll-limpio > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-limpio { -fx-background-insets: 0; }
+
+/* ===================== ENCABEZADO ===================== */
+.header-icon-box {
+    -fx-background-color: rgba(79,195,255,0.14);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(79,195,255,0.4);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-min-width: 44;
+    -fx-min-height: 44;
+    -fx-max-width: 44;
+    -fx-max-height: 44;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.55), 10, 0.35, 0, 0);
+}
+.header-icon { -fx-font-size: 18px; }
+
+.page-title {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+.page-subtitle {
+    -fx-text-fill: #7c8bb5;
+    -fx-font-size: 12.5px;
+}
+
+/* ===================== TARJETAS ===================== */
+.card {
+    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(79,195,255,0.55);
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 18;
+}
+.card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 14.5px;
+    -fx-font-weight: bold;
+}
+
+/* ===================== CAMPOS DE FILTRO ===================== */
+.field-label {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+}
+.input-combo {
+    -fx-background-color: #0d1526;
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-mark-color: #4fc3ff;
+    -fx-min-height: 38;
+}
+.input-combo:focused, .input-combo:showing { -fx-border-color: #4fc3ff; }
+.input-combo .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e6eefc;
+    -fx-font-size: 11.5px;
+    -fx-padding: 6 10 6 10;
+}
+.input-combo .list-view {
+    -fx-background-color: #0d1526;
+    -fx-border-color: rgba(79,195,255,0.25);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+.input-combo .list-cell:filled:hover { -fx-background-color: rgba(79,195,255,0.15); }
+.input-combo .list-cell:filled:selected { -fx-background-color: rgba(79,195,255,0.25); }
+.input-combo:disabled { -fx-opacity: 0.45; }
+
+.primary-btn {
+    -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10 18 10 18;
+    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.45), 18, 0.2, 0, 4);
+}
+.primary-btn:hover { -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff); }
+
+.results-label {
+    -fx-text-fill: #7c8bb5;
+    -fx-font-size: 11.5px;
+}
+
+/* ===================== TARJETAS RESUMEN (mini stats) ===================== */
+.stat-mini-card {
+    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(79,195,255,0.30);
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 16;
+    -fx-spacing: 4;
+    -fx-alignment: CENTER_LEFT;
+}
+.stat-mini-icon { -fx-font-size: 20px; }
+.stat-mini-valor {
+    -fx-text-fill: #4fc3ff;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+.stat-mini-valor-chico {
+    -fx-text-fill: #4fc3ff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+.stat-mini-label {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 10.5px;
+    -fx-max-width: 180;
+}
+
+/* ===================== TABLA ===================== */
+.data-table {
+    -fx-background-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+.data-table .column-header-background {
+    -fx-background-color: #0a1120;
+    -fx-background-radius: 8 8 0 0;
+}
+.data-table .column-header, .data-table .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(79,195,255,0.12) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.data-table .column-header .label {
+    -fx-text-fill: #7590b0;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+}
+.data-table .table-row-cell {
+    -fx-background-color: #0d1526;
+    -fx-table-cell-border-color: transparent;
+}
+.data-table .table-row-cell:odd { -fx-background-color: #0a1120; }
+.data-table .table-row-cell:selected { -fx-background-color: rgba(79,195,255,0.14); }
+.data-table .table-cell {
+    -fx-text-fill: #cfe0f5;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 8 10 8 10;
+}
+.data-table .placeholder .label { -fx-text-fill: #57708f; }
+
+/* ===================== GRÁFICA (StackedBarChart) ===================== */
+.chart { -fx-background-color: transparent; -fx-padding: 0; }
+.chart-plot-background { -fx-background-color: transparent; }
+.chart-legend { -fx-background-color: transparent; }
+.chart-legend-item-symbol { -fx-background-radius: 3; }
+.chart-legend .label { -fx-text-fill: #9db4d1; -fx-font-size: 10.5px; }
+
+.axis { -fx-tick-label-fill: #7590b0; -fx-font-size: 10.5px; }
+.axis .axis-label { -fx-text-fill: #7590b0; -fx-font-weight: bold; }
+.axis-tick-mark, .axis-minor-tick-mark { -fx-stroke: rgba(79,195,255,0.25); }
+.chart-vertical-grid-lines, .chart-horizontal-grid-lines { -fx-stroke: rgba(79,195,255,0.08); }
+
+/* Serie 1 = "Horas ocupadas" (accent fuerte), Serie 2 = "Horas disponibles restantes" (tenue) */
+.default-color0.chart-bar { -fx-bar-fill: #4fc3ff; }
+.default-color1.chart-bar { -fx-bar-fill: rgba(157,180,209,0.35); }
+.chart-bar { -fx-background-radius: 4 4 0 0; }
+
+/* ===================== BOTONES EXPORTAR ===================== */
+.btn-pdf, .btn-excel, .btn-word {
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10 16 10 16;
+}
+.btn-pdf {
+    -fx-background-color: linear-gradient(to right, #d64545, #ef4444);
+    -fx-effect: dropshadow(gaussian, rgba(239,68,68,0.35), 14, 0.2, 0, 3);
+}
+.btn-pdf:hover { -fx-background-color: linear-gradient(to right, #e55555, #f45c5c); }
+
+.btn-excel {
+    -fx-background-color: linear-gradient(to right, #1f9d55, #22c55e);
+    -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.35), 14, 0.2, 0, 3);
+}
+.btn-excel:hover { -fx-background-color: linear-gradient(to right, #26b562, #3ad374); }
+
+.btn-word {
+    -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
+    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.35), 14, 0.2, 0, 3);
+}
+.btn-word:hover { -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff); }

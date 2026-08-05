@@ -1,0 +1,366 @@
+/* =========================================================
+   SIGAL - Tema "Claro"
+   Misma lógica que theme_dark.css: nombres de clase reales +
+   !important para ganarle a los .css locales de cada pantalla.
+   Aquí es donde los textos/íconos "de texto" (no emojis a color)
+   pasan de blanco a un tono oscuro, para que se sigan leyendo
+   sobre fondo claro.
+   ========================================================= */
+
+/* ---------- Fondo general (aplica a TODAS las pantallas) ---------- */
+.menu-root, .page-root, .ajustes-root, .acerca-root, .app-root, .menu-content-bg {
+    -fx-background-color: #f4f6fb !important;
+}
+
+/* ---------- Sidebar ---------- */
+.menu-sidebar {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: transparent #e0e4ee transparent transparent !important;
+}
+.nav-item-label {
+    -fx-text-fill: #4a5570 !important;
+}
+.nav-item:hover .nav-item-label {
+    -fx-text-fill: #1b1f2e !important;
+}
+.nav-item-active .nav-item-label {
+    -fx-text-fill: white !important;
+}
+.menu-sidebar-tagline {
+    -fx-text-fill: #8b93a8 !important;
+}
+
+/* ---------- Topbar / bienvenida ---------- */
+.menu-welcome-title, .menu-topchip-title, .chip-title, .topbar-title {
+    -fx-text-fill: #1b1f2e !important;
+}
+.menu-welcome-role, .menu-topchip-sub, .chip-sub, .topbar-sub {
+    -fx-text-fill: #6c7aa0 !important;
+}
+.menu-avatar-chevron {
+    -fx-text-fill: #6c7aa0 !important;
+}
+
+/* ---------- Tarjetas / paneles (todas las pantallas) ---------- */
+.card, .panel-card, .panel-card-compact {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #c7cce0 !important;
+    -fx-border-width: 1.4 !important;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0, 0, 2) !important;
+}
+
+/* ---------- Ventanas de confirmación / alertas (Profesores, Horarios, Cuenta, Admin) ---------- */
+.themed-dialog, .dialog-reserva, .confirm-dialog {
+    -fx-background-color: #ffffff !important;
+}
+.themed-dialog > *.header-panel, .dialog-reserva .header-panel, .confirm-dialog .header-panel {
+    -fx-background-color: #ffffff !important;
+}
+.themed-dialog > *.header-panel .label, .dialog-reserva .header-panel .label {
+    -fx-text-fill: #1b1f2e !important;
+}
+.themed-dialog > *.content, .dialog-reserva .content, .confirm-dialog .content {
+    -fx-background-color: #ffffff !important;
+}
+.themed-dialog > *.content.label, .dialog-reserva .label {
+    -fx-text-fill: #4a5570 !important;
+}
+.themed-dialog .button-bar, .dialog-reserva .button-bar {
+    -fx-background-color: #ffffff !important;
+}
+.themed-dialog .button-bar .button, .dialog-reserva .button-bar .button {
+    -fx-text-fill: #1b1f2e !important;
+    -fx-border-color: #c7cce0 !important;
+}
+.themed-dialog .button-bar .button:default, .dialog-reserva .button-bar .button:default {
+    -fx-text-fill: white !important;
+    -fx-border-width: 0 !important;
+}
+.page-title, .card-title, .panel-title, .empty-title, .modal-title,
+.notif-title, .save-title, .info-title, .theme-label, .field-value,
+.account-menu-name, .dialog-titulo {
+    -fx-text-fill: #1b1f2e !important;
+}
+.page-subtitle, .card-subtitle, .panel-subtitle-muted, .field-label,
+.stat-label, .results-label, .notif-desc, .save-subtitle, .footer-text,
+.account-menu-role, .empty-text, .cell-detalle-text, .legend-text,
+.legend-title, .dialog-subtitulo {
+    -fx-text-fill: #6c7aa0 !important;
+}
+
+/* ---------- Íconos "de texto" (símbolos, no emoji a color) ----------
+   Nota: los emoji a color (🕒 👤 📅 🔔 ...) los pinta la fuente del
+   sistema operativo con sus propios colores fijos; -fx-text-fill no
+   los puede invertir. Esto sí invierte cualquier ícono renderizado
+   como símbolo monocromático. */
+.header-icon, .card-icon, .page-icon, .theme-icon, .save-icon,
+.info-icon, .notif-icon-blue, .notif-icon-orange, .notif-icon-green,
+.menu-topchip-icon, .avatar-icon, .menu-avatar-icon {
+    -fx-text-fill: #1b1f2e !important;
+}
+.nav-icon, .nav-icon-fill, .topbar-icon, .topbar-icon-fill {
+    -fx-stroke: #4a5570 !important;
+    -fx-fill: #4a5570 !important;
+}
+
+/* ---------- Campos de formulario (todas las pantallas) ---------- */
+.input-box, .input-combo, .field-combo, .field-input, .input-date,
+.view-toggle-group {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #d7dcec !important;
+}
+.input-field, .field-input {
+    -fx-text-fill: #1b1f2e !important;
+}
+
+/* ---------- Tablas ---------- */
+.data-table .column-header-background, .asig-table .column-header-background {
+    -fx-background-color: #eef0fb !important;
+}
+.data-table .table-row-cell, .asig-table .table-row-cell {
+    -fx-background-color: #ffffff !important;
+}
+.data-table .table-row-cell:odd, .asig-table .table-row-cell:odd {
+    -fx-background-color: #f8f9fd !important;
+}
+.data-table .table-cell, .asig-table .table-cell {
+    -fx-text-fill: #1b1f2e !important;
+}
+.data-table .column-header .label, .asig-table .column-header .label {
+    -fx-text-fill: #4a5570 !important;
+}
+
+/* =========================================================
+   A partir de aquí: colores propios de Ajustes / Acerca del
+   sistema (no compiten con ningún .css local).
+   ========================================================= */
+
+.sidebar-logo {
+    -fx-text-fill: #4a3fd6;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-tagline {
+    -fx-text-fill: #8b93a8;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-max-width: 180px;
+}
+
+.header-icon-box {
+    -fx-background-color: rgba(162,89,255,0.12);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(162,89,255,0.3);
+    -fx-border-radius: 14;
+    -fx-min-width: 52;
+    -fx-min-height: 52;
+    -fx-max-width: 52;
+    -fx-max-height: 52;
+}
+
+.ajustes-content, .acerca-content, .app-content {
+    -fx-background-color: #f4f6fb;
+}
+
+.avatar-circle {
+    -fx-fill: #eef0fb;
+    -fx-stroke: #7b2ff7;
+    -fx-stroke-width: 1.5;
+}
+
+.link-button {
+    -fx-background-color: #f4f6fb;
+    -fx-text-fill: #4a3fd6;
+    -fx-font-size: 12.5px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 14 12 14;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.link-button:hover {
+    -fx-background-color: #eef0fb;
+}
+
+.notif-row {
+    -fx-background-color: #f8f9fd;
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+    -fx-alignment: CENTER_LEFT;
+}
+.notif-icon-blue {
+    -fx-background-color: rgba(79,195,255,0.15);
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+    -fx-font-size: 16px;
+}
+.notif-icon-orange {
+    -fx-background-color: rgba(255,180,60,0.15);
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+    -fx-font-size: 16px;
+}
+.notif-icon-green {
+    -fx-background-color: rgba(46,204,113,0.15);
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+    -fx-font-size: 16px;
+}
+.notif-status {
+    -fx-text-fill: #22a35a;
+    -fx-font-size: 9.5px;
+    -fx-font-weight: bold;
+}
+.notif-status-off {
+    -fx-text-fill: #8b93a8;
+    -fx-font-size: 9.5px;
+    -fx-font-weight: bold;
+}
+
+.switch {
+    -fx-background-color: #d8dcea, white;
+    -fx-background-radius: 20, 18;
+    -fx-background-insets: 0, 3 25 3 3;
+    -fx-text-fill: transparent;
+    -fx-min-width: 46;
+    -fx-pref-width: 46;
+    -fx-max-width: 46;
+    -fx-min-height: 24;
+    -fx-pref-height: 24;
+    -fx-max-height: 24;
+    -fx-cursor: hand;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.06), 2, 0, 0, 0);
+}
+.switch:selected {
+    -fx-background-color: linear-gradient(to right, #7b2ff7, #22a35a), white;
+    -fx-background-insets: 0, 3 3 3 25;
+}
+
+.info-box {
+    -fx-background-color: rgba(162,89,255,0.06);
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+    -fx-border-color: rgba(162,89,255,0.2);
+    -fx-border-radius: 10;
+}
+.info-text {
+    -fx-text-fill: #4a5570;
+    -fx-font-size: 10.5px;
+}
+
+.theme-card {
+    -fx-background-color: #f8f9fd;
+    -fx-background-radius: 12;
+    -fx-border-color: #e0e4ee;
+    -fx-border-radius: 12;
+    -fx-padding: 18;
+    -fx-cursor: hand;
+}
+.theme-card:hover {
+    -fx-border-color: #c7cce0;
+}
+.theme-card-selected {
+    -fx-background-color: rgba(123,47,247,0.08);
+    -fx-background-radius: 12;
+    -fx-border-color: #a259ff;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-padding: 18;
+    -fx-cursor: hand;
+}
+
+.save-bar {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-border-color: #e0e4ee;
+    -fx-padding: 18 22 18 22;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2);
+}
+.btn-guardar {
+    -fx-background-color: linear-gradient(to right, #7b2ff7 0%, #a259ff 100%);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12.5px;
+    -fx-background-radius: 10;
+    -fx-padding: 12 22 12 22;
+    -fx-cursor: hand;
+}
+.btn-guardar:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.brand-title {
+    -fx-text-fill: #1b1f2e;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+.brand-subtitle {
+    -fx-text-fill: #4a5570;
+    -fx-font-size: 13px;
+}
+.divider {
+    -fx-background-color: linear-gradient(to right, #4fc3ff 0%, #a259ff 100%);
+    -fx-background-radius: 4;
+}
+.brand-desc {
+    -fx-text-fill: #4a5570;
+    -fx-font-size: 12.5px;
+}
+
+.info-row {
+    -fx-padding: 14 4 14 4;
+    -fx-alignment: TOP_LEFT;
+}
+.info-divider {
+    -fx-background-color: #e0e4ee;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+}
+.info-icon-box {
+    -fx-background-color: rgba(162,89,255,0.10);
+    -fx-background-radius: 10;
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-max-width: 40;
+    -fx-max-height: 40;
+}
+
+.team-member {
+    -fx-text-fill: #4a5570;
+    -fx-font-size: 12px;
+}
+.team-group-label {
+    -fx-text-fill: #8b93a8;
+    -fx-font-size: 12px;
+}
+.team-group-value {
+    -fx-text-fill: #7b2ff7;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.confirm-dialog {
+    -fx-background-color: #ffffff;
+}
+.confirm-dialog .content.label {
+    -fx-text-fill: #1b1f2e;
+    -fx-font-size: 13px;
+}
+.confirm-dialog .header-panel {
+    -fx-background-color: #ffffff;
+}
+.confirm-dialog .button-bar .button {
+    -fx-background-color: #f4f6fb;
+    -fx-text-fill: #1b1f2e;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.confirm-dialog .button-bar .button:hover {
+    -fx-background-color: #eef0fb;
+}
+
+.scroll-pane, .scroll-pane .viewport, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}

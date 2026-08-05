@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane styleClass="page-root" stylesheets="@styles_reportes.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.ReportesController">
+    <ScrollPane fitToWidth="true" styleClass="scroll-limpio">
+        <VBox spacing="18.0">
+            <padding>
+                <Insets bottom="24.0" left="28.0" right="28.0" top="22.0" />
+            </padding>
+
+            <!-- Encabezado -->
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+                <StackPane styleClass="header-icon-box">
+                    <Label styleClass="header-icon" text="📊" />
+                </StackPane>
+                <VBox alignment="CENTER_LEFT" spacing="2.0">
+                    <Label styleClass="page-title" text="Reportes" />
+                    <Label styleClass="page-subtitle" text="Genera reportes de ocupación de espacios académicos por periodo." />
+                </VBox>
+            </HBox>
+
+            <!-- Filtros -->
+            <VBox spacing="14.0" styleClass="card">
+                <Label styleClass="card-title" text="Filtros del reporte" />
+                <HBox alignment="BOTTOM_LEFT" spacing="14.0">
+                    <VBox spacing="6.0">
+                        <Label styleClass="field-label" text="Periodo" />
+                        <ComboBox fx:id="cmbPeriodo" prefWidth="150.0" styleClass="input-combo" />
+                    </VBox>
+                    <VBox spacing="6.0">
+                        <Label styleClass="field-label" text="Mes" />
+                        <ComboBox fx:id="cmbMes" prefWidth="150.0" styleClass="input-combo" />
+                    </VBox>
+                    <VBox spacing="6.0">
+                        <Label styleClass="field-label" text="Año" />
+                        <ComboBox fx:id="cmbAnio" prefWidth="110.0" styleClass="input-combo" />
+                    </VBox>
+                    <VBox spacing="6.0">
+                        <Label styleClass="field-label" text="Espacio" />
+                        <ComboBox fx:id="cmbEspacio" prefWidth="190.0" styleClass="input-combo" />
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="btnGenerar" onAction="#onGenerarReporte" styleClass="primary-btn" text="Generar reporte" />
+                </HBox>
+                <Label fx:id="lblRangoPeriodo" styleClass="results-label" text="" />
+            </VBox>
+
+            <!-- Tarjetas resumen -->
+            <HBox spacing="16.0">
+                <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-mini-icon" text="🏫" />
+                    <Label fx:id="lblTotalEspacios" styleClass="stat-mini-valor" text="0" />
+                    <Label styleClass="stat-mini-label" text="Total de espacios" wrapText="true" />
+                </VBox>
+                <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-mini-icon" text="✅" />
+                    <Label fx:id="lblEspaciosConAsignaciones" styleClass="stat-mini-valor" text="0" />
+                    <Label styleClass="stat-mini-label" text="Espacios con asignaciones" wrapText="true" />
+                </VBox>
+                <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-mini-icon" text="📈" />
+                    <Label fx:id="lblPromedioAsignaciones" styleClass="stat-mini-valor" text="0" />
+                    <Label styleClass="stat-mini-label" text="Promedio de asignaciones por espacio" wrapText="true" />
+                </VBox>
+                <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-mini-icon" text="🏆" />
+                    <Label fx:id="lblEspacioMasAsignado" styleClass="stat-mini-valor-chico" text="—" wrapText="true" />
+                    <Label styleClass="stat-mini-label" text="Espacio más asignado" wrapText="true" />
+                </VBox>
+            </HBox>
+
+            <!-- Tabla + gráfica -->
+            <HBox spacing="16.0">
+                <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="card-title" text="Porcentaje de ocupación por espacio" />
+                    <TableView fx:id="tablaReporte" styleClass="data-table" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colEspacio" prefWidth="160.0" text="Espacio" />
+                            <TableColumn fx:id="colHorasDisponibles" prefWidth="120.0" text="Horas disponibles" />
+                            <TableColumn fx:id="colHorasOcupadas" prefWidth="110.0" text="Horas ocupadas" />
+                            <TableColumn fx:id="colPorcentaje" prefWidth="100.0" text="Ocupación (%)" />
+                        </columns>
+                        <placeholder>
+                            <Label styleClass="results-label" text="No hay datos para este periodo." />
+                        </placeholder>
+                    </TableView>
+                </VBox>
+                <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="card-title" text="Gráfica de ocupación por espacio" />
+                    <StackedBarChart fx:id="graficaOcupacion" legendVisible="true" title="" VBox.vgrow="ALWAYS">
+                        <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Horas" side="LEFT" />
+                        </yAxis>
+                    </StackedBarChart>
+                </VBox>
+            </HBox>
+
+            <!-- Exportar -->
+            <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="card">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label styleClass="card-title" text="Exportar reporte" />
+                    <Label styleClass="results-label" text="Descarga el reporte generado en el formato de tu preferencia." />
+                </VBox>
+                <Button fx:id="btnExportarPDF" onAction="#onExportarPDF" styleClass="btn-pdf" text="📄  Exportar a PDF" />
+                <Button fx:id="btnExportarExcel" onAction="#onExportarExcel" styleClass="btn-excel" text="📊  Exportar a Excel" />
+                <Button fx:id="btnExportarWord" onAction="#onExportarWord" styleClass="btn-word" text="📝  Exportar a Word" />
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</StackPane>

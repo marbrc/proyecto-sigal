@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane styleClass="menu-root" stylesheets="@styles_cuenta.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.CuentaController">
+
+    <BorderPane fx:id="mainLayout">
+        <center>
+            <ScrollPane fitToWidth="true" styleClass="menu-content-bg" BorderPane.alignment="CENTER">
+               <VBox spacing="0.0" styleClass="menu-content-bg">
+    <padding>
+        <Insets bottom="30.0" left="34.0" right="34.0" top="18.0" />
+    </padding>
+
+    
+    <VBox spacing="16.0" VBox.vgrow="ALWAYS">
+        
+        <HBox spacing="16.0">
+
+            <!-- Datos personales -->
+            <VBox spacing="12.0" styleClass="panel-card-compact-sm, panel-glow-blue" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <StackPane styleClass="panel-icon-box-blue">
+                        <Group>
+                            <Circle centerX="0" centerY="-3" radius="3.4" styleClass="icon-stroke-blue" />
+                            <Rectangle arcHeight="6" arcWidth="6" height="7" styleClass="icon-stroke-blue" width="11" x="-5.5" y="1" />
+                        </Group>
+                    </StackPane>
+                    <Label styleClass="panel-title" text="Datos personales" />
+                </HBox>
+
+                <VBox spacing="2.0">
+                    <Label styleClass="field-label" text="Nombre(s) *" />
+                    <TextField fx:id="txtNombre" promptText="Ej. María" styleClass="field-input-sm" />
+                </VBox>
+                <VBox spacing="2.0">
+                    <Label styleClass="field-label" text="Apellido paterno *" />
+                    <TextField fx:id="txtApellidoPaterno" promptText="Ej. González" styleClass="field-input-sm" />
+                </VBox>
+                <VBox spacing="2.0">
+                    <Label styleClass="field-label" text="Apellido materno" />
+                    <TextField fx:id="txtApellidoMaterno" promptText="Ej. Ramírez" styleClass="field-input-sm" />
+                </VBox>
+                <VBox spacing="2.0">
+                    <Label styleClass="field-label" text="Nombre de usuario *" />
+                    <TextField fx:id="txtNombreUsuario" promptText="Ej. maria.gonzalez" styleClass="field-input-sm" />
+                </VBox>
+                <VBox spacing="2.0">
+                    <Label styleClass="field-label" text="Correo electrónico *" />
+                    <TextField fx:id="txtCorreo" promptText="Ej. maria.gonzalez@utng.edu.mx" styleClass="field-input-sm" />
+                </VBox>
+
+                <Label styleClass="field-hint" text="* Campos obligatorios" />
+
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Button fx:id="btnGuardarDatos" onAction="#onGuardarDatos" styleClass="btn-primary-compact" text="Guardar cambios" />
+                    <Button fx:id="btnCancelarDatos" onAction="#onCancelarDatos" styleClass="btn-secondary-compact" text="Cancelar" />
+                </HBox>
+            </VBox>
+
+            <!-- Cambiar contraseña -->
+            <VBox spacing="12.0" styleClass="panel-card-compact-sm, panel-glow-purple" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <StackPane styleClass="panel-icon-box-purple">
+                        <Group>
+                            <Rectangle arcHeight="4" arcWidth="4" height="7" styleClass="icon-stroke-purple" width="10" x="-5" y="0" />
+                            <Circle centerX="0" centerY="-2.5" radius="3" styleClass="icon-stroke-purple" />
+                        </Group>
+                    </StackPane>
+                    <Label styleClass="panel-title" text="Cambiar contraseña" />
+                </HBox>
+
+                <VBox spacing="2.0">
+                    <Label styleClass="field-label" text="Contraseña actual *" />
+                    <PasswordField fx:id="txtContrasenaActual" promptText="Escribe tu contraseña actual" styleClass="field-input-sm" />
+                </VBox>
+                <VBox spacing="2.0">
+                    <Label styleClass="field-label" text="Nueva contraseña *" />
+                    <PasswordField fx:id="txtContrasenaNueva" promptText="Mínimo 6 caracteres" styleClass="field-input-sm" />
+                </VBox>
+                <VBox spacing="2.0">
+                    <Label styleClass="field-label" text="Confirmar nueva contraseña *" />
+                    <PasswordField fx:id="txtConfirmarContrasena" promptText="Repite la nueva contraseña" styleClass="field-input-sm" />
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+                <Separator />
+
+                <VBox alignment="CENTER_LEFT" spacing="8.0">
+                    <Button fx:id="btnGuardarContrasena" onAction="#onCambiarContrasena" styleClass="btn-danger-compact" text="Actualizar contraseña" />
+                    <Label styleClass="field-hint" text="Tu contraseña actual es necesaria por seguridad" wrapText="true" />
+                </VBox>
+                </VBox>
+
+                </HBox>
+                </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </center>
+    </BorderPane>
+
+</StackPane>

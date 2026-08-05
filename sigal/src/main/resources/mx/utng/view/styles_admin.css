@@ -1,0 +1,151 @@
+/* =========================================================
+   SIGAL - Estilos "Acceso de Administrador" (fx_admin.fxml)
+   Misma paleta que fx_login / fx_registro
+   ========================================================= */
+
+.admin-card {
+    -fx-background-color: #0b0f24;
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+    -fx-border-color: rgba(79, 195, 255, 0.25);
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 40, 0.25, 0, 10);
+}
+
+.admin-icon-box {
+    -fx-background-color: rgba(59, 130, 246, 0.12);
+    -fx-background-radius: 50%;
+    -fx-border-color: linear-gradient(to bottom right, #3b82f6, #7c3aed);
+    -fx-border-radius: 50%;
+    -fx-border-width: 2;
+    -fx-min-width: 76;
+    -fx-min-height: 76;
+    -fx-max-width: 76;
+    -fx-max-height: 76;
+    -fx-alignment: center;
+}
+
+.admin-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.admin-subtitle {
+    -fx-text-fill: rgba(255,255,255,0.55);
+    -fx-font-size: 13px;
+}
+
+/* ---------- Campos (mismas reglas que en el registro) ---------- */
+.field-label {
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.input-box {
+    -fx-background-color: rgba(255,255,255,0.03);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 6 16 6 16;
+    -fx-min-height: 52;
+}
+
+.input-box:focused-within {
+    -fx-border-color: #3b82f6;
+}
+
+.input-icon {
+    -fx-font-size: 14px;
+    -fx-opacity: 0.85;
+}
+
+.input-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255,255,255,0.35);
+    -fx-font-size: 14px;
+    -fx-padding: 8 0 8 0;
+}
+
+.input-field:focused {
+    -fx-background-color: transparent;
+}
+
+.input-eye-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 4;
+}
+
+/* ---------- Iconos vectoriales (candado / ojo) ---------- */
+.icon-eye {
+    -fx-background-color: rgba(255,255,255,0.6);
+    -fx-shape: "M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5C21.3 7.6 17 4.5 12 4.5zM12 17a5 5 0 110-10 5 5 0 010 10z";
+}
+
+.icon-eye-slash-line {
+    -fx-stroke: rgba(255,255,255,0.7);
+    -fx-stroke-width: 1.4;
+}
+
+.icon-lock {
+    -fx-background-color: rgba(255,255,255,0.85);
+    -fx-shape: "M6 10V7a6 6 0 1112 0v3h1a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-9a1 1 0 011-1h1zm2 0h8V7a4 4 0 00-8 0v3z";
+}
+
+.icon-sm {
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+    -fx-max-width: 16;
+    -fx-max-height: 16;
+}
+
+.icon-md {
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+}
+
+.icon-muted {
+    -fx-opacity: 0.75;
+}
+
+/* ---------- Botones ---------- */
+.admin-btn-primary {
+    -fx-background-color: linear-gradient(to right, #2563eb, #7c3aed);
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.55), 22, 0.25, 0, 6);
+}
+
+.admin-btn-primary:hover {
+    -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+}
+
+.admin-btn-primary:pressed {
+    -fx-background-color: linear-gradient(to right, #1d4ed8, #6d28d9);
+}
+
+.admin-btn-secondary {
+    -fx-background-color: rgba(255,255,255,0.04);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.18);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-font-size: 14.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.admin-btn-secondary:hover {
+    -fx-background-color: rgba(255,255,255,0.09);
+    -fx-border-color: rgba(255,255,255,0.32);
+}

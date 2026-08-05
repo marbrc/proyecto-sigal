@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane styleClass="menu-root" stylesheets="@styles_asignaciones.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.DisponibilidadController">
+
+    <BorderPane fx:id="mainLayout">
+        <center>
+            <VBox spacing="12.0" styleClass="menu-content-bg">
+                <padding>
+                    <Insets bottom="18.0" left="34.0" right="34.0" top="14.0" />
+                </padding>
+
+                <!-- Encabezado -->
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Button fx:id="btnVolver" onAction="#onVolver" styleClass="btn-secondary-compact" text="← Volver a Asignaciones" />
+                    <Region HBox.hgrow="ALWAYS" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <StackPane styleClass="panel-icon-box-blue">
+                        <Group>
+                            <Rectangle arcHeight="2" arcWidth="2" height="12" styleClass="icon-stroke-blue" width="14" x="-7" y="-5" />
+                            <Line endX="-3.5" endY="-4" startX="-3.5" startY="-7" styleClass="icon-stroke-blue" />
+                            <Line endX="3.5" endY="-4" startX="3.5" startY="-7" styleClass="icon-stroke-blue" />
+                            <Line endX="7" endY="-1" startX="-7" startY="-1" styleClass="icon-stroke-blue" />
+                        </Group>
+                    </StackPane>
+                    <VBox spacing="1.0">
+                        <Label styleClass="panel-title-lg" text="Disponibilidad de espacios" />
+                        <Label styleClass="avail-sub" text="Estado actual de todos los laboratorios, salas y aulas" />
+                    </VBox>
+                </HBox>
+
+                <!-- Tarjetas resumen -->
+                <GridPane hgap="14.0" vgap="14.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                    </columnConstraints>
+
+                    <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="avail-item-green" GridPane.columnIndex="0">
+                        <StackPane styleClass="avail-icon-green">
+                            <Group>
+                                <javafx.scene.shape.Polyline points="-5,0,-1.5,4,5,-5" styleClass="icon-stroke-green-thick" />
+                            </Group>
+                        </StackPane>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                            <Label fx:id="lblDisponibles" styleClass="avail-number-green" text="0" />
+                            <Label styleClass="avail-label" text="Espacios disponibles" />
+                            <Label styleClass="avail-sub" text="Listos para asignar" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="avail-item-red" GridPane.columnIndex="1">
+                        <StackPane styleClass="avail-icon-red">
+                            <Group>
+                                <Circle centerX="0" centerY="0" radius="6" styleClass="icon-stroke-red" />
+                                <Line endX="3" endY="3" startX="-3" startY="-3" styleClass="icon-stroke-red" />
+                                <Line endX="3" endY="-3" startX="-3" startY="3" styleClass="icon-stroke-red" />
+                            </Group>
+                        </StackPane>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                            <Label fx:id="lblOcupados" styleClass="avail-number-red" text="0" />
+                            <Label styleClass="avail-label" text="Espacios ocupados" />
+                            <Label styleClass="avail-sub" text="Asignados actualmente" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="avail-item-orange" GridPane.columnIndex="2">
+                        <StackPane styleClass="avail-icon-orange">
+                            <Group>
+                                <Rectangle height="9" rotate="45" styleClass="icon-stroke-orange" width="3" x="-1.5" y="-2" />
+                                <Circle centerX="4" centerY="-4" radius="3" styleClass="icon-stroke-orange" />
+                            </Group>
+                        </StackPane>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                            <Label fx:id="lblMantenimiento" styleClass="avail-number-orange" text="0" />
+                            <Label styleClass="avail-label" text="En mantenimiento" />
+                            <Label styleClass="avail-sub" text="No disponibles temporalmente" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="avail-item-gray" GridPane.columnIndex="3">
+                        <StackPane styleClass="avail-icon-gray">
+                            <Circle centerX="0" centerY="0" radius="6" styleClass="icon-stroke-gray" />
+                        </StackPane>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                            <Label fx:id="lblCancelados" styleClass="avail-number-gray" text="0" />
+                            <Label styleClass="avail-label" text="Cancelados hoy" />
+                            <Label styleClass="avail-sub" text="Asignaciones canceladas" />
+                        </VBox>
+                    </HBox>
+                </GridPane>
+
+                <!-- Tabla detallada -->
+                <VBox spacing="12.0" styleClass="panel-card, panel-glow-blue" VBox.vgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <Label styleClass="panel-title" text="Todos los espacios" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="txtBuscar" promptText="Buscar espacio, tipo o encargado..." styleClass="search-input" />
+                    </HBox>
+
+                    <TableView fx:id="tablaEspacios" styleClass="asig-table" VBox.vgrow="ALWAYS">
+                        <placeholder>
+                            <Label styleClass="asig-table-placeholder" text="No se encontraron espacios" />
+                        </placeholder>
+                        <columns>
+                            <TableColumn fx:id="colNombre" prefWidth="150.0" text="Espacio" />
+                            <TableColumn fx:id="colTipo" prefWidth="170.0" text="Tipo" />
+                            <TableColumn fx:id="colCapacidad" prefWidth="90.0" text="Capacidad" />
+                            <TableColumn fx:id="colEstado" prefWidth="120.0" text="Estado" />
+                            <TableColumn fx:id="colOcupacion" prefWidth="220.0" text="Ocupación actual" />
+                            <TableColumn fx:id="colProximoHorario" prefWidth="200.0" text="Próximo horario" />
+                            <TableColumn fx:id="colEncargado" prefWidth="140.0" text="Encargado" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </center>
+    </BorderPane>
+
+</StackPane>

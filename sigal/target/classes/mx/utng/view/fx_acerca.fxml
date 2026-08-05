@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="acerca-content" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AcercaController">
+
+    <VBox fx:id="rootAcerca" spacing="20.0" styleClass="acerca-content">
+        <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="24.0" />
+        </padding>
+
+        <!-- Dos tarjetas -->
+        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+
+            <!-- Logo y descripción -->
+            <VBox alignment="CENTER" spacing="16.0" styleClass="card" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets bottom="10.0" top="10.0" />
+                </padding>
+
+                <ImageView fitHeight="180.0" fitWidth="180.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image backgroundLoading="true" url="@assets/logo.png" />
+                    </image>
+                </ImageView>
+
+                <Label styleClass="brand-title" text="SIGAL" />
+                <Label styleClass="brand-subtitle" text="Sistema de Gestión y Asignación de Laboratorios" textAlignment="CENTER" wrapText="true" />
+
+                <Region maxWidth="140.0" minHeight="2.0" prefHeight="2.0" styleClass="divider" />
+
+                <Label maxWidth="440.0" styleClass="brand-desc" text="SIGAL es una aplicación diseñada para administrar la disponibilidad y asignación de aulas, laboratorios y salas de la institución, facilitando la gestión de reservaciones, horarios, reportes y avisos relacionados con los espacios académicos." textAlignment="CENTER" wrapText="true" />
+
+                <Label maxWidth="440.0" styleClass="brand-desc" text="Nuestro objetivo es optimizar el uso de los recursos académicos mediante una plataforma eficiente, segura y fácil de usar." textAlignment="CENTER" wrapText="true" />
+            </VBox>
+
+            <!-- Información institucional -->
+            <VBox spacing="0.0" styleClass="card" HBox.hgrow="ALWAYS">
+
+                <HBox spacing="14.0" styleClass="info-row">
+                    <StackPane styleClass="info-icon-box">
+                        <Label styleClass="info-icon" text="🏛" />
+                    </StackPane>
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                        <Label styleClass="info-title" text="Institución" />
+                        <Label styleClass="info-text" text="Universidad Tecnológica del Norte de Guanajuato (UTNG)" wrapText="true" />
+                    </VBox>
+                </HBox>
+                <Region styleClass="info-divider" />
+
+                <HBox spacing="14.0" styleClass="info-row">
+                    <StackPane styleClass="info-icon-box">
+                        <Label styleClass="info-icon" text="🎓" />
+                    </StackPane>
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                        <Label styleClass="info-title" text="Programa educativo" />
+                        <Label styleClass="info-text" text="Licenciatura en Ingeniería en Tecnologías de la Información e Innovación Digital" wrapText="true" />
+                        <Label styleClass="info-text" text="TSU en Desarrollo de Software Multiplataforma" wrapText="true" />
+                    </VBox>
+                </HBox>
+                <Region styleClass="info-divider" />
+
+                <HBox spacing="14.0" styleClass="info-row">
+                    <StackPane styleClass="info-icon-box">
+                        <Label styleClass="info-icon" text="📄" />
+                    </StackPane>
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                        <Label styleClass="info-title" text="Proyecto académico" />
+                        <Label styleClass="info-text" text="Asignatura: Proyecto Integrador I" wrapText="true" />
+                    </VBox>
+                </HBox>
+                <Region styleClass="info-divider" />
+
+                <HBox spacing="14.0" styleClass="info-row">
+                    <StackPane styleClass="info-icon-box">
+                        <Label styleClass="info-icon" text="⌗" />
+                    </StackPane>
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                        <Label styleClass="info-title" text="Versión del sistema" />
+                        <Label styleClass="info-text" text="1.0.0" wrapText="true" />
+                    </VBox>
+                </HBox>
+                <Region styleClass="info-divider" />
+
+                <HBox spacing="14.0" styleClass="info-row">
+                    <StackPane styleClass="info-icon-box">
+                        <Label styleClass="info-icon" text="📅" />
+                    </StackPane>
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                        <Label styleClass="info-title" text="Fecha de creación" />
+                        <Label styleClass="info-text" text="22 de julio del 2026" wrapText="true" />
+                    </VBox>
+                </HBox>
+                <Region styleClass="info-divider" />
+
+                <HBox spacing="14.0" styleClass="info-row">
+                    <StackPane styleClass="info-icon-box">
+                        <Label styleClass="info-icon" text="👥" />
+                    </StackPane>
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                        <Label styleClass="info-title" text="Integrantes del equipo de desarrollo" wrapText="true" />
+                        <HBox alignment="TOP_LEFT" spacing="24.0">
+                            <VBox spacing="4.0">
+                                <Label styleClass="team-member" text="•  Ávila Guerrero Luis Ari" />
+                                <Label styleClass="team-member" text="•  Camacho Gómez Jenny Alexandra" />
+                                <Label styleClass="team-member" text="•  Méndez López Rodrigo" />
+                                <Label styleClass="team-member" text="•  Rodríguez Bárcenas María Guadalupe" />
+                            </VBox>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <HBox alignment="TOP_RIGHT">
+                                <Label styleClass="team-group-label" text="Grupo: " />
+                                <Label styleClass="team-group-value" text="GTID235" />
+                            </HBox>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+            </VBox>
+
+        </HBox>
+
+        <Label styleClass="footer-text" text="SIGAL © 2026 - Sistema de Gestión y Asignación de Laboratorios">
+            <VBox.margin>
+                <Insets bottom="6.0" top="10.0" />
+            </VBox.margin>
+        </Label>
+
+    </VBox>
+
+</ScrollPane>

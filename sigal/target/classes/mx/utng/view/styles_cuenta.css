@@ -1,0 +1,241 @@
+.root, .menu-root {
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
+    -fx-background-color: #060b22;
+}
+
+.menu-content-bg {
+    -fx-background-color: #060b22;
+}
+
+.scroll-pane, .scroll-pane .viewport, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+/* ---------------- ENCABEZADO DE LA PANTALLA ---------------- */
+
+.panel-icon-box-blue {
+    -fx-background-color: rgba(79,195,255,0.14);
+    -fx-background-radius: 9;
+    -fx-min-width: 34;
+    -fx-min-height: 34;
+    -fx-max-width: 34;
+    -fx-max-height: 34;
+}
+
+.icon-stroke-blue {
+    -fx-stroke: #4fc3ff;
+    -fx-fill: transparent;
+    -fx-stroke-width: 1.4;
+}
+
+.cuenta-titulo {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.cuenta-subtitulo {
+    -fx-text-fill: rgba(255,255,255,0.75);
+    -fx-font-size: 12px;
+}
+
+.cuenta-banner {
+    -fx-background-color: linear-gradient(to right, #1f3a8f, #4f7fd6, #4fc3ff);
+    -fx-background-radius: 16;
+    -fx-min-height: 92;
+    -fx-pref-height: 92;
+    -fx-padding: 0 24 0 24;
+}
+
+.cuenta-identidad-card {
+    -fx-background-color: rgba(15,22,50,0.92);
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: rgba(79,195,255,0.30);
+    -fx-border-width: 1;
+    -fx-padding: 16 22 16 22;
+    -fx-translate-y: -30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 18, 0.2, 0, 6);
+}
+
+.cuenta-identidad-nombre {
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.panel-icon-box-purple {
+    -fx-background-color: rgba(168,85,247,0.16);
+    -fx-background-radius: 9;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+}
+
+.icon-stroke-purple {
+    -fx-stroke: #c586ff;
+    -fx-fill: transparent;
+    -fx-stroke-width: 1.4;
+}
+
+/* ---------------- TARJETAS ---------------- */
+
+.panel-card-compact {
+    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: rgba(79,195,255,0.14);
+    -fx-border-width: 1;
+    -fx-padding: 18 20 18 20;
+}
+
+.panel-card-compact-sm {
+    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: rgba(79,195,255,0.14);
+    -fx-border-width: 1;
+    -fx-padding: 12 16 12 16;
+}
+
+.panel-glow-blue {
+    -fx-border-color: rgba(79,195,255,0.55);
+    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.35), 22, 0.25, 0, 0);
+}
+
+.panel-glow-purple {
+    -fx-border-color: rgba(168,85,247,0.55);
+    -fx-effect: dropshadow(gaussian, rgba(168,85,247,0.35), 22, 0.25, 0, 0);
+}
+
+.panel-title {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.panel-subtitle-small {
+    -fx-text-fill: #7c8bb5;
+    -fx-font-size: 10.5px;
+}
+
+/* ---------------- AVATAR GRANDE ---------------- */
+
+.cuenta-avatar-circle {
+    -fx-background-color: linear-gradient(to bottom right, #4f7fd6, #4fc3ff);
+    -fx-border-color: rgba(255,255,255,0.5);
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-border-width: 2;
+    -fx-min-width: 64;
+    -fx-min-height: 64;
+    -fx-max-width: 64;
+    -fx-max-height: 64;
+    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.55), 16, 0.3, 0, 0);
+}
+
+.cuenta-avatar-iniciales {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.cuenta-rol-badge {
+    -fx-background-color: rgba(120,150,255,0.16);
+    -fx-text-fill: #8fb3ff;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 4 12 4 12;
+}
+
+/* ---------------- CAMPOS ---------------- */
+
+.field-label {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+}
+
+.field-input {
+    -fx-background-color: #0d1526;
+    -fx-text-fill: #e6eefc;
+    -fx-prompt-text-fill: #57708f;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-width: 1;
+    -fx-font-size: 11.5px;
+    -fx-padding: 8 10 8 10;
+}
+
+.field-input:focused {
+    -fx-border-color: #4fc3ff;
+}
+
+.field-input-sm {
+    -fx-background-color: #0d1526;
+    -fx-text-fill: #e6eefc;
+    -fx-prompt-text-fill: #57708f;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-width: 1;
+    -fx-font-size: 10.5px;
+    -fx-padding: 5 8 5 8;
+}
+
+.field-input-sm:focused {
+    -fx-border-color: #4fc3ff;
+}
+
+.field-hint {
+    -fx-text-fill: #5a6690;
+    -fx-font-size: 10px;
+    -fx-font-style: italic;
+}
+
+/* ---------------- BOTONES ---------------- */
+
+.btn-primary-compact {
+    -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
+    -fx-background-radius: 7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 11.5px;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+}
+.btn-primary-compact:hover {
+    -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
+}
+
+.btn-secondary-compact {
+    -fx-background-color: transparent;
+    -fx-background-radius: 7;
+    -fx-border-color: rgba(157,180,209,0.35);
+    -fx-border-radius: 7;
+    -fx-border-width: 1;
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 11.5px;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+}
+.btn-secondary-compact:hover {
+    -fx-background-color: rgba(157,180,209,0.08);
+}
+
+.btn-danger-compact {
+    -fx-background-color: linear-gradient(to right, #d63b3b, #ff6b6b);
+    -fx-background-radius: 7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 11.5px;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+}
+.btn-danger-compact:hover {
+    -fx-background-color: linear-gradient(to right, #e64d4d, #ff8080);
+}

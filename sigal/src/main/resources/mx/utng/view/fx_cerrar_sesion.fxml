@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<!--
+    Pantalla "Cerrar sesión".
+    Proyecto independiente: esta pantalla NO depende de ninguna otra pantalla
+    del sistema. Es un modal pequeño tipo opción, pensado para abrirse desde
+    la pantalla que lo invoque (ver mx.utng.util.CerrarSesionDialog).
+    El StackPane raíz actúa como fondo oscurecido y centra la tarjeta.
+-->
+<StackPane fx:id="rootOverlay" styleClass="logout-overlay" stylesheets="@styles_cerrar_sesion.css"
+           xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="mx.utng.controller.CerrarSesionController">
+
+    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="420.0" spacing="22.0" styleClass="logout-card">
+        <padding>
+            <Insets bottom="34.0" left="38.0" right="38.0" top="38.0" />
+        </padding>
+
+        <!-- ==== ICONO CIRCULAR CON DECORACIONES ==== -->
+        <StackPane prefHeight="130.0" prefWidth="130.0">
+            <Label styleClass="sparkle, sparkle-1" text="◆" translateX="-58.0" translateY="6.0" />
+            <Label styleClass="sparkle, sparkle-2" text="◆" translateX="54.0" translateY="-40.0" />
+            <Label styleClass="sparkle, sparkle-3" text="◆" translateX="46.0" translateY="42.0" />
+
+            <Circle radius="52.0" styleClass="logout-icon-ring" />
+            <Label styleClass="logout-icon-symbol" text="⏻" />
+        </StackPane>
+
+        <!-- ==== TÍTULO Y MENSAJE ==== -->
+        <VBox alignment="CENTER" spacing="10.0">
+            <Label styleClass="logout-title" text="Cerrar sesión" />
+            <Label alignment="CENTER" styleClass="logout-subtitle" text="¿Está seguro(a) de que desea cerrar sesión?" textAlignment="CENTER" wrapText="true" />
+        </VBox>
+
+        <!-- ==== SEPARADOR DECORATIVO ==== -->
+        <StackPane alignment="CENTER" maxWidth="Infinity" prefHeight="14.0">
+            <Region maxHeight="2.0" maxWidth="Infinity" minHeight="2.0" styleClass="logout-divider-line" />
+            <Circle radius="4.0" styleClass="logout-divider-dot" />
+        </StackPane>
+
+        <!-- ==== BOTONES ==== -->
+        <HBox alignment="CENTER" spacing="14.0" VBox.vgrow="NEVER">
+            <Button fx:id="btnCancelar" maxWidth="Infinity" minWidth="0.0" mnemonicParsing="false" onAction="#manejarCancelar" prefWidth="165.0" styleClass="btn-cancelar" text="↩  Cancelar" HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnConfirmar" maxWidth="Infinity" minWidth="0.0" mnemonicParsing="false" onAction="#manejarConfirmar" prefWidth="165.0" styleClass="btn-confirmar" text="✓  Confirmar" HBox.hgrow="ALWAYS" />
+        </HBox>
+    </VBox>
+</StackPane>

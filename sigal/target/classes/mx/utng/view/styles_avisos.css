@@ -1,0 +1,417 @@
+/* =========================================================
+   SIGAL - Estilos pantalla "Avisos"
+   Misma paleta oscura/azul del resto del sistema (ver
+   styles_espacios.css), con morado reservado para el título,
+   el botón "Nuevo aviso" y los acentos de las tarjetas.
+   Esta vista NO incluye menú lateral ni barra superior: se
+   inserta dentro del panel de contenido (contentPane) del menú
+   principal.
+   ========================================================= */
+
+.page-root {
+    -fx-background-color: #060b22;
+}
+
+/* ===================== TEXTOS GENERALES ===================== */
+.title {
+    -fx-text-fill: #e6eefc;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.dim {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 11.5px;
+}
+
+.purple {
+    -fx-text-fill: #a855f7;
+    -fx-font-weight: bold;
+}
+
+/* ===================== TARJETAS ===================== */
+.card {
+    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(79,195,255,0.14);
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 18;
+}
+
+.card-title {
+    -fx-text-fill: #a855f7;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* ===================== CAMPOS DE FORMULARIO / FILTROS ===================== */
+.field-label {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+}
+
+.input-combo,
+.date-picker.input-combo {
+    -fx-background-color: #0d1526;
+    -fx-background-radius: 7;
+    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-radius: 7;
+    -fx-border-width: 1;
+    -fx-mark-color: #4fc3ff;
+    -fx-min-height: 34;
+}
+
+.input-combo:focused,
+.input-combo:showing {
+    -fx-border-color: #4fc3ff;
+}
+
+.input-combo .list-cell,
+.input-combo .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e6eefc;
+    -fx-font-size: 11.5px;
+    -fx-padding: 5 8 5 8;
+}
+
+.input-combo .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.input-combo .arrow,
+.input-combo .date-picker-popup-icon {
+    -fx-background-color: #9db4d1;
+}
+
+.input-combo .list-view {
+    -fx-background-color: #0d1526;
+    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+}
+
+.input-combo .list-cell:filled:hover,
+.input-combo .list-cell:filled:selected {
+    -fx-background-color: rgba(79,195,255,0.16);
+}
+
+/* ===================== BOTONES ===================== */
+.primary-btn {
+    -fx-background-color: linear-gradient(to right, #7b2ff7 0%, #a855f7 100%);
+    -fx-background-radius: 7;
+    -fx-text-fill: white;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+    -fx-effect: dropshadow(gaussian, rgba(168,85,247,0.4), 14, 0.2, 0, 3);
+}
+
+.primary-btn:hover {
+    -fx-background-color: linear-gradient(to right, #8b3ffc, #b968ff);
+}
+
+.primary-btn:pressed {
+    -fx-background-color: linear-gradient(to right, #6a1fe0, #9333ea);
+}
+
+.secondary-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 7;
+    -fx-border-color: rgba(157,180,209,0.35);
+    -fx-border-radius: 7;
+    -fx-border-width: 1;
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 7 14 7 14;
+}
+
+.secondary-btn:hover {
+    -fx-background-color: rgba(157,180,209,0.08);
+}
+
+.cancel-btn {
+    -fx-background-color: rgba(239, 68, 68, 0.12);
+    -fx-background-radius: 7;
+    -fx-border-color: rgba(239, 68, 68, 0.4);
+    -fx-border-radius: 7;
+    -fx-border-width: 1;
+    -fx-text-fill: #f87171;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 14 8 14;
+}
+
+.cancel-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.22);
+}
+
+/* Botones dentro de la columna "Acciones" */
+.accion-leido-btn,
+.accion-eliminar-btn {
+    -fx-background-radius: 8;
+    -fx-min-width: 28;
+    -fx-min-height: 28;
+    -fx-max-width: 28;
+    -fx-max-height: 28;
+    -fx-cursor: hand;
+    -fx-font-size: 11.5px;
+    -fx-text-fill: white;
+    -fx-padding: 0;
+}
+
+.accion-leido-btn {
+    -fx-background-color: #1f6fd6;
+}
+
+.accion-leido-btn:hover {
+    -fx-background-color: #4fc3ff;
+}
+
+.accion-leido-btn:disabled {
+    -fx-background-color: rgba(157,180,209,0.18);
+    -fx-opacity: 0.6;
+}
+
+.accion-eliminar-btn {
+    -fx-background-color: #dc2626;
+}
+
+.accion-eliminar-btn:hover {
+    -fx-background-color: #ef4444;
+}
+
+/* ===================== TABLA ===================== */
+.data-table {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(79,195,255,0.12);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.data-table .column-header-background {
+    -fx-background-color: #0d1526;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.data-table .column-header,
+.data-table .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 36;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.data-table .table-row-cell {
+    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-border-color: transparent transparent rgba(79,195,255,0.08) transparent;
+    -fx-table-cell-border-color: transparent;
+}
+
+.data-table .table-row-cell:odd {
+    -fx-background-color: rgba(20,28,60,0.75);
+}
+
+.data-table .table-row-cell:selected {
+    -fx-background-color: rgba(79,195,255,0.20);
+}
+
+.data-table .table-cell {
+    -fx-text-fill: #d7e2f5;
+    -fx-font-size: 11px;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 7 10 7 10;
+}
+
+.data-table .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.data-table .placeholder .label {
+    -fx-text-fill: #5a6690;
+}
+
+/* Pastillas "Tipo de aviso" dentro de la tabla */
+.tipo-badge {
+    -fx-background-radius: 20;
+    -fx-padding: 3 10 3 10;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.tipo-informacion {
+    -fx-background-color: rgba(59, 130, 246, 0.18);
+    -fx-text-fill: #60a5fa;
+}
+
+.tipo-advertencia {
+    -fx-background-color: rgba(249, 115, 22, 0.18);
+    -fx-text-fill: #fb923c;
+}
+
+.tipo-error {
+    -fx-background-color: rgba(239, 68, 68, 0.18);
+    -fx-text-fill: #f87171;
+}
+
+.tipo-exito {
+    -fx-background-color: rgba(34, 197, 94, 0.18);
+    -fx-text-fill: #4ade80;
+}
+
+/* Pastillas "Estado" (lectura) dentro de la tabla */
+.estado-badge {
+    -fx-background-radius: 20;
+    -fx-padding: 3 10 3 10;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.estado-no-leido {
+    -fx-background-color: rgba(168, 85, 247, 0.18);
+    -fx-text-fill: #c084fc;
+}
+
+.estado-leido {
+    -fx-background-color: rgba(148, 163, 184, 0.18);
+    -fx-text-fill: #cbd5e1;
+}
+
+/* ===================== PANEL "RESUMEN DE AVISOS" ===================== */
+.tipo-dot {
+    -fx-font-size: 13px;
+}
+
+.tipo-dot-info    { -fx-text-fill: #60a5fa; }
+.tipo-dot-warn    { -fx-text-fill: #fb923c; }
+.tipo-dot-error   { -fx-text-fill: #f87171; }
+.tipo-dot-exito   { -fx-text-fill: #4ade80; }
+
+.resumen-label {
+    -fx-text-fill: #d7e2f5;
+    -fx-font-size: 12px;
+}
+
+.resumen-valor {
+    -fx-text-fill: #e6eefc;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.info-box {
+    -fx-background-color: rgba(79,195,255,0.08);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(79,195,255,0.18);
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 12;
+}
+
+.info-box-title {
+    -fx-text-fill: #4fc3ff;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+}
+
+.info-box-text {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 10.5px;
+}
+
+/* ===================== VENTANAS FLOTANTES (Alert / Dialog) ===================== */
+.themed-dialog {
+    -fx-background-color: #0d1526;
+}
+
+.themed-dialog > *.header-panel {
+    -fx-background-color: #0d1526;
+    -fx-padding: 22 26 12 26;
+}
+
+.themed-dialog > *.header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+}
+
+.themed-dialog > *.content.label {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+.themed-dialog > *.content {
+    -fx-background-color: #0d1526;
+    -fx-padding: 4 26 20 26;
+}
+
+.themed-dialog .button-bar {
+    -fx-background-color: #0d1526;
+    -fx-padding: 0 22 22 22;
+}
+
+.themed-dialog .button-bar .button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 7;
+    -fx-border-color: rgba(157,180,209,0.30);
+    -fx-border-radius: 7;
+    -fx-border-width: 1;
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+
+.themed-dialog .button-bar .button:hover {
+    -fx-background-color: rgba(79,195,255,0.12);
+}
+
+.themed-dialog .button-bar .button:default {
+    -fx-background-color: linear-gradient(to right, #7b2ff7, #a855f7);
+    -fx-border-width: 0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(168,85,247,0.4), 12, 0.2, 0, 3);
+}
+
+.themed-dialog .button-bar .button:default:hover {
+    -fx-background-color: linear-gradient(to right, #8b3ffc, #b968ff);
+}
+
+/* Campos de texto usados dentro del dialogo "Nuevo aviso" */
+.dialog-field-label {
+    -fx-text-fill: #9db4d1;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+}
+
+.dialog-combo,
+.dialog-textarea {
+    -fx-background-color: #14265c;
+    -fx-background-radius: 7;
+    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-radius: 7;
+    -fx-border-width: 1;
+    -fx-text-fill: #e6eefc;
+    -fx-font-size: 11.5px;
+}
+
+.dialog-textarea .content {
+    -fx-background-color: #14265c;
+    -fx-background-radius: 7;
+}
+
+.dialog-textarea .prompt-text {
+    -fx-fill: #57708f;
+}

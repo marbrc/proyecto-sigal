@@ -1,0 +1,271 @@
+/* =========================================================
+   SIGAL - Estilos ventana de registro (Crear cuenta)
+   Paleta acorde a fx_login.fxml
+   ========================================================= */
+
+.login-root {
+    -fx-background-color: #05070f;
+}
+
+/* Tarjeta principal */
+.login-card {
+    -fx-background-color: #0b0f24;
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+    -fx-border-color: rgba(79, 195, 255, 0.25);
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(79,140,255,0.35), 60, 0.15, 0, 0);
+}
+
+/* ===================== PANEL IZQUIERDO ===================== */
+.login-left {
+    -fx-background-color: black;
+    -fx-background-image: url('assets/fondo_registro.jpg');
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-radius: 22 0 0 22;
+    -fx-border-radius: 22 0 0 22;
+}
+
+.login-left-overlay {
+    -fx-background-color: linear-gradient(to bottom, rgba(5,7,20,0.75), rgba(6,10,30,0.94));
+    -fx-background-radius: 22 0 0 22;
+}
+
+.login-tagline {
+    -fx-text-fill: #e7f1ff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+.login-divider {
+    -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+    -fx-background-radius: 4;
+}
+
+.login-info-chip {
+    -fx-background-color: rgba(20, 28, 58, 0.75);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(79, 140, 255, 0.35);
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 14 16 14 14;
+}
+
+.login-info-icon-box {
+    -fx-background-color: linear-gradient(to bottom right, #3b82f6, #7c3aed);
+    -fx-background-radius: 10;
+    -fx-min-width: 34;
+    -fx-min-height: 34;
+    -fx-max-width: 34;
+    -fx-max-height: 34;
+    -fx-alignment: center;
+}
+
+.login-info-text {
+    -fx-text-fill: #cfe0ff;
+    -fx-font-size: 12.5px;
+}
+
+.login-utng-sep {
+    -fx-background-color: rgba(255,255,255,0.35);
+}
+
+.login-utng-text {
+    -fx-text-fill: rgba(255,255,255,0.55);
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5px;
+}
+
+/* ===================== PANEL DERECHO ===================== */
+.login-right {
+    -fx-background-color: #0b0f24;
+    -fx-background-radius: 0 22 22 0;
+}
+
+.login-avatar-box {
+    -fx-background-color: rgba(59, 130, 246, 0.15);
+    -fx-background-radius: 50%;
+    -fx-border-color: #3b82f6;
+    -fx-border-radius: 50%;
+    -fx-border-width: 1.5;
+    -fx-min-width: 52;
+    -fx-min-height: 52;
+    -fx-max-width: 52;
+    -fx-max-height: 52;
+    -fx-alignment: center;
+}
+
+.login-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.login-subtitle {
+    -fx-text-fill: rgba(255,255,255,0.55);
+    -fx-font-size: 12.5px;
+}
+
+.field-label {
+    -fx-text-fill: rgba(255,255,255,0.8);
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+}
+
+/* Cajas de texto */
+.input-box {
+    -fx-background-color: rgba(255,255,255,0.04);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 4 14 4 14;
+    -fx-min-height: 46;
+}
+
+.input-box:focused-within {
+    -fx-border-color: #3b82f6;
+}
+
+.input-icon {
+    -fx-font-size: 13px;
+    -fx-opacity: 0.85;
+}
+
+.input-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255,255,255,0.35);
+    -fx-font-size: 13px;
+    -fx-padding: 8 0 8 0;
+}
+
+.input-field:focused {
+    -fx-background-color: transparent;
+}
+
+.input-eye-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 4;
+}
+
+
+
+
+
+.icon-tiny {
+    -fx-min-width: 12;
+    -fx-min-height: 12;
+    -fx-max-width: 12;
+    -fx-max-height: 12;
+}
+
+
+
+.icon-eye-slash-line {
+    -fx-stroke: rgba(255,255,255,0.7);
+    -fx-stroke-width: 1.4;
+}
+
+.icon-lock {
+    -fx-background-color: rgba(255,255,255,0.5);
+    -fx-shape: "M6 10V7a6 6 0 1112 0v3h1a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-9a1 1 0 011-1h1zm2 0h8V7a4 4 0 00-8 0v3z";
+}
+
+/* ComboBox Rol */
+.input-combo,
+.input-combo .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+}
+
+.input-combo {
+    -fx-mark-color: rgba(255,255,255,0.6);
+}
+
+.input-combo .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.input-combo .arrow {
+    -fx-background-color: rgba(255,255,255,0.6);
+}
+
+.input-combo:focused,
+.input-combo:showing {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.input-combo .list-view {
+    -fx-background-color: #101632;
+    -fx-border-color: rgba(79,140,255,0.35);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.input-combo .list-cell:filled:hover {
+    -fx-background-color: rgba(59,130,246,0.25);
+}
+
+/* Botón principal (degradado) */
+.login-submit-btn {
+    -fx-background-color: linear-gradient(to right, #2563eb, #7c3aed);
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-size: 14.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.55), 22, 0.25, 0, 6);
+}
+
+.login-submit-btn:hover {
+    -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+}
+
+.login-submit-btn:pressed {
+    -fx-background-color: linear-gradient(to right, #1d4ed8, #6d28d9);
+}
+
+/* Botón secundario (Volver al inicio de sesión) */
+.login-secondary-btn {
+    -fx-background-color: rgba(255,255,255,0.04);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.18);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.login-secondary-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.09);
+    -fx-border-color: rgba(255,255,255,0.32);
+}
+
+.login-hr {
+    -fx-stroke: rgba(255,255,255,0.12);
+    -fx-stroke-width: 1;
+}
+
+.login-exclusive-text {
+    -fx-text-fill: rgba(255,255,255,0.4);
+    -fx-font-size: 10.5px;
+}
+
+.login-footer-text {
+    -fx-text-fill: rgba(255,255,255,0.4);
+    -fx-font-size: 10.5px;
+}
+
+.login-version-text {
+    -fx-text-fill: rgba(255,255,255,0.28);
+    -fx-font-size: 9.5px;
+}

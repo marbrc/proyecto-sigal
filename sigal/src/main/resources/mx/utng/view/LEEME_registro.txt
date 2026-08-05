@@ -1,0 +1,78 @@
+LEEME - fx_registro (Crear cuenta de SIGAL)
+=============================================
+
+Este paquete trae 4 archivos:
+
+1) fx_registro.fxml          -> la pantalla en sí (Scene Builder)
+2) styles_registro.css       -> los colores y estilos
+3) RegistroController.java   -> la lógica en Java
+4) assets/fondo_registro.jpg -> la foto de fondo (letrero de UTNG)
+   assets/logo.jpg           -> el logo neón de SIGAL
+
+-------------------------------------------------------------
+DÓNDE GUARDAR CADA ARCHIVO
+-------------------------------------------------------------
+- fx_registro.fxml y styles_registro.css -> en tu carpeta
+  resources/.../view, junto a fx_login.fxml y fx_menu.fxml.
+- La carpeta "assets" (con las 2 imágenes adentro) -> TIENE
+  que ir dentro de esa misma carpeta view, así:
+
+      view/
+       ├── fx_registro.fxml
+       ├── styles_registro.css
+       ├── fx_login.fxml
+       ├── fx_menu.fxml
+       └── assets/
+            ├── fondo_registro.jpg
+            └── logo.jpg
+
+  (Si ya tienes una carpeta "assets" ahí de antes, con otras
+  imágenes del login, solo agrégale estas 2 adentro, no borres
+  las que ya tenías.)
+
+- RegistroController.java -> junto a tu LoginController.java
+  y MenuController.java, en la carpeta controller.
+
+Asumí que tu paquete sigue siendo "mx.utng.controller", igual
+que en tus otras pantallas de SIGAL.
+
+-------------------------------------------------------------
+QUÉ YA FUNCIONA
+-------------------------------------------------------------
+1. FONDO Y LOGO: ya apuntan a las imágenes reales que me
+   mandaste (el letrero de UTNG de fondo, y tu logo de SIGAL
+   con su brillo azul encima).
+
+2. MOSTRAR/OCULTAR CONTRASEÑA (el ojito): sí funciona de
+   verdad. Cada campo de contraseña en realidad son DOS
+   campos encimados (uno oculto tipo contraseña, otro normal
+   de texto) - al picarle al ojito se intercambian y se ve el
+   texto en claro. Esto aplica tanto para "Contraseña" como
+   para "Confirmar contraseña", cada uno por separado.
+
+3. VALIDACIÓN DEL FORMULARIO: al picarle a "Registrarse", se
+   revisa que:
+   - ningún campo esté vacío (incluyendo que se haya
+     elegido un Rol)
+   - la contraseña y su confirmación sean iguales
+   Si algo falla, sale una ventanita de error explicando qué.
+
+4. "Volver al inicio de sesión": ya regresa a tu
+   fx_login.fxml.
+
+-------------------------------------------------------------
+QUÉ FALTA (a propósito, no lo inventé)
+-------------------------------------------------------------
+1. GUARDAR EN LA BASE DE DATOS: el botón "Registrarse" valida
+   los campos, pero todavía NO inserta nada en tu tabla
+   tb_usuario. Dejé un comentario "TODO" exactamente en el
+   lugar del código donde iría esa parte. Para completarlo
+   necesito que me pases:
+     - tu UsuarioDAO / modelo Usuario de SIGAL (si ya los
+       tienes), o los nombres reales de las columnas de
+       tb_usuario para armarlos desde cero.
+
+2. LOS ROLES DEL COMBOBOX: puse "Usuario", "Profesor" y
+   "Administrador" como ejemplo, en el método initialize()
+   de RegistroController.java. Si tus roles reales en
+   tb_usuario se llaman distinto, dime y los cambio.

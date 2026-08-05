@@ -1,0 +1,33 @@
+PANTALLA DE BIENVENIDA - SIGAL
+================================
+
+Archivos:
+- Welcome.fxml        -> la pantalla (ábrela con Scene Builder)
+- styles.css           -> estilos neón/glass (ya conectado en el FXML)
+- assets/logo.png      -> tu logo (imagen 1)
+- assets/background.jpg -> tu imagen de fondo (imagen 3), ya incluida
+
+Cómo usarla:
+1. Copia toda esta carpeta "sigal-welcome" dentro de tu proyecto
+   (por ejemplo en src/main/resources/app/views/).
+2. Abre Welcome.fxml con Scene Builder para verla y moverla a gusto.
+3. Si prefieres cambiar la imagen de fondo, solo reemplaza el archivo
+   assets/background.jpg por otra imagen con el mismo nombre.
+4. Los botones "Iniciar sesión" y "Registrarse" ya tienen efecto hover
+   (brillo + escalado) y cursor de mano. No tienen todavía onAction
+   ni fx:controller para que puedas abrir el archivo directo en Scene
+   Builder sin necesitar una clase Java. Cuando quieras conectarla a
+   tu lógica, solo agrega:
+      fx:controller="tu.paquete.WelcomeController"
+   en la raíz del FXML, y onAction="#tuMetodo" en cada botón.
+5. Las transiciones al presionar los botones las dejamos pendientes,
+   tal como comentaste, para una siguiente etapa.
+
+Notas de diseño:
+- El logo se muestra completo (sin recortes) tanto en la barra
+  superior como en el centro de la pantalla, usando preserveRatio.
+- La barra derecha (calendario, reservaciones, laboratorios
+  disponibles) está armada como tarjetas de vidrio ("glass cards"),
+  lista para que después conectes los datos reales.
+- El calendario del sidebar quedó como placeholder (un GridPane con
+  los días se puede agregar después junto con la lógica de fechas).

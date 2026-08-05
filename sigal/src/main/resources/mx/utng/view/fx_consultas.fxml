@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+    fx_consultas.fxml
+    Pantalla "Consultas" de SIGAL: filtra las asignaciones ya
+    registradas y las muestra en una tabla.
+    Controller: mx.utng.controller.ConsultaController
+    Estilos: styles_consultas.css
+
+    Se carga dentro del panel central del menú (contentPane), tal
+    como el resto de los módulos (Asignaciones, Espacios, etc.), así
+    que no necesita fondo de pantalla completa: el fondo lo pone el
+    "cascarón" del menú (fx_menu.fxml).
+-->
+<ScrollPane fitToWidth="true" styleClass="consultas-scroll" stylesheets="@styles_consultas.css"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="mx.utng.controller.ConsultaController">
+
+    <VBox spacing="20.0" styleClass="consultas-content">
+        <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="24.0" />
+        </padding>
+
+        <!-- ===== Encabezado ===== -->
+        <HBox alignment="CENTER_LEFT" spacing="16.0">
+            <StackPane styleClass="header-icon-box">
+                <ImageView fitHeight="26.0" fitWidth="26.0" preserveRatio="true">
+                    <image>
+                        <Image url="@assets/logo.png" />
+                    </image>
+                </ImageView>
+            </StackPane>
+            <VBox>
+                <Label styleClass="page-title" text="Consultas" />
+                <Label styleClass="page-subtitle"
+                       text="Consulta asignaciones registradas en el sistema mediante diferentes tipos de filtros." />
+            </VBox>
+        </HBox>
+
+        <!-- ===== Tarjeta de filtros ===== -->
+        <VBox spacing="16.0" styleClass="consultas-card">
+
+            <GridPane hgap="16.0" vgap="4.0">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="20" />
+                    <ColumnConstraints percentWidth="20" />
+                    <ColumnConstraints percentWidth="20" />
+                    <ColumnConstraints percentWidth="20" />
+                    <ColumnConstraints percentWidth="20" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints />
+                    <RowConstraints />
+                    <RowConstraints />
+                    <RowConstraints />
+                </rowConstraints>
+
+                <!-- Fila 1: etiquetas -->
+                <Label styleClass="filter-label" text="Profesor" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Label styleClass="filter-label" text="Solicitante" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <Label styleClass="filter-label" text="Tipo de espacio" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <Label styleClass="filter-label" text="Espacio" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                <Label styleClass="filter-label" text="Estado de la asignación" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+
+                <!-- Fila 2: campos -->
+                <ComboBox fx:id="cmbProfesor" maxWidth="Infinity" promptText="Todos"
+                          GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="txtSolicitante" promptText="Nombre del solicitante"
+                           GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cmbTipoEspacio" maxWidth="Infinity" promptText="Todos"
+                          GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cmbEspacio" maxWidth="Infinity" promptText="Todos"
+                          GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cmbEstado" maxWidth="Infinity" promptText="Todos"
+                          GridPane.columnIndex="4" GridPane.rowIndex="1" />
+
+                <!-- Fila 3: etiquetas -->
+                <Label styleClass="filter-label" text="Carrera" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Label styleClass="filter-label" text="Materia" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label styleClass="filter-label" text="Grupo" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+
+                <!-- Fila 4: campos -->
+                <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Todos"
+                          GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <TextField fx:id="txtMateria" promptText="Nombre de la materia"
+                           GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="txtGrupo" promptText="Ej. GTID235"
+                           GridPane.columnIndex="2" GridPane.rowIndex="3" />
+
+            </GridPane>
+
+            <!-- Rango de fechas + botones -->
+            <Label styleClass="filter-label" text="Rango de fechas" />
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Label styleClass="filter-inline-label" text="Desde" />
+                <DatePicker fx:id="dtDesde" prefWidth="150.0" />
+                <Label styleClass="filter-inline-label" text="Hasta" />
+                <DatePicker fx:id="dtHasta" prefWidth="150.0" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Button fx:id="btnLimpiar" onAction="#onLimpiarFiltros" styleClass="btn-secundario" text="Limpiar filtros" />
+                <Button fx:id="btnBuscar" onAction="#onBuscar" styleClass="btn-primario" text="🔍  Buscar" />
+            </HBox>
+
+        </VBox>
+
+        <!-- ===== Tarjeta de resultados ===== -->
+        <VBox spacing="12.0" styleClass="consultas-card">
+
+            <HBox alignment="CENTER_LEFT" spacing="4.0">
+                <Label styleClass="resultados-titulo" text="Resultados de la búsqueda" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label styleClass="resultados-texto" text="Se encontraron" />
+                <Label fx:id="lblCantidadResultados" styleClass="resultados-numero" text="0" />
+                <Label styleClass="resultados-texto" text="asignaciones" />
+                <Button fx:id="btnExportar" onAction="#onExportar" styleClass="btn-secundario" text="⬇  Exportar" />
+            </HBox>
+
+            <TableView fx:id="tblResultados" prefHeight="320.0" styleClass="consultas-tabla">
+                <columns>
+                    <TableColumn fx:id="colHorario" prefWidth="100.0" text="Horario" />
+                    <TableColumn fx:id="colEspacio" prefWidth="140.0" text="Espacio" />
+                    <TableColumn fx:id="colSolicitante" prefWidth="170.0" text="Profesor / Solicitante" />
+                    <TableColumn fx:id="colGrupo" prefWidth="90.0" text="Grupo" />
+                    <TableColumn fx:id="colEstado" prefWidth="100.0" text="Estado" />
+                    <TableColumn fx:id="colMotivo" prefWidth="140.0" text="Motivo" />
+                    <TableColumn fx:id="colCarrera" prefWidth="130.0" text="Carrera" />
+                    <TableColumn fx:id="colMateria" prefWidth="130.0" text="Materia" />
+                </columns>
+            </TableView>
+
+        </VBox>
+
+    </VBox>
+
+</ScrollPane>

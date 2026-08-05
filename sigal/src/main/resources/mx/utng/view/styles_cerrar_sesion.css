@@ -1,0 +1,112 @@
+/* =========================================================
+   SIGAL - Estilos pantalla "Cerrar sesión"
+   Modal de confirmación con la misma paleta oscura y acentos
+   morado/azul/rosa que el resto del sistema (ver styles_profesores.css).
+   ========================================================= */
+
+/* Fondo oscurecido que cubre la pantalla de origen mientras el modal
+   está abierto. */
+.logout-overlay {
+    -fx-background-color: rgba(2, 6, 20, 0.72);
+}
+
+/* ===================== TARJETA ===================== */
+.logout-card {
+    -fx-background-color: #0d1226;
+    -fx-background-radius: 24;
+    -fx-border-color: rgba(124, 58, 237, 0.35);
+    -fx-border-radius: 24;
+    -fx-border-width: 1.4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.55), 40, 0.25, 0, 14);
+}
+
+/* ===================== ICONO ===================== */
+.logout-icon-ring {
+    -fx-fill: transparent;
+    -fx-stroke-width: 3.5;
+    -fx-stroke: linear-gradient(to bottom right, #3b82f6, #7c3aed, #ec4899);
+}
+
+.logout-icon-symbol {
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to bottom, #fb7185, #e11d48);
+}
+
+.sparkle {
+    -fx-text-fill: #8b5cf6;
+    -fx-opacity: 0.8;
+}
+
+.sparkle-1 {
+    -fx-font-size: 15px;
+}
+
+.sparkle-2 {
+    -fx-font-size: 10px;
+    -fx-text-fill: #60a5fa;
+}
+
+.sparkle-3 {
+    -fx-font-size: 13px;
+}
+
+/* ===================== TEXTOS ===================== */
+.logout-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.logout-subtitle {
+    -fx-text-fill: rgba(255, 255, 255, 0.62);
+    -fx-font-size: 13.5px;
+    -fx-line-spacing: 3;
+}
+
+/* ===================== SEPARADOR ===================== */
+.logout-divider-line {
+    -fx-background-color: linear-gradient(to right, rgba(59, 130, 246, 0), #7c3aed, rgba(236, 72, 153, 0));
+}
+
+.logout-divider-dot {
+    -fx-fill: #60a5fa;
+    -fx-effect: dropshadow(gaussian, rgba(96, 165, 250, 0.85), 8, 0.5, 0, 0);
+}
+
+/* ===================== BOTONES ===================== */
+.btn-cancelar {
+    -fx-background-color: rgba(255, 255, 255, 0.04);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(96, 165, 250, 0.4);
+    -fx-border-radius: 12;
+    -fx-border-width: 1.4;
+    -fx-text-fill: #60a5fa;
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 14 0 14 0;
+}
+
+.btn-cancelar:hover {
+    -fx-background-color: rgba(96, 165, 250, 0.12);
+}
+
+.btn-confirmar {
+    -fx-background-color: linear-gradient(to right, #2563eb, #7c3aed);
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 14 0 14 0;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 18, 0.25, 0, 5);
+}
+
+.btn-confirmar:hover {
+    -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+}
+
+.btn-confirmar:pressed {
+    -fx-background-color: linear-gradient(to right, #1d4ed8, #6d28d9);
+}

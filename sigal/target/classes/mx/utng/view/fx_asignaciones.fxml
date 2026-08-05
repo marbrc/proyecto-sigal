@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Polyline?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane styleClass="menu-root" stylesheets="@styles_asignaciones.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AsignacionesController">
+
+    <!-- PANTALLA PRINCIPAL -->
+    <BorderPane fx:id="mainLayout">
+
+
+        <!-- TOP + CONTENIDO -->
+        <center>
+            <VBox styleClass="menu-content-bg">
+
+                <!-- CONTENIDO: FORMULARIO + DISPONIBILIDAD -->
+                <HBox alignment="TOP_LEFT" spacing="14.0" styleClass="asig-row">
+                    <padding>
+                        <Insets bottom="4.0" left="34.0" right="34.0" top="8.0" />
+                    </padding>
+
+                    <!-- Nueva asignación -->
+                    <VBox spacing="7.0" styleClass="panel-card-compact, panel-glow-blue" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <StackPane styleClass="panel-icon-box-blue">
+                                <Group>
+                                    <Rectangle arcHeight="2" arcWidth="2" height="12" styleClass="icon-stroke-blue" width="14" x="-7" y="-5" />
+                                    <Line endX="-3.5" endY="-4" startX="-3.5" startY="-7" styleClass="icon-stroke-blue" />
+                                    <Line endX="3.5" endY="-4" startX="3.5" startY="-7" styleClass="icon-stroke-blue" />
+                                    <Line endX="7" endY="-1" startX="-7" startY="-1" styleClass="icon-stroke-blue" />
+                                </Group>
+                            </StackPane>
+                            <Label styleClass="panel-title" text="Nueva asignación" />
+                        </HBox>
+
+                        <GridPane hgap="12.0" vgap="5.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints />
+                                <RowConstraints />
+                                <RowConstraints />
+                                <RowConstraints />
+                                <RowConstraints />
+                            </rowConstraints>
+
+                            <!-- Fila 1 -->
+                            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label styleClass="field-label" text="Solicitante *" />
+                                <ComboBox fx:id="cmbSolicitante" maxWidth="Infinity" promptText="Seleccionar tipo" styleClass="field-combo" />
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label styleClass="field-label" text="Nombre del solicitante *" />
+                                <TextField fx:id="txtNombreSolicitante" promptText="Ingrese nombre completo" styleClass="field-input" />
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label styleClass="field-label" text="Profesor" />
+                                <ComboBox fx:id="cmbProfesor" maxWidth="Infinity" promptText="Seleccionar profesor" styleClass="field-combo" />
+                            </VBox>
+                            <HBox alignment="BOTTOM_LEFT" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                <CheckBox fx:id="chkSinProfesor" styleClass="field-checkbox" text="Otro / Ninguno" />
+                            </HBox>
+
+                            <!-- Fila 2 -->
+                            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label styleClass="field-label" text="Espacio *" />
+                                <ComboBox fx:id="cmbEspacio" maxWidth="Infinity" promptText="Seleccionar espacio" styleClass="field-combo" />
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label styleClass="field-label" text="Carrera *" />
+                                <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Seleccionar carrera" styleClass="field-combo" />
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Label styleClass="field-label" text="Materia *" />
+                                <TextField fx:id="txtMateria" promptText="Ingrese la materia" styleClass="field-input" />
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                <Label styleClass="field-label" text="Grupo *" />
+                                <TextField fx:id="txtGrupo" promptText="Ingrese el grupo" styleClass="field-input" />
+                            </VBox>
+
+                            <!-- Checkbox otra carrera (debajo de Carrera, ocupa poco espacio) -->
+                            <HBox alignment="CENTER_LEFT" spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <CheckBox fx:id="chkOtraCarrera" prefHeight="18.0" prefWidth="105.0" styleClass="field-checkbox" text="Otra carrera" />
+                                <TextField fx:id="txtOtraCarrera" managed="false" visible="false" promptText="Nombre de la carrera" styleClass="field-input" HBox.hgrow="ALWAYS" />
+                            </HBox>
+
+                            <!-- Fila 3 -->
+                            <VBox spacing="3.0" GridPane.rowIndex="3">
+                                <Label styleClass="field-label" text="Número de alumnos *" />
+                                <TextField fx:id="txtNumAlumnos" promptText="Ingrese cantidad" styleClass="field-input" />
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <Label styleClass="field-label" text="Fecha *" />
+                                <DatePicker fx:id="dpFecha" maxWidth="Infinity" promptText="Seleccionar fecha" styleClass="field-date" />
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                <Label styleClass="field-label" text="Hora inicio *" />
+                                <HBox alignment="CENTER_LEFT" styleClass="field-time-box">
+                                    <TextField fx:id="txtHoraInicio" promptText="Seleccionar hora" styleClass="field-time-input" HBox.hgrow="ALWAYS" />
+                                    <StackPane styleClass="field-time-icon">
+                                        <Group>
+                                            <Circle centerX="0" centerY="0" radius="6" styleClass="icon-stroke-muted" />
+                                            <Line endX="0" endY="-3.2" startX="0" startY="0" styleClass="icon-stroke-muted" />
+                                            <Line endX="2.7" endY="0" startX="0" startY="0" styleClass="icon-stroke-muted" />
+                                        </Group>
+                                    </StackPane>
+                                </HBox>
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                                <Label styleClass="field-label" text="Hora término *" />
+                                <HBox alignment="CENTER_LEFT" styleClass="field-time-box">
+                                    <TextField fx:id="txtHoraTermino" promptText="Seleccionar hora" styleClass="field-time-input" HBox.hgrow="ALWAYS" />
+                                    <StackPane styleClass="field-time-icon">
+                                        <Group>
+                                            <Circle centerX="0" centerY="0" radius="6" styleClass="icon-stroke-muted" />
+                                            <Line endX="0" endY="-3.2" startX="0" startY="0" styleClass="icon-stroke-muted" />
+                                            <Line endX="2.7" endY="0" startX="0" startY="0" styleClass="icon-stroke-muted" />
+                                        </Group>
+                                    </StackPane>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Fila 4: actividad -->
+                            <VBox spacing="3.0" GridPane.columnSpan="4" GridPane.rowIndex="4">
+                                <Label styleClass="field-label" text="Actividad o motivo *" />
+                                <TextArea fx:id="txtActividad" prefHeight="26.0" promptText="Describa la actividad o motivo de la asignación" styleClass="field-textarea" wrapText="true" />
+                            </VBox>
+                        </GridPane>
+
+                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                            <Button fx:id="btnLimpiar" onAction="#onLimpiar" styleClass="btn-secondary-compact" text="↻  Limpiar" />
+                            <Button fx:id="btnGuardar" onAction="#onGuardarAsignacion" styleClass="btn-primary-compact" text="✓  Guardar asignación" />
+                        </HBox>
+                    </VBox>
+
+                    <!-- Disponibilidad de espacios -->
+                    <VBox prefWidth="330.0" spacing="6.0" styleClass="panel-card-compact, panel-glow-purple">
+                        <HBox alignment="CENTER_LEFT">
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <StackPane styleClass="panel-icon-box-blue">
+                                    <Group>
+                                        <Rectangle arcHeight="2" arcWidth="2" height="12" styleClass="icon-stroke-blue" width="14" x="-7" y="-5" />
+                                        <Line endX="-3.5" endY="-4" startX="-3.5" startY="-7" styleClass="icon-stroke-blue" />
+                                        <Line endX="3.5" endY="-4" startX="3.5" startY="-7" styleClass="icon-stroke-blue" />
+                                        <Line endX="7" endY="-1" startX="-7" startY="-1" styleClass="icon-stroke-blue" />
+                                    </Group>
+                                </StackPane>
+                                <Label styleClass="panel-title" text="Disponibilidad de espacios" />
+                            </HBox>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="lblVerMasDisponibilidad" onMouseClicked="#onVerMasDisponibilidad" styleClass="panel-link-small" text="Ver más →" />
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="avail-item-green">
+                            <StackPane styleClass="avail-icon-green">
+                                <Polyline points="-5,0,-1.5,4,5,-5" styleClass="icon-stroke-green-thick" />
+                            </StackPane>
+                            <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                                <Label fx:id="lblDisponibles" styleClass="avail-number-green" text="8" />
+                                <Label styleClass="avail-label" text="Espacios disponibles" />
+                                <Label styleClass="avail-sub" text="Listos para asignar" />
+                            </VBox>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="avail-item-red">
+                            <StackPane styleClass="avail-icon-red">
+                                <Group>
+                                    <Circle centerX="0" centerY="0" radius="6" styleClass="icon-stroke-red" />
+                                    <Line endX="3" endY="3" startX="-3" startY="-3" styleClass="icon-stroke-red" />
+                                    <Line endX="3" endY="-3" startX="-3" startY="3" styleClass="icon-stroke-red" />
+                                </Group>
+                            </StackPane>
+                            <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                                <Label fx:id="lblOcupados" styleClass="avail-number-red" text="13" />
+                                <Label styleClass="avail-label" text="Espacios ocupados" />
+                                <Label styleClass="avail-sub" text="Asignados actualmente" />
+                            </VBox>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="avail-item-orange">
+                            <StackPane styleClass="avail-icon-orange">
+                                <Group>
+                                    <Rectangle height="9" rotate="45" styleClass="icon-stroke-orange" width="3" x="-1.5" y="-2" />
+                                    <Circle centerX="4" centerY="-4" radius="3" styleClass="icon-stroke-orange" />
+                                </Group>
+                            </StackPane>
+                            <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                                <Label fx:id="lblMantenimiento" styleClass="avail-number-orange" text="2" />
+                                <Label styleClass="avail-label" text="En mantenimiento" />
+                                <Label styleClass="avail-sub" text="No disponibles temporalmente" />
+                            </VBox>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="avail-item-gray">
+                            <StackPane styleClass="avail-icon-gray">
+                                <Circle centerX="0" centerY="0" radius="6" styleClass="icon-stroke-gray" />
+                            </StackPane>
+                            <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                                <Label fx:id="lblCancelados" styleClass="avail-number-gray" text="1" />
+                                <Label styleClass="avail-label" text="Cancelados hoy" />
+                                <Label styleClass="avail-sub" text="Asignaciones canceladas" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <!-- ASIGNACIONES REGISTRADAS -->
+                <VBox spacing="10.0" styleClass="panel-card-table" VBox.vgrow="ALWAYS">
+                    <padding>
+                        <Insets bottom="18.0" left="34.0" right="34.0" top="6.0" />
+                    </padding>
+
+                    <VBox spacing="14.0" styleClass="panel-card, panel-glow-blue">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <StackPane styleClass="panel-icon-box-blue">
+                                    <Group>
+                                        <Rectangle arcHeight="2" arcWidth="2" height="12" styleClass="icon-stroke-blue" width="14" x="-7" y="-5" />
+                                        <Line endX="-3.5" endY="-4" startX="-3.5" startY="-7" styleClass="icon-stroke-blue" />
+                                        <Line endX="3.5" endY="-4" startX="3.5" startY="-7" styleClass="icon-stroke-blue" />
+                                        <Line endX="7" endY="-1" startX="-7" startY="-1" styleClass="icon-stroke-blue" />
+                                    </Group>
+                                </StackPane>
+                                <Label styleClass="panel-title" text="Asignaciones registradas" />
+                            </HBox>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <TextField fx:id="txtBuscar" promptText="Buscar asignación..." styleClass="search-input" />
+                            <Button fx:id="btnFiltros" styleClass="btn-filter" text="▤  Filtros" />
+                        </HBox>
+
+                        <TableView fx:id="tablaAsignaciones" styleClass="asig-table" VBox.vgrow="ALWAYS">
+                            <placeholder>
+                                <Label styleClass="asig-table-placeholder" text="No hay asignaciones registradas todavía" />
+                            </placeholder>
+                            <columns>
+                                <TableColumn fx:id="colId" prefWidth="90.0" text="ID" />
+                                <TableColumn fx:id="colFecha" prefWidth="90.0" text="Fecha" />
+                                <TableColumn fx:id="colHora" prefWidth="120.0" text="Hora" />
+                                <TableColumn fx:id="colEspacio" prefWidth="130.0" text="Espacio" />
+                                <TableColumn fx:id="colSolicitante" prefWidth="120.0" text="Solicitante" />
+                                <TableColumn fx:id="colProfesor" prefWidth="120.0" text="Profesor" />
+                                <TableColumn fx:id="colMateria" prefWidth="140.0" text="Materia" />
+                                <TableColumn fx:id="colGrupo" prefWidth="70.0" text="Grupo" />
+                                <TableColumn fx:id="colActividad" prefWidth="90.0" text="Actividad" />
+                                <TableColumn fx:id="colEstado" prefWidth="110.0" text="Estado" />
+                                <TableColumn fx:id="colAcciones" prefWidth="110.0" sortable="false" text="Acciones" />
+                            </columns>
+                        </TableView>
+
+                        <HBox alignment="CENTER">
+                            <Pagination fx:id="paginacion" maxPageIndicatorCount="5" pageCount="12" styleClass="asig-pagination" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </center>
+    </BorderPane>
+
+</StackPane>
