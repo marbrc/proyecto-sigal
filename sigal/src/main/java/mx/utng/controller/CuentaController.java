@@ -1,6 +1,9 @@
 package mx.utng.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -12,8 +15,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import mx.utng.dao.UsuarioDAO;
 import mx.utng.model.Usuario;
+import mx.utng.util.AvatarUtil;
 
 /**
  * Controlador de la pantalla "Mi cuenta" (fx_cuenta.fxml).
@@ -43,6 +51,10 @@ public class CuentaController implements Initializable {
     @FXML private Label lblCuentaIniciales;
     @FXML private Label lblCuentaCorreo;
     @FXML private Label lblCuentaRolBadge;
+    @FXML private Circle avatarCirculo;
+    @FXML private ImageView imgAvatarCuenta;
+    @FXML private Button btnCambiarFoto;
+    @FXML private Button btnQuitarFoto;
 
     // --------------------------- Datos personales ---------------------------
     @FXML private TextField txtNombre;
@@ -89,7 +101,14 @@ public class CuentaController implements Initializable {
         txtApellidoPaterno.setText(usuarioActual.getApellidoPaterno());
         txtApellidoMaterno.setText(usuarioActual.getApellidoMaterno());
         txtNombreUsuario.setText(usuarioActual.getNombreUsuario());
-        
+
+        String nombreCompleto = (usuarioActual.getNombre() + " " + usuarioActual.getApellidoPaterno()).trim();
+        lblCuentaNombreCompleto.setText(nombreCompleto.isBlank() ? usuarioActual.getNombreUsuario() : nombreCompleto);
+        lblCuentaIniciales.setText(obtenerIniciales(usuarioActual.getNombre(), usuarioActual.getApellidoPaterno()));
+        lblCuentaCorreo.setText(usuarioActual.getCorreoElectronico());
+        lblCuentaRolBadge.setText(usuarioActual.getRol());
+
+        AvatarUtil.aplicar(imgAvatarCuenta, lblCuentaIniciales, usuarioActual.getFotoPerfil());
     }
 
      /**
@@ -226,6 +245,75 @@ public class CuentaController implements Initializable {
 
         mostrarAlerta(AlertType.INFORMATION, "Contraseña actualizada",
                 "Tu contraseña se cambió correctamente.");
+    }
+
+    // ============================================================
+    //  FOTO DE PERFIL
+    // ============================================================
+
+    /** 3 MB: suficiente para una foto de perfil sin dejar crecer demasiado la base de datos. */
+    private static final long TAMANO_MAXIMO_FOTO_BYTES = 3L * 1024 * 1024;
+
+    @FXML
+    private void onCambiarFoto(ActionEvent event) {
+        if (usuarioActual == null) return;
+
+        FileChooser selector = new FileChooser();
+        selector.setTitle("Elige tu foto de perfil");
+        selector.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Imágenes (JPG, PNG)", "*.jpg", "*.jpeg", "*.png"));
+
+        Window ventana = btnCambiarFoto.getScene() != null ? btnCambiarFoto.getScene().getWindow() : null;
+        File archivo = selector.showOpenDialog(ventana);
+        if (archivo == null) {
+            return; // el usuario cerró el selector sin elegir nada
+        }
+
+        if (archivo.length() > TAMANO_MAXIMO_FOTO_BYTES) {
+            mostrarAlerta(AlertType.WARNING, "Imagen muy pesada",
+                    "Elige una imagen de máximo 3 MB.");
+            return;
+        }
+
+        try {
+            byte[] fotoBytes = Files.readAllBytes(archivo.toPath());
+            guardarFoto(fotoBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta(AlertType.ERROR, "No se pudo leer la imagen",
+                    "Ocurrió un problema al abrir el archivo que elegiste.");
+        }
+    }
+
+    @FXML
+    private void onQuitarFoto(ActionEvent event) {
+        if (usuarioActual == null || usuarioActual.getFotoPerfil() == null) {
+            return; // ya no tiene foto, nada que quitar
+        }
+        guardarFoto(null);
+    }
+
+    /** Guarda la foto (o null para quitarla) en la BD y la refleja en esta pantalla y en la barra lateral. */
+    private void guardarFoto(byte[] fotoBytes) {
+        boolean guardado = usuarioDAO.actualizarFotoPerfil(usuarioActual.getIdUsuario(), fotoBytes);
+
+        if (!guardado) {
+            mostrarAlerta(AlertType.ERROR, "No se pudo guardar la foto",
+                    "Ocurrió un problema al guardar tu foto de perfil en la base de datos.");
+            return;
+        }
+
+        usuarioActual.setFotoPerfil(fotoBytes);
+        AvatarUtil.aplicar(imgAvatarCuenta, lblCuentaIniciales, fotoBytes);
+
+        if (menuController != null) {
+            menuController.setFotoPerfilSesion(fotoBytes);
+        }
+
+        mostrarAlerta(AlertType.INFORMATION,
+                fotoBytes == null ? "Foto eliminada" : "Foto actualizada",
+                fotoBytes == null ? "Tu foto de perfil se quitó correctamente."
+                                   : "Tu foto de perfil se actualizó correctamente.");
     }
 
     private void mostrarAlerta(AlertType tipo, String titulo, String mensaje) {

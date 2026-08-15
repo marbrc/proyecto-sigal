@@ -218,6 +218,75 @@ public class AvisoDAO {
     }
 
     // ============================================================
+    //  DASHBOARD (fx_inicio.fxml)
+    // ============================================================
+
+    /** Cuántos avisos siguen sin leerse (tarjeta "Avisos"). */
+    public int contarNoLeidos() {
+        String sql = "SELECT COUNT(*) AS Total FROM tb_aviso WHERE Estado = 'No leído'";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("Total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /** Avisos sin leer, para el modal de la tarjeta "Avisos". */
+    public ObservableList<Aviso> listarNoLeidos() {
+        ObservableList<Aviso> lista = FXCollections.observableArrayList();
+
+        String sql = """
+                SELECT av.ID_Aviso, av.TipoAviso, av.Descripcion, av.Comentarios,
+                       av.Fecha, av.Estado, av.ID_Espacio,
+                       e.NombreEspacio
+                FROM tb_aviso av
+                LEFT JOIN tb_espacio e ON e.ID_Espacio = av.ID_Espacio
+                WHERE av.Estado = 'No leído'
+                ORDER BY av.Fecha DESC, av.ID_Aviso DESC
+                """;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                String nombreEspacio = rs.getString("NombreEspacio");
+                if (nombreEspacio == null || nombreEspacio.isBlank()) {
+                    nombreEspacio = "General";
+                }
+                String comentarios = rs.getString("Comentarios");
+
+                Aviso aviso = new Aviso(
+                        rs.getInt("ID_Aviso"),
+                        rs.getDate("Fecha").toLocalDate().format(FORMATO_FECHA_UI),
+                        nombreEspacio,
+                        rs.getString("TipoAviso"),
+                        rs.getString("Descripcion"),
+                        comentarios == null ? "" : comentarios,
+                        rs.getString("Estado")
+                );
+
+                int idEspacio = rs.getInt("ID_Espacio");
+                aviso.setIdEspacio(rs.wasNull() ? null : idEspacio);
+
+                lista.add(aviso);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    // ============================================================
     //  ELIMINAR
     // ============================================================
 

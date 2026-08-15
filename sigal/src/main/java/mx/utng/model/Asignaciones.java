@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Modelo que representa una asignación (reservación) de un espacio
+ * Modelo que representa una asignación (asignación) de un espacio
  * (aula, laboratorio o sala) dentro del sistema SIGAL.
  *
  * Se usa tanto para llenar el formulario "Nueva asignación" como
@@ -30,7 +30,7 @@ public class Asignaciones {
     private final StringProperty numAlumnos;
     private final StringProperty actividad;
 
-    private final StringProperty estado; // Libre / Ocupado / Reservado / Cancelado (ENUM de tb_asignacion)
+    private final StringProperty estado; // Libre / Ocupado / Asignado / Cancelado (ENUM de tb_asignacion)
 
     public Asignaciones() {
         this("", "", "", "", "", "", "", "", "", "", "", "", "", "");

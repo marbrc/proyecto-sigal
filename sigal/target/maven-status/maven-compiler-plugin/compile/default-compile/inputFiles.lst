@@ -23,10 +23,12 @@ C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\dao\AsignacionDAO.jav
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\dao\AvisoDAO.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\dao\ConsultaDAO.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\dao\EspacioDAO.java
+C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\dao\ProfesorDAO.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\dao\ReporteDAO.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\dao\UsuarioDAO.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\database\Conexion.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\model\Asignaciones.java
+C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\model\AsignacionHorario.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\model\Aviso.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\model\CeldaHorario.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\model\Consultas.java
@@ -40,6 +42,7 @@ C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\model\ResultadoReport
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\model\Usuario.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\PrimaryController.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\SecondaryController.java
+C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\util\AvatarUtil.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\util\CerrarSesionDialog.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\util\ReporteExportador.java
 C:\Users\Laura\Downloads\SIGAL\sigal\src\main\java\mx\utng\util\ThemeManager.java

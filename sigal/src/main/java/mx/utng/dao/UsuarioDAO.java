@@ -37,7 +37,9 @@ public class UsuarioDAO {
             u.setRol(rs.getString("Rol"));
             u.setEstado(rs.getString("Estado"));
             u.setTema(rs.getString("Tema"));
-            u.setNotificaciones(rs.getString("Notificaciones"));            return u;
+            u.setNotificaciones(rs.getString("Notificaciones"));
+            u.setFotoPerfil(rs.getBytes("FotoPerfil"));
+            return u;
         }
         
         return null;
@@ -75,6 +77,9 @@ public class UsuarioDAO {
                 u.setCorreoElectronico(rs.getString("CorreoElectronico"));
                 u.setRol(rs.getString("Rol"));
                 u.setEstado(rs.getString("Estado"));
+                u.setTema(rs.getString("Tema"));
+                u.setNotificaciones(String.valueOf(rs.getBoolean("Notificaciones")));
+                u.setFotoPerfil(rs.getBytes("FotoPerfil"));
                 return u;
             }
             return null;
@@ -174,6 +179,51 @@ public class UsuarioDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, tema);
+            ps.setInt(2, idUsuario);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Guarda si las notificaciones (mantenimiento, recordatorios, reportes)
+     * están activadas. tb_usuario.Notificaciones hoy es un solo tinyint(1),
+     * así que representa "¿al menos una notificación activada?" en conjunto;
+     * si más adelante se necesita guardar cada switch por separado, hay que
+     * agregar columnas nuevas (ej. NotifMantenimiento, NotifRecordatorios,
+     * NotifReportes) y un método que las reciba.
+     */
+    public boolean actualizarNotificaciones(int idUsuario, boolean activas) {
+        String sql = "UPDATE tb_usuario SET Notificaciones = ? WHERE ID_Usuario = ?";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setBoolean(1, activas);
+            ps.setInt(2, idUsuario);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /** Guarda (o borra, si fotoBytes es null) la foto de perfil del usuario. */
+    public boolean actualizarFotoPerfil(int idUsuario, byte[] fotoBytes) {
+        String sql = "UPDATE tb_usuario SET FotoPerfil = ? WHERE ID_Usuario = ?";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            if (fotoBytes == null) {
+                ps.setNull(1, java.sql.Types.BLOB);
+            } else {
+                ps.setBytes(1, fotoBytes);
+            }
             ps.setInt(2, idUsuario);
             return ps.executeUpdate() > 0;
 

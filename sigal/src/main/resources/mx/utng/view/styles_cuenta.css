@@ -151,6 +151,17 @@
     -fx-padding: 4 12 4 12;
 }
 
+.cuenta-nombre-completo {
+    -fx-text-fill: #e6eefc;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.cuenta-correo {
+    -fx-text-fill: #7c8bb5;
+    -fx-font-size: 11.5px;
+}
+
 /* ---------------- CAMPOS ---------------- */
 
 .field-label {

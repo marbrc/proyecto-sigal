@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -31,7 +32,27 @@
 
     
     <VBox spacing="16.0" VBox.vgrow="ALWAYS">
-        
+
+        <!-- Foto de perfil e identidad -->
+        <HBox alignment="CENTER_LEFT" spacing="18.0" styleClass="panel-card-compact-sm, panel-glow-blue">
+            <StackPane prefHeight="64.0" prefWidth="64.0">
+                <Circle fx:id="avatarCirculo" radius="32.0" styleClass="cuenta-avatar-circle" />
+                <Label fx:id="lblCuentaIniciales" styleClass="cuenta-avatar-iniciales" text="?" />
+                <ImageView fx:id="imgAvatarCuenta" fitHeight="64.0" fitWidth="64.0" managed="false" preserveRatio="false" visible="false" />
+            </StackPane>
+            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblCuentaNombreCompleto" styleClass="cuenta-nombre-completo" text="Nombre Apellido" />
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label fx:id="lblCuentaRolBadge" styleClass="cuenta-rol-badge" text="Rol" />
+                    <Label fx:id="lblCuentaCorreo" styleClass="cuenta-correo" text="correo@utng.edu.mx" />
+                </HBox>
+                <HBox spacing="10.0">
+                    <Button fx:id="btnCambiarFoto" onAction="#onCambiarFoto" styleClass="btn-secondary-compact" text="Cambiar foto" />
+                    <Button fx:id="btnQuitarFoto" onAction="#onQuitarFoto" styleClass="btn-secondary-compact" text="Quitar foto" />
+                </HBox>
+            </VBox>
+        </HBox>
+
         <HBox spacing="16.0">
 
             <!-- Datos personales -->

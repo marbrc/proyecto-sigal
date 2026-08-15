@@ -24,13 +24,7 @@
 
             <!-- Encabezado -->
             <HBox alignment="CENTER_LEFT" spacing="14.0">
-                <StackPane styleClass="header-icon-box">
-                    <Label styleClass="header-icon" text="📊" />
-                </StackPane>
-                <VBox alignment="CENTER_LEFT" spacing="2.0">
-                    <Label styleClass="page-title" text="Reportes" />
-                    <Label styleClass="page-subtitle" text="Genera reportes de ocupación de espacios académicos por periodo." />
-                </VBox>
+                <VBox alignment="CENTER_LEFT" spacing="2.0" />
             </HBox>
 
             <!-- Filtros -->

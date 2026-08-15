@@ -53,16 +53,16 @@
 }
 
 /* ---------- Ventanas de confirmación / alertas (Profesores, Horarios, Cuenta, Admin) ---------- */
-.themed-dialog, .dialog-reserva, .confirm-dialog {
+.themed-dialog, .dialog-asignacion, .confirm-dialog {
     -fx-background-color: #10152c !important;
 }
-.themed-dialog > *.header-panel, .dialog-reserva .header-panel, .confirm-dialog .header-panel {
+.themed-dialog > *.header-panel, .dialog-asignacion .header-panel, .confirm-dialog .header-panel {
     -fx-background-color: #10152c !important;
 }
-.themed-dialog > *.content, .dialog-reserva .content, .confirm-dialog .content {
+.themed-dialog > *.content, .dialog-asignacion .content, .confirm-dialog .content {
     -fx-background-color: #10152c !important;
 }
-.themed-dialog .button-bar, .dialog-reserva .button-bar {
+.themed-dialog .button-bar, .dialog-asignacion .button-bar {
     -fx-background-color: #10152c !important;
 }
 .page-title, .card-title, .panel-title, .empty-title, .modal-title,

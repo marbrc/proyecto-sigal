@@ -5,6 +5,7 @@
 
 .login-root {
     -fx-background-color: #05070f;
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
 
 /* Tarjeta principal */

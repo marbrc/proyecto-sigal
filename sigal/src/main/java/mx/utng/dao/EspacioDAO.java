@@ -194,5 +194,77 @@ public class EspacioDAO {
             return false;
         }
     }
+
+    // ============================================================
+    //  DASHBOARD (fx_inicio.fxml)
+    // ============================================================
+
+    /** Total de espacios registrados (tarjeta "Espacios"). */
+    public int contarTotal() {
+        String sql = "SELECT COUNT(*) AS Total FROM tb_espacio";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("Total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Espacios "Disponible" en tb_espacio que además, ahora mismo,
+     * no tienen ninguna asignación en curso (tarjeta "Disponibles").
+     */
+    public ObservableList<EspacioRegistro> listarDisponiblesAhora() {
+        ObservableList<EspacioRegistro> lista = FXCollections.observableArrayList();
+
+        String sql = """
+                SELECT e.ID_Espacio, e.ClaveEspacio, e.NombreEspacio, e.TipoEspacio,
+                       e.CapacidadMaxima, e.Estado, e.Descripcion
+                FROM tb_espacio e
+                WHERE e.Estado = 'Disponible'
+                  AND NOT EXISTS (
+                        SELECT 1 FROM tb_asignacion a
+                        WHERE a.ID_Espacio = e.ID_Espacio
+                          AND a.Fecha = CURDATE()
+                          AND a.Estado IN ('Asignado', 'Ocupado')
+                          AND CURTIME() BETWEEN a.HoraInicio AND a.HoraTermino
+                  )
+                ORDER BY e.NombreEspacio
+                """;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                EspacioRegistro espacio = new EspacioRegistro(
+                        rs.getString("ClaveEspacio"),
+                        rs.getString("NombreEspacio"),
+                        rs.getString("TipoEspacio"),
+                        rs.getInt("CapacidadMaxima"),
+                        rs.getString("Estado"),
+                        rs.getString("Descripcion")
+                );
+                espacio.setIdEspacio(rs.getInt("ID_Espacio"));
+                lista.add(espacio);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    /** Igual que listarDisponiblesAhora(), pero solo el número (para la tarjeta). */
+    public int contarDisponiblesAhora() {
+        return listarDisponiblesAhora().size();
+    }
 }
  

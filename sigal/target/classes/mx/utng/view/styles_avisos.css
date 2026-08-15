@@ -1,7 +1,7 @@
 /* =========================================================
    SIGAL - Estilos pantalla "Avisos"
    Misma paleta oscura/azul del resto del sistema (ver
-   styles_espacios.css), con morado reservado para el título,
+   styles_espacios.css), con morado asignado para el título,
    el botón "Nuevo aviso" y los acentos de las tarjetas.
    Esta vista NO incluye menú lateral ni barra superior: se
    inserta dentro del panel de contenido (contentPane) del menú
@@ -10,6 +10,7 @@
 
 .page-root {
     -fx-background-color: #060b22;
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
 
 /* ===================== TEXTOS GENERALES ===================== */

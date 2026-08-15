@@ -5,7 +5,7 @@ package mx.utng.model;
  */
 public enum EstadoCelda {
     LIBRE("Libre"),
-    RESERVADO("Reservado"),
+    ASIGNADO("Asignado"),
     OCUPADO("Ocupado");
 
     private final String etiqueta;

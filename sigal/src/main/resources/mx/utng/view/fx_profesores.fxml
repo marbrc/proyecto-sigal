@@ -14,87 +14,87 @@
 
 <StackPane styleClass="page-root" stylesheets="@styles_profesores.css" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.ProfesoresController">
 
-    <VBox spacing="20.0">
+    <VBox spacing="16.0">
         <padding>
-            <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
+            <Insets bottom="18.0" left="34.0" right="34.0" top="14.0" />
         </padding>
 
-        <!-- ==== ENCABEZADO DE LA PANTALLA ==== -->
-        <HBox alignment="CENTER_LEFT" spacing="14.0">
-            <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnNuevoProfesor" onAction="#onNuevoProfesor" styleClass="primary-btn" text="+  Nuevo Profesor" />
-        </HBox>
-
-        <!-- ==== CONTENIDO: FORMULARIO + TABLA ==== -->
-        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+        <!-- ============ CONTENIDO: FORMULARIO + TABLA ============ -->
+        <HBox spacing="18.0" VBox.vgrow="ALWAYS">
 
             <!-- ==== PANEL IZQUIERDO: DATOS DEL PROFESOR ==== -->
-            <VBox prefWidth="420.0" spacing="16.0" styleClass="card">
-                <Label styleClass="card-title" text="Datos del profesor" />
+            <VBox prefWidth="400.0" spacing="14.0" styleClass="card">
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label styleClass="card-title" text="Datos del profesor" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="btnNuevoProfesor" onAction="#onNuevoProfesor" styleClass="btn-nuevo" text="+  Nuevo" />
+                </HBox>
 
-                <VBox spacing="8.0">
-                    <Label styleClass="field-label" text="Nombre completo *" />
-                    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="input-box">
+                <VBox spacing="6.0">
+                    <Label styleClass="field-label" text="Nombre *" />
+                    <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="input-box">
                         <Label styleClass="input-icon" text="👤" />
-                        <TextField fx:id="txtNombreCompleto" promptText="Ej. Juan Pérez García" styleClass="input-field" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="txtNombre" promptText="Ej. Juan" styleClass="input-field" HBox.hgrow="ALWAYS" />
                     </HBox>
                 </VBox>
 
-                <VBox spacing="8.0">
-                    <Label styleClass="field-label" text="Identificador de profesor (No. de empleado) *" wrapText="true" />
-                    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="input-box">
+                <VBox spacing="6.0">
+                    <Label styleClass="field-label" text="Apellido paterno *" />
+                    <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="input-box">
                         <Label styleClass="input-icon" text="🪪" />
-                        <TextField fx:id="txtIdentificador" promptText="Ej. EMP-0025" styleClass="input-field" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="txtApellidoPaterno" promptText="Ej. Pérez" styleClass="input-field" HBox.hgrow="ALWAYS" />
                     </HBox>
                 </VBox>
 
-                <VBox spacing="8.0">
-                    <Label styleClass="field-label" text="Correo electrónico *" />
-                    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="input-box">
+                <VBox spacing="6.0">
+                    <Label styleClass="field-label" text="Apellido materno" />
+                    <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="input-box">
+                        <Label styleClass="input-icon" text="🪪" />
+                        <TextField fx:id="txtApellidoMaterno" promptText="Ej. García" styleClass="input-field" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="6.0">
+                    <Label styleClass="field-label" text="Correo electrónico" />
+                    <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="input-box">
                         <Label styleClass="input-icon" text="✉" />
                         <TextField fx:id="txtCorreo" promptText="Ej. juan.perez@utng.edu.mx" styleClass="input-field" HBox.hgrow="ALWAYS" />
                     </HBox>
                 </VBox>
 
-                <VBox spacing="8.0">
-                    <Label styleClass="field-label" text="Carrera a la que pertenece *" />
-                    <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Seleccione la carrera" styleClass="input-combo" />
-                    <HBox fx:id="boxOtraCarrera" alignment="CENTER_LEFT" managed="false" spacing="10.0" styleClass="input-box" visible="false">
-                        <Label styleClass="input-icon" text="✎" />
-                        <TextField fx:id="txtOtraCarrera" promptText="Escribe el nombre de la carrera (opcional)" styleClass="input-field" HBox.hgrow="ALWAYS" />
-                    </HBox>
+                <VBox spacing="6.0" VBox.vgrow="ALWAYS">
+                    <Label styleClass="field-label" text="Usuario vinculado *" />
+                    <ComboBox fx:id="cmbUsuario" maxWidth="Infinity" promptText="Seleccione el usuario" styleClass="input-combo" />
                 </VBox>
 
-                <Region VBox.vgrow="ALWAYS" />
-
-                <HBox spacing="10.0">
-                    <Button fx:id="btnGuardar" onAction="#onGuardar" maxWidth="Infinity" styleClass="primary-btn" text="💾  Guardar" HBox.hgrow="ALWAYS" />
+                <HBox spacing="8.0">
+                    <Button fx:id="btnGuardar" onAction="#onGuardar" styleClass="primary-btn" text="💾  Guardar" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
                     <Button fx:id="btnLimpiar" onAction="#onLimpiar" styleClass="secondary-btn" text="↻  Limpiar" />
                     <Button fx:id="btnCancelar" onAction="#onCancelar" styleClass="cancel-btn" text="✕  Cancelar" />
                 </HBox>
             </VBox>
 
             <!-- ==== PANEL DERECHO: PROFESORES REGISTRADOS ==== -->
-            <VBox spacing="14.0" styleClass="card" HBox.hgrow="ALWAYS">
+            <VBox spacing="12.0" styleClass="card" HBox.hgrow="ALWAYS">
                 <Label styleClass="card-title" text="Profesores registrados" />
 
-                <HBox spacing="10.0">
-                    <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="input-box" HBox.hgrow="ALWAYS">
+                <HBox spacing="8.0">
+                    <HBox alignment="CENTER_LEFT" spacing="6.0" styleClass="input-box" HBox.hgrow="ALWAYS">
                         <Label styleClass="input-icon" text="🔍" />
-                        <TextField fx:id="txtBuscar" promptText="Buscar por nombre, identificador o correo..." styleClass="input-field" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="txtBuscar" promptText="Buscar por nombre, apellido o correo..." styleClass="input-field" HBox.hgrow="ALWAYS" />
                     </HBox>
-                    <ComboBox fx:id="cmbFiltroCarrera" prefWidth="190.0" styleClass="input-combo" />
-                    <ComboBox fx:id="cmbFiltroEstado" prefWidth="170.0" styleClass="input-combo" />
+                    <ComboBox fx:id="cmbFiltroUsuario" prefWidth="180.0" styleClass="input-combo" />
+                    <ComboBox fx:id="cmbFiltroRol" prefWidth="160.0" styleClass="input-combo" />
                     <Button fx:id="btnRefrescar" onAction="#onRefrescar" styleClass="icon-btn" text="↻" />
                 </HBox>
 
                 <TableView fx:id="tblProfesores" styleClass="data-table" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colNo" prefWidth="50.0" sortable="false" text="No." />
-                        <TableColumn fx:id="colNombre" prefWidth="220.0" text="Nombre completo" />
-                        <TableColumn fx:id="colIdentificador" prefWidth="130.0" text="Identificador" />
-                        <TableColumn fx:id="colCorreo" prefWidth="220.0" text="Correo electrónico" />
-                        <TableColumn fx:id="colCarrera" prefWidth="150.0" text="Carrera" />
+                        <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre completo" />
+                        <TableColumn fx:id="colCorreo" prefWidth="210.0" text="Correo electrónico" />
+                        <TableColumn fx:id="colUsuario" prefWidth="150.0" text="Usuario vinculado" />
+                        <TableColumn fx:id="colRol" prefWidth="110.0" text="Rol" />
                         <TableColumn fx:id="colAcciones" prefWidth="100.0" sortable="false" text="Acciones" />
                     </columns>
                     <columnResizePolicy>
@@ -102,7 +102,7 @@
                     </columnResizePolicy>
                 </TableView>
 
-                <Label fx:id="lblResultados" styleClass="results-label" text="Mostrando 1 a 8 de 8 profesores" />
+                <Label fx:id="lblResultados" styleClass="results-label" text="Mostrando 0 de 0 profesores" />
             </VBox>
 
         </HBox>

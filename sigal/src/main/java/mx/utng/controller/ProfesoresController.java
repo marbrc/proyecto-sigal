@@ -1,7 +1,8 @@
 package mx.utng.controller;
 
 import java.net.URL;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -17,8 +18,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,17 +28,34 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+import mx.utng.dao.ProfesorDAO;
 import mx.utng.model.Profesor;
 
+/**
+ * Controlador de la pantalla "Profesores" (fx_profesores.fxml).
+ *
+ * Usa EXACTAMENTE las columnas reales de tb_profesor (Nombre,
+ * ApellidoPaterno, ApellidoMaterno, CorreoElectronico, ID_Usuario) a
+ * través de ProfesorDAO. Como ID_Usuario es obligatorio (llave
+ * foránea hacia tb_usuario), el formulario pide elegir el usuario al
+ * que se vincula el profesor en vez de pedir datos que no existen en
+ * la tabla (como "Identificador" o "Carrera").
+ *
+ * Sigue el mismo patrón que EspaciosController: TableView +
+ * FilteredList en memoria, tarjetas con el mismo estilo visual
+ * (styles_profesores.css, calcado de styles_espacios.css) y el mismo
+ * flujo de Guardar / Editar / Eliminar / Limpiar / Buscar.
+ */
 public class ProfesoresController implements Initializable {
 
+    private final ProfesorDAO profesorDAO = new ProfesorDAO();
+
     // -------- Formulario "Datos del profesor" --------
-    @FXML private TextField txtNombreCompleto;
-    @FXML private TextField txtIdentificador;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtApellidoPaterno;
+    @FXML private TextField txtApellidoMaterno;
     @FXML private TextField txtCorreo;
-    @FXML private ComboBox<String> cmbCarrera;
-    @FXML private HBox boxOtraCarrera;
-    @FXML private TextField txtOtraCarrera;
+    @FXML private ComboBox<String> cmbUsuario;
 
     @FXML private Button btnGuardar;
     @FXML private Button btnLimpiar;
@@ -46,16 +64,16 @@ public class ProfesoresController implements Initializable {
 
     // -------- Panel "Profesores registrados" --------
     @FXML private TextField txtBuscar;
-    @FXML private ComboBox<String> cmbFiltroCarrera;
-    @FXML private ComboBox<String> cmbFiltroEstado;
+    @FXML private ComboBox<String> cmbFiltroUsuario;
+    @FXML private ComboBox<String> cmbFiltroRol;
     @FXML private Button btnRefrescar;
 
     @FXML private TableView<Profesor> tblProfesores;
     @FXML private TableColumn<Profesor, Void> colNo;
     @FXML private TableColumn<Profesor, String> colNombre;
-    @FXML private TableColumn<Profesor, String> colIdentificador;
     @FXML private TableColumn<Profesor, String> colCorreo;
-    @FXML private TableColumn<Profesor, String> colCarrera;
+    @FXML private TableColumn<Profesor, String> colUsuario;
+    @FXML private TableColumn<Profesor, String> colRol;
     @FXML private TableColumn<Profesor, Void> colAcciones;
 
     @FXML private Label lblResultados;
@@ -67,42 +85,28 @@ public class ProfesoresController implements Initializable {
     /** Profesor que se está editando actualmente (null = modo "nuevo profesor"). */
     private Profesor profesorEnEdicion;
 
+    /** Texto mostrado en cmbUsuario -> ID_Usuario real (tb_usuario.ID_Usuario). */
+    private Map<String, Integer> mapaUsuarios = new LinkedHashMap<>();
+
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 
-    private static final String[] CARRERAS = {
-            "Diseño y Animación Digital",
-            "Desarrollo de Software Multiplataforma",
-            "Infraestructura de Redes Digitales",
-            "Entornos Virtuales y Negocios Digitales",
-            "Otra"
-    };
-
-    private static final String[] ESTADOS = {
-            "Activo",
-            "Inactivo"
+    /** Roles reales de tb_usuario (columna Rol: enum('Administrador','Usuario')). */
+    private static final String[] ROLES = {
+            "Administrador",
+            "Usuario"
     };
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        cmbCarrera.getItems().addAll(CARRERAS);
+        cargarUsuariosDisponibles();
 
-        cmbFiltroCarrera.getItems().add("Todas las carreras");
-        cmbFiltroCarrera.getItems().addAll(CARRERAS);
-        cmbFiltroCarrera.setValue("Todas las carreras");
+        cmbFiltroUsuario.getItems().add("Todos los usuarios");
+        cmbFiltroUsuario.getItems().addAll(mapaUsuarios.keySet());
+        cmbFiltroUsuario.setValue("Todos los usuarios");
 
-        cmbFiltroEstado.getItems().add("Todos los estados");
-        cmbFiltroEstado.getItems().addAll(ESTADOS);
-        cmbFiltroEstado.setValue("Todos los estados");
-
-        // Al elegir "Otra" se muestra el campo de texto libre (puede quedar vacío).
-        cmbCarrera.valueProperty().addListener((obs, anterior, actual) -> {
-            boolean esOtra = "Otra".equals(actual);
-            boxOtraCarrera.setVisible(esOtra);
-            boxOtraCarrera.setManaged(esOtra);
-            if (!esOtra) {
-                txtOtraCarrera.clear();
-            }
-        });
+        cmbFiltroRol.getItems().add("Todos los roles");
+        cmbFiltroRol.getItems().addAll(ROLES);
+        cmbFiltroRol.setValue("Todos los roles");
 
         cargarDatosIniciales();
         configurarTabla();
@@ -111,24 +115,30 @@ public class ProfesoresController implements Initializable {
         actualizarContador();
     }
 
+    /** Llena cmbUsuario con los usuarios reales de tb_usuario (JOIN usado por ProfesorDAO). */
+    private void cargarUsuariosDisponibles() {
+        mapaUsuarios = profesorDAO.listarUsuariosParaVincular();
+        cmbUsuario.setItems(FXCollections.observableArrayList(mapaUsuarios.keySet()));
+    }
+
     /**
-     * Punto de entrada para la carga inicial de profesores.
-     * A propósito NO agrega registros de ejemplo: la aplicación debe iniciar
-     * sin datos precargados.
-     * TODO: sustituir por una carga real desde la base de datos, por ejemplo:
-     * profesores.addAll(miDao.obtenerTodos());
+     * Carga los profesores registrados desde tb_profesor (con su
+     * usuario vinculado) usando ProfesorDAO.cargarTabla().
      */
     private void cargarDatosIniciales() {
-        // Sin datos por defecto: la tabla inicia vacía.
+        profesores.setAll(profesorDAO.cargarTabla());
     }
 
     private void configurarTabla() {
         colNo.setCellFactory(col -> new NumeroFilaCell());
 
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
-        colIdentificador.setCellValueFactory(new PropertyValueFactory<>("identificador"));
-        colCorreo.setCellValueFactory(new PropertyValueFactory<>("correo"));
-        colCarrera.setCellValueFactory(new PropertyValueFactory<>("carrera"));
+        colNombre.setCellFactory(col -> new NombreCompletoCell());
+        colCorreo.setCellValueFactory(new PropertyValueFactory<>("correoElectronico"));
+        colUsuario.setCellValueFactory(new PropertyValueFactory<>("nombreUsuarioVinculado"));
+        colRol.setCellValueFactory(new PropertyValueFactory<>("rolUsuarioVinculado"));
+
+        // Columna "Rol" con badge de color (mismo estilo visual que el estado en Espacios)
+        colRol.setCellFactory(col -> new RolBadgeCell());
 
         colAcciones.setCellFactory(col -> new AccionesCell());
 
@@ -138,23 +148,24 @@ public class ProfesoresController implements Initializable {
 
     private void configurarFiltros() {
         txtBuscar.textProperty().addListener((obs, oldV, newV) -> aplicarFiltros());
-        cmbFiltroCarrera.valueProperty().addListener((obs, oldV, newV) -> aplicarFiltros());
-        cmbFiltroEstado.valueProperty().addListener((obs, oldV, newV) -> aplicarFiltros());
+        cmbFiltroUsuario.valueProperty().addListener((obs, oldV, newV) -> aplicarFiltros());
+        cmbFiltroRol.valueProperty().addListener((obs, oldV, newV) -> aplicarFiltros());
     }
 
     private void aplicarFiltros() {
         String texto = txtBuscar.getText() == null ? "" : txtBuscar.getText().trim().toLowerCase();
-        String carrera = cmbFiltroCarrera.getValue();
-        String estado = cmbFiltroEstado.getValue();
+        String usuario = cmbFiltroUsuario.getValue();
+        String rol = cmbFiltroRol.getValue();
 
         profesoresFiltrados.setPredicate(prof -> {
             boolean coincideTexto = texto.isEmpty()
                     || prof.getNombreCompleto().toLowerCase().contains(texto)
-                    || prof.getIdentificador().toLowerCase().contains(texto)
-                    || prof.getCorreo().toLowerCase().contains(texto);
-            boolean coincideCarrera = carrera == null || carrera.equals("Todas las carreras") || carrera.equals(prof.getCarrera());
-            boolean coincideEstado = estado == null || estado.equals("Todos los estados") || estado.equals(prof.getEstado());
-            return coincideTexto && coincideCarrera && coincideEstado;
+                    || (prof.getCorreoElectronico() != null && prof.getCorreoElectronico().toLowerCase().contains(texto));
+            boolean coincideUsuario = usuario == null || usuario.equals("Todos los usuarios")
+                    || usuario.equals(prof.getNombreUsuarioVinculado());
+            boolean coincideRol = rol == null || rol.equals("Todos los roles")
+                    || rol.equals(prof.getRolUsuarioVinculado());
+            return coincideTexto && coincideUsuario && coincideRol;
         });
 
         actualizarContador();
@@ -165,11 +176,7 @@ public class ProfesoresController implements Initializable {
         int mostrados = profesoresFiltrados == null ? 0 : profesoresFiltrados.size();
         int total = profesores.size();
         if (lblResultados != null) {
-            if (mostrados == 0) {
-                lblResultados.setText("Mostrando 0 de " + total + " profesores");
-            } else {
-                lblResultados.setText("Mostrando 1 a " + mostrados + " de " + total + " profesores");
-            }
+            lblResultados.setText("Mostrando " + mostrados + " de " + total + " profesores");
         }
     }
 
@@ -177,54 +184,63 @@ public class ProfesoresController implements Initializable {
 
     @FXML
     private void onGuardar() {
-        String nombre = safeTrim(txtNombreCompleto.getText());
-        String identificador = safeTrim(txtIdentificador.getText());
+        String nombre = safeTrim(txtNombre.getText());
+        String apellidoPaterno = safeTrim(txtApellidoPaterno.getText());
+        String apellidoMaterno = safeTrim(txtApellidoMaterno.getText());
         String correo = safeTrim(txtCorreo.getText());
-        String carreraSeleccionada = cmbCarrera.getValue();
+        String usuarioSeleccionado = cmbUsuario.getValue();
 
-        if (nombre.isEmpty() || identificador.isEmpty() || correo.isEmpty() || carreraSeleccionada == null) {
+        if (nombre.isEmpty() || apellidoPaterno.isEmpty() || usuarioSeleccionado == null) {
             mostrarAlerta(AlertType.WARNING, "Campos incompletos",
-                    "Por favor complete el nombre, identificador, correo y carrera antes de guardar.");
+                    "Por favor complete el nombre, el apellido paterno y el usuario vinculado antes de guardar.");
             return;
         }
 
-        // Si eligió "Otra", se usa lo que escribió (o "Otra" si lo dejó en blanco).
-        String carrera = "Otra".equals(carreraSeleccionada)
-                ? (txtOtraCarrera.getText() == null || txtOtraCarrera.getText().isBlank()
-                        ? "Otra" : txtOtraCarrera.getText().trim())
-                : carreraSeleccionada;
-
-        if (!EMAIL_PATTERN.matcher(correo).matches()) {
+        if (!correo.isEmpty() && !EMAIL_PATTERN.matcher(correo).matches()) {
             mostrarAlerta(AlertType.WARNING, "Correo inválido",
                     "Ingrese un correo electrónico con un formato válido, por ejemplo usuario@utng.edu.mx.");
             return;
         }
 
-        // Validar que el identificador sea único (excepto cuando se está editando ese mismo profesor)
-        boolean idDuplicado = profesores.stream()
-                .anyMatch(p -> p.getIdentificador().equalsIgnoreCase(identificador) && p != profesorEnEdicion);
-        if (idDuplicado) {
-            mostrarAlerta(AlertType.WARNING, "Identificador duplicado",
-                    "Ya existe un profesor registrado con el identificador \"" + identificador + "\". Debe ser único.");
+        Integer idUsuario = mapaUsuarios.get(usuarioSeleccionado);
+        if (idUsuario == null) {
+            mostrarAlerta(AlertType.ERROR, "Usuario no válido",
+                    "El usuario seleccionado ya no está disponible. Actualiza la lista e inténtalo de nuevo.");
+            return;
+        }
+
+        // Validar que el correo sea único (excepto cuando se está editando ese mismo profesor)
+        Integer idEnEdicion = (profesorEnEdicion == null) ? null : profesorEnEdicion.getIdProfesor();
+        if (!correo.isEmpty() && profesorDAO.existeCorreo(correo, idEnEdicion)) {
+            mostrarAlerta(AlertType.WARNING, "Correo duplicado",
+                    "Ya existe un profesor registrado con el correo \"" + correo + "\". Debe ser único.");
             return;
         }
 
         if (profesorEnEdicion == null) {
             // Modo creación
-            profesores.add(new Profesor(nombre, identificador, correo, carrera, "Activo"));
+            Profesor nuevo = new Profesor(nombre, apellidoPaterno, apellidoMaterno, correo, null, null);
+            boolean guardado = profesorDAO.insertarProfesor(nuevo, idUsuario);
+            if (!guardado) {
+                mostrarAlerta(AlertType.ERROR, "No se pudo guardar",
+                        "Ocurrió un error al registrar el profesor en la base de datos. Intenta de nuevo.");
+                return;
+            }
         } else {
-            // Modo edición: actualizar el objeto existente
-            profesorEnEdicion.setNombreCompleto(nombre);
-            profesorEnEdicion.setIdentificador(identificador);
-            profesorEnEdicion.setCorreo(correo);
-            profesorEnEdicion.setCarrera(carrera);
-            tblProfesores.refresh();
+            // Modo edición
+            Profesor datosActualizados = new Profesor(nombre, apellidoPaterno, apellidoMaterno, correo, null, null);
+            boolean actualizado = profesorDAO.actualizarProfesor(profesorEnEdicion.getIdProfesor(), datosActualizados, idUsuario);
+            if (!actualizado) {
+                mostrarAlerta(AlertType.ERROR, "No se pudo actualizar",
+                        "Ocurrió un error al actualizar el profesor en la base de datos. Intenta de nuevo.");
+                return;
+            }
         }
 
-        // TODO: aquí va la llamada real a tu capa de datos (INSERT / UPDATE en BD)
-
+        // Volvemos a cargar desde la BD para reflejar el JOIN con tb_usuario (NombreUsuario / Rol) correctamente.
+        cargarDatosIniciales();
         limpiarFormulario();
-        actualizarContador();
+        aplicarFiltros();
     }
 
     @FXML
@@ -240,51 +256,43 @@ public class ProfesoresController implements Initializable {
     @FXML
     private void onNuevoProfesor() {
         limpiarFormulario();
-        txtNombreCompleto.requestFocus();
+        txtNombre.requestFocus();
     }
 
     @FXML
     private void onRefrescar() {
         txtBuscar.clear();
-        cmbFiltroCarrera.setValue("Todas las carreras");
-        cmbFiltroEstado.setValue("Todos los estados");
-        // TODO: aquí volverías a consultar la base de datos.
+        cmbFiltroUsuario.setValue("Todos los usuarios");
+        cmbFiltroRol.setValue("Todos los roles");
+        cargarUsuariosDisponibles();
+        cargarDatosIniciales();
         aplicarFiltros();
     }
 
     private void limpiarFormulario() {
         profesorEnEdicion = null;
-        txtNombreCompleto.clear();
-        txtIdentificador.clear();
+        txtNombre.clear();
+        txtApellidoPaterno.clear();
+        txtApellidoMaterno.clear();
         txtCorreo.clear();
-        cmbCarrera.setValue(null);
-        txtOtraCarrera.clear();
-        boxOtraCarrera.setVisible(false);
-        boxOtraCarrera.setManaged(false);
+        cmbUsuario.setValue(null);
         btnGuardar.setText("💾  Guardar");
     }
 
     private void cargarEnFormulario(Profesor profesor) {
         profesorEnEdicion = profesor;
-        txtNombreCompleto.setText(profesor.getNombreCompleto());
-        txtIdentificador.setText(profesor.getIdentificador());
-        txtCorreo.setText(profesor.getCorreo());
+        txtNombre.setText(profesor.getNombre());
+        txtApellidoPaterno.setText(profesor.getApellidoPaterno());
+        txtApellidoMaterno.setText(profesor.getApellidoMaterno());
+        txtCorreo.setText(profesor.getCorreoElectronico());
 
-        // Si la carrera guardada no es una de las 4 conocidas, se trata como "Otra".
-        String carreraGuardada = profesor.getCarrera();
-        boolean esConocida = Arrays.asList(CARRERAS).contains(carreraGuardada) && !"Otra".equals(carreraGuardada);
-
-        if (esConocida) {
-            cmbCarrera.setValue(carreraGuardada);
-            boxOtraCarrera.setVisible(false);
-            boxOtraCarrera.setManaged(false);
-            txtOtraCarrera.clear();
-        } else {
-            cmbCarrera.setValue("Otra");
-            boxOtraCarrera.setVisible(true);
-            boxOtraCarrera.setManaged(true);
-            txtOtraCarrera.setText(carreraGuardada);
-        }
+        // Selecciona en el combo la entrada cuyo ID_Usuario coincide con el del profesor.
+        String textoUsuario = mapaUsuarios.entrySet().stream()
+                .filter(entry -> entry.getValue() == profesor.getIdUsuario())
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+        cmbUsuario.setValue(textoUsuario);
 
         btnGuardar.setText("💾  Guardar cambios");
     }
@@ -297,13 +305,18 @@ public class ProfesoresController implements Initializable {
 
         Optional<ButtonType> resultado = confirmacion.showAndWait();
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            boolean eliminado = profesorDAO.eliminarProfesor(profesor.getIdProfesor());
+            if (!eliminado) {
+                mostrarAlerta(AlertType.WARNING, "No se pudo eliminar",
+                        "Este profesor tiene asignaciones (u otros registros) relacionados, "
+                                + "así que no se puede eliminar mientras existan.");
+                return;
+            }
             profesores.remove(profesor);
-            // TODO: aquí va el DELETE real en la base de datos
             if (profesorEnEdicion == profesor) {
                 limpiarFormulario();
             }
             actualizarContador();
-            tblProfesores.refresh();
         }
     }
 
@@ -315,11 +328,10 @@ public class ProfesoresController implements Initializable {
 
     /**
      * Construye una ventana flotante (Alert) con la misma temática oscura /
-     * azul de esta pantalla (colores y estilos de styles_profesores.css) y
-     * con las mismas medidas máximas usadas para las ventanas flotantes del
-     * resto del sistema (ver el modal de fx_inicio.fxml: maxWidth 900 /
-     * maxHeight 620), para que todas las ventanas emergentes de la
-     * aplicación luzcan y midan igual entre sí.
+     * azul-morada de esta pantalla (colores y estilos de
+     * styles_profesores.css, calcados de styles_espacios.css) y con las
+     * mismas medidas máximas usadas para las ventanas flotantes del resto
+     * del sistema.
      */
     private Alert crearDialogoTematico(AlertType tipo, String glifo, String titulo,
                                         String encabezado, String mensaje) {
@@ -357,6 +369,46 @@ public class ProfesoresController implements Initializable {
             super.updateItem(item, empty);
             setText(empty ? null : String.valueOf(getIndex() + 1));
             setAlignment(Pos.CENTER_LEFT);
+        }
+    }
+
+    /** Columna "Nombre completo": concatena Nombre + ApellidoPaterno + ApellidoMaterno. */
+    private static class NombreCompletoCell extends TableCell<Profesor, String> {
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                setText(null);
+                return;
+            }
+            Profesor profesor = getTableView().getItems().get(getIndex());
+            setText(profesor == null ? null : profesor.getNombreCompleto());
+        }
+    }
+
+    /** Pinta el Rol del usuario vinculado como una "pastilla" de color. */
+    private class RolBadgeCell extends TableCell<Profesor, String> {
+        private final Label badge = new Label();
+
+        RolBadgeCell() {
+            badge.getStyleClass().add("estado-badge");
+        }
+
+        @Override
+        protected void updateItem(String rol, boolean empty) {
+            super.updateItem(rol, empty);
+            if (empty || rol == null || rol.isBlank()) {
+                setGraphic(null);
+                return;
+            }
+            badge.setText(rol);
+            badge.getStyleClass().removeIf(s -> s.startsWith("estado-") && !s.equals("estado-badge"));
+            if ("Administrador".equals(rol)) {
+                badge.getStyleClass().add("estado-administrador");
+            } else {
+                badge.getStyleClass().add("estado-usuario");
+            }
+            setGraphic(badge);
         }
     }
 

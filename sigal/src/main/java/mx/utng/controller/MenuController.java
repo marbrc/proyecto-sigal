@@ -5,24 +5,31 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-import mx.utng.util.CerrarSesionDialog;
-
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import mx.utng.util.AvatarUtil;
+import mx.utng.util.CerrarSesionDialog;
 
 /**
  * =================================================================
@@ -32,7 +39,7 @@ import javafx.util.Duration;
  *
  * EL controlador es el "shell" permanente de la aplicacion:
  * ycontiene el sidebar, el topbar y todo el Dashboard (tarjetas,
- * calendario, reservaciones, avisos, modal de detalle)
+ * calendario, asignaciones, avisos, modal de detalle)
  * =================================================================
  */
 public class MenuController {
@@ -50,6 +57,10 @@ public class MenuController {
     @FXML private StackPane contentPane;
 
     // ---- Sidebar: navegacion ----
+    @FXML private VBox sidebarRoot;
+    @FXML private Button btnToggleSidebar;
+    @FXML private Node iconoToggleSidebar;
+    @FXML private ImageView imgLogoSidebar;
     @FXML private Button navInicio;
     @FXML private Button navAsignaciones;
     @FXML private Button navRegistroEspacios;
@@ -69,8 +80,6 @@ public class MenuController {
     @FXML private Label lblFechaLarga;
     @FXML private Label lblDiaSemana;
     @FXML private Label lblHora;
-    @FXML private Label lblTemp;
-    @FXML private Label lblClima;
 
     // ---- Menu desplegable de cuenta ----
     @FXML private HBox chipCuenta;
@@ -78,6 +87,10 @@ public class MenuController {
     @FXML private StackPane panelCuenta;
     @FXML private Label lblCuentaNombre;
     @FXML private Label lblCuentaRol;
+    @FXML private Node iconoAvatarChip;
+    @FXML private ImageView imgAvatarChip;
+    @FXML private Node iconoAvatarPanel;
+    @FXML private ImageView imgAvatarPanel;
 
 
     //====================================================
@@ -87,9 +100,9 @@ public class MenuController {
     /** Localizacion usada para formatear fecha/hora en español */
     private static final Locale LOCALE_ES = new Locale("es", "MX");
 
-    /** Formato de hora tipo "08:45 PM */
+    /** Formato de hora tipo "20:45" (24 horas) */
     private static final DateTimeFormatter FORMATO_HORA =
-            DateTimeFormatter.ofPattern("hh:mm a", LOCALE_ES);
+            DateTimeFormatter.ofPattern("HH:mm", LOCALE_ES);
 
     /** Ruta base donde viven todas las vistas FXML */
     private static final String RUTA_VISTAS = "/mx/utng/view/";
@@ -113,6 +126,22 @@ public class MenuController {
     /** Momento en el que inició esta sesión (para mostrar "último acceso" en Ajustes) */
     private java.time.LocalDateTime horaInicioSesion;
 
+    /** Foto de perfil del usuario en sesión (bytes tal cual vienen de tb_usuario.FotoPerfil). Puede ser null. */
+    private byte[] fotoPerfilActual;
+
+    /** true cuando el sidebar esta colapsado (solo iconos) */
+    private boolean sidebarColapsado = false;
+
+    /** Ancho del sidebar expandido (con etiquetas de texto) */
+    private static final double SIDEBAR_ANCHO_EXPANDIDO = 252.0;
+
+    /** Ancho del sidebar colapsado (solo iconos) */
+    private static final double SIDEBAR_ANCHO_COLAPSADO = 76.0;
+
+    /** Tamaño del logo con el sidebar expandido / colapsado */
+    private static final double LOGO_TAMANO_EXPANDIDO = 96.0;
+    private static final double LOGO_TAMANO_COLAPSADO = 40.0;
+
 
 
 //====================================================
@@ -123,8 +152,8 @@ public class MenuController {
     public void initialize() {
 
         iniciarReloj();
-        cargarClima();
         cargarUsuario();
+        configurarEfectosSidebar();
         cargarModulo("fx_inicio");
 
     }
@@ -143,6 +172,74 @@ public class MenuController {
         lblRol.setText("Rol: " + rolActual);
         if (lblCuentaNombre != null) lblCuentaNombre.setText(usuarioActual);
         if (lblCuentaRol != null) lblCuentaRol.setText("Rol: " + rolActual);
+    }
+
+    /**
+     * Actualiza el encabezado del topbar (lblBienvenida / lblRol) segun
+     * el modulo que se acaba de cargar en el contentPane.
+     *
+     * En "fx_inicio" se mantiene el saludo de bienvenida + rol de
+     * siempre. En cualquier otro modulo, esos mismos labels se
+     * reutilizan para mostrar el titulo de la pantalla y una breve
+     * descripcion de que hace, en vez del saludo.
+     */
+    private void actualizarEncabezado(String nombreFxml) {
+        if ("fx_inicio".equals(nombreFxml)) {
+            cargarUsuario();
+            return;
+        }
+
+        String titulo;
+        String descripcion;
+
+        switch (nombreFxml) {
+            case "fx_asignaciones":
+                titulo = "Asignaciones";
+                descripcion = "Gestiona las asignaciones de espacios y horarios";
+                break;
+            case "fx_espacios":
+                titulo = "Registro de Espacios";
+                descripcion = "Administra los espacios disponibles en el Edificio F";
+                break;
+            case "fx_profesores":
+                titulo = "Profesores";
+                descripcion = "Consulta y administra el catálogo de profesores";
+                break;
+            case "fx_horarios":
+                titulo = "Horarios";
+                descripcion = "Visualiza y organiza los horarios por espacio";
+                break;
+            case "fx_consultas":
+                titulo = "Consultas";
+                descripcion = "Consulta el historial de reservaciones";
+                break;
+            case "fx_reportes":
+                titulo = "Reportes";
+                descripcion = "Genera reportes de ocupación y uso";
+                break;
+            case "fx_avisos":
+                titulo = "Avisos";
+                descripcion = "Publica y revisa avisos e incidencias";
+                break;
+            case "fx_ajustes":
+                titulo = "Ajustes";
+                descripcion = "Configura tu perfil, notificaciones y apariencia";
+                break;
+            case "fx_cuenta":
+                titulo = "Cuenta";
+                descripcion = "Administra los datos de tu cuenta";
+                break;
+            case "fx_acerca":
+                titulo = "Acerca del Sistema";
+                descripcion = "Información sobre el sistema SIGAL";
+                break;
+            default:
+                titulo = "";
+                descripcion = "";
+        }
+
+        lblBienvenida.setText(titulo);
+        lblRol.setText(descripcion);
     }
 
     /**
@@ -174,6 +271,24 @@ public class MenuController {
     public void setSesionExtra(String correo, java.time.LocalDateTime horaAcceso) {
         this.correoActual = correo;
         this.horaInicioSesion = horaAcceso;
+    }
+
+    /**
+     * Guarda la foto de perfil (bytes) de la sesión actual y la refleja
+     * de inmediato en el chip de la topbar y en el panel desplegable de
+     * cuenta. LoginController la llama al iniciar sesión; CuentaController
+     * la vuelve a llamar cada vez que el usuario sube una foto nueva, para
+     * que no haga falta cerrar sesión para verla reflejada.
+     */
+    public void setFotoPerfilSesion(byte[] fotoBytes) {
+        this.fotoPerfilActual = fotoBytes;
+        AvatarUtil.aplicar(imgAvatarChip, iconoAvatarChip, fotoBytes);
+        AvatarUtil.aplicar(imgAvatarPanel, iconoAvatarPanel, fotoBytes);
+    }
+
+    /** Foto de perfil de la sesión actual (para precargarla en Ajustes/Cuenta sin volver a consultar la BD). */
+    public byte[] getFotoPerfilActual() {
+        return fotoPerfilActual;
     }
 
     /** Nombre del usuario en sesión (para la tarjeta "Perfil de usuario" de Ajustes). */
@@ -264,23 +379,6 @@ public class MenuController {
     }
 
 
-    //====================================================
-    // CLIMA
-    //====================================================
-
-    /**
-     * Carga la informacion del clima en el topbar
-     *
-     * TODO: reemplazar estos valores fijos por una llamada real a una
-     * API de clima (ej. OpenWeatherMap) cuando tenga la API key
-     * La firma del metodo ya no tendria que cambiar solo su interior
-     */
-    private void cargarClima() {
-        lblTemp.setText("24°C");
-        lblClima.setText("Parcialmente nublado");
-    }
-
-
 
 
     //====================================================
@@ -367,10 +465,7 @@ public class MenuController {
      * modulo actual
      */
     private void marcarNavActivo(Button botonActivo) {
-        Button[] botonesNav = {
-                navInicio, navAsignaciones, navRegistroEspacios, navProfesores,
-                navHorarios, navConsultas, navReportes, navAvisos, navAjustes, navCuenta, navAcerca
-        };
+        Button[] botonesNav = obtenerBotonesNav();
 
         for (Button boton : botonesNav) {
             if (boton == null) continue;
@@ -384,6 +479,14 @@ public class MenuController {
         if (!botonActivo.getStyleClass().contains("nav-item-active")) {
             botonActivo.getStyleClass().add("nav-item-active");
         }
+    }
+
+    /** Lista de los botones de navegacion del sidebar (sin Cerrar Sesion). */
+    private Button[] obtenerBotonesNav() {
+        return new Button[]{
+                navInicio, navAsignaciones, navRegistroEspacios, navProfesores,
+                navHorarios, navConsultas, navReportes, navAvisos, navAjustes, navCuenta, navAcerca
+        };
     }
 
     //====================================================
@@ -462,11 +565,14 @@ public class MenuController {
                 cuentaController.setMenuController(this);
             } else if (controlador instanceof AjustesController ajustesController) {
                 ajustesController.setMenuController(this);
+            } else if (controlador instanceof HorarioController horarioController) {
+                horarioController.setMenuController(this);
             }
 
             contentPane.getChildren().clear();
             contentPane.getChildren().add(vista);
-           
+
+            actualizarEncabezado(nombreFxml);
 
         } catch (IOException e) {
             System.err.println("[SIGAL] Error al cargar el modulo '" + nombreFxml + "':");
@@ -509,15 +615,17 @@ public class MenuController {
 
         /**
          * Le da un pequeño realce de sombra a los botones del sidebar
-         * cuando el usuario pasa el mouse encima.
+         * cuando el usuario pasa el mouse encima, y les instala un
+         * tooltip con el nombre de la pantalla (aparece tras 2 seg de
+         * dejar el cursor encima, util sobre todo cuando el sidebar
+         * esta colapsado y solo se ven los iconos).
          */
     private void configurarEfectosSidebar() {
-        Button[] botonesNav = {
-            navInicio, navAsignaciones, navRegistroEspacios, navProfesores,
-            navHorarios, navConsultas, navReportes, navAvisos, navAjustes, navCuenta, navAcerca
-        };
+        Button[] botonesNav = obtenerBotonesNav();
+        Button[] botonesConLogout = java.util.Arrays.copyOf(botonesNav, botonesNav.length + 1);
+        botonesConLogout[botonesNav.length] = btnCerrarSesion;
 
-        for (Button boton : botonesNav) {
+        for (Button boton : botonesConLogout) {
             if (boton == null) continue;
 
                 boton.setOnMouseEntered(evento -> {
@@ -526,7 +634,109 @@ public class MenuController {
             });
 
             boton.setOnMouseExited(evento -> boton.setEffect(null));
+
+            Tooltip tooltip = new Tooltip(boton.getText());
+            tooltip.setShowDelay(Duration.seconds(2));
+            tooltip.setHideDelay(Duration.millis(80));
+            Tooltip.install(boton, tooltip);
         }
+    }
+
+    //====================================================
+    // SIDEBAR COLAPSABLE
+    //====================================================
+
+    /**
+     * Boton "barrita" del sidebar: alterna entre el modo expandido
+     * (icono + texto) y el modo colapsado (solo iconos). En ambos
+     * modos los botones siguen navegando exactamente igual; lo unico
+     * que cambia es que, colapsado, el nombre de la pantalla se ve
+     * como tooltip al dejar el cursor encima por 2 segundos.
+     */
+    @FXML
+    private void onToggleSidebar(ActionEvent event) {
+        sidebarColapsado = !sidebarColapsado;
+        aplicarAnchoSidebar(sidebarColapsado);
+        aplicarVisibilidadEtiquetasSidebar(!sidebarColapsado);
+        aplicarAlineacionBotonesSidebar(sidebarColapsado);
+        aplicarTamanoLogo(sidebarColapsado);
+        aplicarRotacionToggle(sidebarColapsado);
+    }
+
+    /** Anima el ancho del sidebar hacia el ancho expandido o colapsado. */
+    private void aplicarAnchoSidebar(boolean colapsado) {
+        double anchoDestino = colapsado ? SIDEBAR_ANCHO_COLAPSADO : SIDEBAR_ANCHO_EXPANDIDO;
+
+        Timeline animacion = new Timeline(
+                new KeyFrame(Duration.millis(180),
+                        new KeyValue(sidebarRoot.prefWidthProperty(), anchoDestino),
+                        new KeyValue(sidebarRoot.minWidthProperty(), anchoDestino),
+                        new KeyValue(sidebarRoot.maxWidthProperty(), anchoDestino))
+        );
+        animacion.play();
+    }
+
+    /**
+     * Muestra u oculta las etiquetas de texto del sidebar (tagline del
+     * logo, nombre de cada modulo y "Cerrar Sesion"), dejando solo los
+     * iconos visibles cuando el sidebar esta colapsado. Usa lookupAll
+     * por styleClass para no depender de darle fx:id a cada Label.
+     */
+    private void aplicarVisibilidadEtiquetasSidebar(boolean visible) {
+        for (Node nodo : sidebarRoot.lookupAll(".menu-sidebar-tagline")) {
+            nodo.setVisible(visible);
+            nodo.setManaged(visible);
+        }
+        for (Node nodo : sidebarRoot.lookupAll(".nav-item-label")) {
+            nodo.setVisible(visible);
+            nodo.setManaged(visible);
+        }
+        for (Node nodo : sidebarRoot.lookupAll(".nav-item-logout-label")) {
+            nodo.setVisible(visible);
+            nodo.setManaged(visible);
+        }
+    }
+
+    /**
+     * Centra el icono dentro de cada boton del sidebar cuando esta
+     * colapsado (si no, el icono queda pegado a la izquierda porque
+     * el alineamiento por defecto de un Button es CENTER_LEFT). Al
+     * expandir, regresa al alineamiento normal para que el icono y
+     * la etiqueta de texto queden en fila, pegados a la izquierda.
+     */
+    private void aplicarAlineacionBotonesSidebar(boolean colapsado) {
+        Pos alineacion = colapsado ? Pos.CENTER : Pos.CENTER_LEFT;
+
+        Button[] botonesNav = obtenerBotonesNav();
+        for (Button boton : botonesNav) {
+            if (boton != null) boton.setAlignment(alineacion);
+        }
+        if (btnCerrarSesion != null) btnCerrarSesion.setAlignment(alineacion);
+    }
+
+    /**
+     * Encoge el logo del sidebar cuando esta colapsado para que quepa
+     * dentro de los 76px de ancho sin desbordarse hacia el contenido;
+     * lo regresa a su tamaño normal al expandir.
+     */
+    private void aplicarTamanoLogo(boolean colapsado) {
+        if (imgLogoSidebar == null) return;
+        double tamano = colapsado ? LOGO_TAMANO_COLAPSADO : LOGO_TAMANO_EXPANDIDO;
+        imgLogoSidebar.setFitWidth(tamano);
+        imgLogoSidebar.setFitHeight(tamano);
+    }
+
+    /**
+     * Gira la flechita del boton de colapsar 180° para que apunte
+     * hacia el lado en el que se puede volver a abrir el sidebar
+     * (apunta a la izquierda cuando esta expandido, a la derecha
+     * cuando esta colapsado).
+     */
+    private void aplicarRotacionToggle(boolean colapsado) {
+        if (iconoToggleSidebar == null) return;
+        RotateTransition giro = new RotateTransition(Duration.millis(180), iconoToggleSidebar);
+        giro.setToAngle(colapsado ? 180 : 0);
+        giro.play();
     }
 
     //====================================================
@@ -681,4 +891,3 @@ public class MenuController {
 
     
 }
- 

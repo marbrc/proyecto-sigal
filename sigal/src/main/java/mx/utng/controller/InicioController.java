@@ -20,7 +20,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import mx.utng.dao.AsignacionDAO;
+import mx.utng.dao.AvisoDAO;
+import mx.utng.dao.EspacioDAO;
+import mx.utng.model.Asignaciones;
+import mx.utng.model.Aviso;
 import mx.utng.model.DetalleItem;
+import mx.utng.model.EspacioRegistro;
 
 
 
@@ -30,7 +36,7 @@ public class InicioController {
     
     // ---- Tarjetas del dashboard ----
     @FXML private VBox cardEspacios;
-    @FXML private VBox cardReservaciones;
+    @FXML private VBox cardAsignaciones;
     @FXML private VBox cardDisponibles;
     @FXML private VBox cardAvisos;
 
@@ -67,6 +73,10 @@ public class InicioController {
     /** Rol del usuario actualmente en sesion (tmb simulado por ahora) */
     private String rolActual = "Usuario";
 
+    private final EspacioDAO espacioDAO = new EspacioDAO();
+    private final AsignacionDAO asignacionDAO = new AsignacionDAO();
+    private final AvisoDAO avisoDAO = new AvisoDAO();
+
 
 
 
@@ -94,7 +104,7 @@ public class InicioController {
      */
     private void cargarDashboard() {
         cargarEstadisticas();
-        cargarReservaciones();
+        cargarAsignaciones();
         cargarAvisos();
     }
 
@@ -107,52 +117,44 @@ public class InicioController {
      * (estan en Scene Builder), asi que se localizan por su
      * styleClass dentro de cada tarjeta usando lookup() y esto NO
      * requiere modificar el FXML ni agregar fx:id nuevos.
-     *
-     * TODO: reemplazar los valores fijos (24, 12, 8, 3) por el
-     * resultado real de las consultas SQL cuando conecte MySQL, por
-     * ejemplo:
-     *   int totalEspacios = espacioDAO.contarEspacios();
-     *   actualizarNumeroTarjeta(cardEspacios, ".stat-number-blue", totalEspacios);
      */
     private void cargarEstadisticas() {
-        actualizarNumeroTarjeta(cardEspacios, ".stat-number-blue", 24);
-        actualizarNumeroTarjeta(cardReservaciones, ".stat-number-purple", 12);
-        actualizarNumeroTarjeta(cardDisponibles, ".stat-number-green", 8);
-        actualizarNumeroTarjeta(cardAvisos, ".stat-number-orange", 3);
+        actualizarNumeroTarjeta(cardEspacios, ".stat-number-blue", espacioDAO.contarTotal());
+        actualizarNumeroTarjeta(cardAsignaciones, ".stat-number-purple", asignacionDAO.contarDeHoy());
+        actualizarNumeroTarjeta(cardDisponibles, ".stat-number-green", espacioDAO.contarDisponiblesAhora());
+        actualizarNumeroTarjeta(cardAvisos, ".stat-number-orange", avisoDAO.contarNoLeidos());
     }
 
     /**
-     * Carga las reservaciones del dia que se muestran en el panel
+     * Carga las asignaciones del dia que se muestran en el panel
      * "Asignaciones del dia"
      *
-     * las filas de ese panel (Laboratorio TI-1,
-     * Laboratorio WAN, Sala Audiovisual) estan escritas directo en
-     * el FXML y su contenedor VBox no tiene fx:id, asi que por ahora
-     * este metodo no puede reemplazar esas filas dinamicamente sin
-     * tocar el diseno. Cuando quiera que esta lista sea 100% dinamica,
-     * agregaré fx:id="panelReservaciones" al VBox que las contiene y
-     * aqui se conecta la reconstruccion real de las filas a partir de
-     * la base de datos
+     * Las filas de ese panel (Laboratorio TI-1, Laboratorio WAN, etc.)
+     * siguen escritas directo en el FXML porque su contenedor VBox no
+     * tiene fx:id todavia, asi que este metodo por ahora no puede
+     * reemplazar esas filas dinamicamente sin tocar el diseno del
+     * FXML. Los NUMEROS de la tarjeta y el MODAL de detalle
+     * ("Asignaciones de hoy") si ya usan datos reales (ver
+     * cargarEstadisticas() y onCardAsignaciones()).
      */
-    private void cargarReservaciones() {
-        // Simulacion de lo que vendria de la base de datos:
-        // List<Reservacion> reservacionesHoy = reservacionDAO.obtenerDelDia(LocalDate.now());
-        // (pendiente de conectar al VBox real, RECUERDAMEEE ver comentario arriba)
+    private void cargarAsignaciones() {
+        // Pendiente: agregar fx:id="panelAsignaciones" al VBox del
+        // panel "Asignaciones del dia" en fx_inicio.fxml para poder
+        // reconstruir sus filas aqui con asignacionDAO.listarDeHoy().
     }
 
     /**
      * Carga los avisos recientes que se muestran en el panel
      * "Avisos Recientes"
      *
-     *  mismo caso que cargarReservaciones() -- el VBox
-     * de avisos tampoco tiene fx:id en el FXML actua Cuando agregue
-     * fx:id="panelAvisos", aqui se conecta la carga real desde la
-     * tabla de avisos
+     * Mismo caso que cargarAsignaciones(): el VBox de avisos tampoco
+     * tiene fx:id en el FXML todavia. Los numeros y el modal de
+     * detalle ya usan datos reales.
      */
     private void cargarAvisos() {
-        // Simulacion de lo que vendria de la base de datos:
-        // List<Aviso> avisosActivos = avisoDAO.obtenerActivos();
-        // (pendiente de conectar al VBox real, ver comentario arriba)
+        // Pendiente: agregar fx:id="panelAvisos" al VBox del panel
+        // "Avisos Recientes" en fx_inicio.fxml para reconstruir sus
+        // filas aqui con avisoDAO.listarNoLeidos().
     }
 
     /**
@@ -176,46 +178,56 @@ public class InicioController {
 
     @FXML
     private void onCardEspacios(MouseEvent event) {
-        ObservableList<DetalleItem> datos = FXCollections.observableArrayList(
-                new DetalleItem("Laboratorio TI-1", "Laboratorio de Computo", "30", "Disponible"),
-                new DetalleItem("Laboratorio TI-2", "Laboratorio de Computo", "30", "Disponible"),
-                new DetalleItem("Laboratorio WAN", "Laboratorio de Redes", "25", "Reservado"),
-                new DetalleItem("Aula 101", "Aula", "40", "Disponible"),
-                new DetalleItem("Aula 102", "Aula", "40", "Disponible"),
-                new DetalleItem("Sala Audiovisual", "Aula Especializada", "20", "Ocupado"),
-                new DetalleItem("Laboratorio Fotografia", "Aula Especializada", "15", "Disponible")
-        );
-        abrirModal("Espacios registrados", "24 espacios en total - Edificio F", datos);
+        ObservableList<EspacioRegistro> espacios = espacioDAO.listarTodos();
+
+        ObservableList<DetalleItem> datos = FXCollections.observableArrayList();
+        for (EspacioRegistro e : espacios) {
+            datos.add(new DetalleItem(e.getNombre(), e.getTipo(), String.valueOf(e.getCapacidad()), e.getEstado()));
+        }
+
+        abrirModal("Espacios registrados", espacios.size() + " espacios en total", datos);
     }
 
     @FXML
-    private void onCardReservaciones(MouseEvent event) {
-        ObservableList<DetalleItem> datos = FXCollections.observableArrayList(
-                new DetalleItem("Laboratorio TI-1", "08:00 AM - 09:30 AM", "30", "Reservado"),
-                new DetalleItem("Laboratorio WAN", "10:00 AM - 11:30 AM", "25", "Reservado"),
-                new DetalleItem("Sala Audiovisual", "12:00 PM - 01:30 PM", "20", "Ocupado")
-        );
-        abrirModal("Reservaciones de hoy", "25 de Julio de 2026 - 12 reservaciones", datos);
+    private void onCardAsignaciones(MouseEvent event) {
+        ObservableList<Asignaciones> asignaciones = asignacionDAO.listarDeHoy();
+
+        ObservableList<DetalleItem> datos = FXCollections.observableArrayList();
+        for (Asignaciones a : asignaciones) {
+            datos.add(new DetalleItem(
+                    a.getEspacio(),
+                    a.getHoraInicio() + " - " + a.getHoraTermino(),
+                    a.getNumAlumnos(),
+                    a.getEstado()));
+        }
+
+        String hoyTexto = java.time.LocalDate.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new java.util.Locale("es", "MX")));
+        abrirModal("Asignaciones de hoy", hoyTexto + " - " + asignaciones.size() + " asignaciones", datos);
     }
 
     @FXML
     private void onCardDisponibles(MouseEvent event) {
-        ObservableList<DetalleItem> datos = FXCollections.observableArrayList(
-                new DetalleItem("Aula 101", "Aula", "40", "Disponible"),
-                new DetalleItem("Aula 102", "Aula", "40", "Disponible"),
-                new DetalleItem("Laboratorio Fotografia", "Aula Especializada", "15", "Disponible")
-        );
-        abrirModal("Espacios disponibles ahora", "8 espacios libres en este momento", datos);
+        ObservableList<EspacioRegistro> disponibles = espacioDAO.listarDisponiblesAhora();
+
+        ObservableList<DetalleItem> datos = FXCollections.observableArrayList();
+        for (EspacioRegistro e : disponibles) {
+            datos.add(new DetalleItem(e.getNombre(), e.getTipo(), String.valueOf(e.getCapacidad()), e.getEstado()));
+        }
+
+        abrirModal("Espacios disponibles ahora", disponibles.size() + " espacios libres en este momento", datos);
     }
 
     @FXML
     private void onCardAvisos(MouseEvent event) {
-        ObservableList<DetalleItem> datos = FXCollections.observableArrayList(
-                new DetalleItem("Mantenimiento programado", "Sistema", "-", "Activo"),
-                new DetalleItem("Nuevo laboratorio disponible", "Laboratorios", "-", "Activo"),
-                new DetalleItem("Recordatorio de cancelacion", "General", "-", "Activo")
-        );
-        abrirModal("Avisos activos", "3 avisos vigentes", datos);
+        ObservableList<Aviso> avisos = avisoDAO.listarNoLeidos();
+
+        ObservableList<DetalleItem> datos = FXCollections.observableArrayList();
+        for (Aviso a : avisos) {
+            datos.add(new DetalleItem(a.getDescripcion(), a.getTipoAviso(), "-", a.getEstado()));
+        }
+
+        abrirModal("Avisos sin leer", avisos.size() + " avisos pendientes de revisar", datos);
     }
 
     /**
@@ -355,7 +367,7 @@ public class InicioController {
      * dando una sensacion de carga suav
      */
     private void reproducirEntradaDashboard() {
-        VBox[] tarjetas = { cardEspacios, cardReservaciones, cardDisponibles, cardAvisos };
+        VBox[] tarjetas = { cardEspacios, cardAsignaciones, cardDisponibles, cardAvisos };
 
         SequentialTransition secuencia = new SequentialTransition();
         secuencia.setDelay(Duration.millis(80));
@@ -412,7 +424,7 @@ public class InicioController {
      * Agrega un ligero efecto de "levantado" a las tarjetas del dashboard.
      */
     private void configurarEfectosTarjetas() {
-    VBox[] tarjetas = { cardEspacios, cardReservaciones, cardDisponibles, cardAvisos };
+    VBox[] tarjetas = { cardEspacios, cardAsignaciones, cardDisponibles, cardAvisos };
 
     for (VBox tarjeta : tarjetas) {
         if (tarjeta == null) continue;

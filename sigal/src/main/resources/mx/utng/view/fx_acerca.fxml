@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" styleClass="acerca-content" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AcercaController">
+<ScrollPane fitToWidth="true" styleClass="acerca-content" stylesheets="@styles_ajustes.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AcercaController">
 
     <VBox fx:id="rootAcerca" spacing="20.0" styleClass="acerca-content">
         <padding>
@@ -37,7 +37,7 @@
 
                 <Region maxWidth="140.0" minHeight="2.0" prefHeight="2.0" styleClass="divider" />
 
-                <Label maxWidth="440.0" styleClass="brand-desc" text="SIGAL es una aplicación diseñada para administrar la disponibilidad y asignación de aulas, laboratorios y salas de la institución, facilitando la gestión de reservaciones, horarios, reportes y avisos relacionados con los espacios académicos." textAlignment="CENTER" wrapText="true" />
+                <Label maxWidth="440.0" styleClass="brand-desc" text="SIGAL es una aplicación diseñada para administrar la disponibilidad y asignación de aulas, laboratorios y salas de la institución, facilitando la gestión de asignaciones, horarios, reportes y avisos relacionados con los espacios académicos." textAlignment="CENTER" wrapText="true" />
 
                 <Label maxWidth="440.0" styleClass="brand-desc" text="Nuestro objetivo es optimizar el uso de los recursos académicos mediante una plataforma eficiente, segura y fácil de usar." textAlignment="CENTER" wrapText="true" />
             </VBox>

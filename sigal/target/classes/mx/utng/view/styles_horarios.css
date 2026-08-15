@@ -5,6 +5,7 @@
 
 .page-root {
     -fx-background-color: #060b22;
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
 
 /* ===================== TARJETAS / FILTROS ===================== */
@@ -232,17 +233,17 @@
     -fx-background-color: rgba(34,197,94,0.18);
 }
 
-.cell-reservado {
+.cell-asignado {
     -fx-background-color: rgba(79,195,255,0.14);
 }
-.cell-reservado .cell-estado-text {
+.cell-asignado .cell-estado-text {
     -fx-text-fill: #4fc3ff;
 }
-.cell-reservado .cell-detalle-text {
+.cell-asignado .cell-detalle-text {
     -fx-text-fill: #cfe0f5;
 }
 
-.cell-reservado:hover {
+.cell-asignado:hover {
     -fx-background-color: rgba(79,195,255,0.24);
 }
 
@@ -298,25 +299,25 @@
     -fx-font-size: 11.5px;
 }
 
-/* ===================== DIÁLOGO DE RESERVA ===================== */
-.dialog-reserva {
+/* ===================== DIÁLOGO DE ASIGNACIÓN ===================== */
+.dialog-asignacion {
     -fx-background-color: #0a1120;
 }
 
-.dialog-reserva .label {
+.dialog-asignacion .label {
     -fx-text-fill: #cfe0f5;
 }
 
-.dialog-reserva .header-panel {
+.dialog-asignacion .header-panel {
     -fx-background-color: #0a1120;
 }
 
-.dialog-reserva .header-panel .label {
+.dialog-asignacion .header-panel .label {
     -fx-text-fill: white;
 }
 
-.dialog-reserva .text-field,
-.dialog-reserva .combo-box {
+.dialog-asignacion .text-field,
+.dialog-asignacion .combo-box {
     -fx-background-color: #0d1526;
     -fx-text-fill: #e6eefc;
     -fx-background-radius: 7;
@@ -324,15 +325,15 @@
     -fx-border-color: rgba(79,195,255,0.20);
 }
 
-.dialog-reserva .content {
+.dialog-asignacion .content {
     -fx-background-color: #0a1120;
 }
 
-.dialog-reserva .button-bar {
+.dialog-asignacion .button-bar {
     -fx-background-color: #0a1120;
 }
 
-.dialog-reserva .button-bar .button {
+.dialog-asignacion .button-bar .button {
     -fx-background-color: transparent;
     -fx-background-radius: 8;
     -fx-border-color: rgba(157,180,209,0.35);
@@ -345,22 +346,22 @@
     -fx-padding: 8 16 8 16;
 }
 
-.dialog-reserva .button-bar .button:hover {
+.dialog-asignacion .button-bar .button:hover {
     -fx-background-color: rgba(157,180,209,0.08);
 }
 
-.dialog-reserva .button-bar .button:default {
+.dialog-asignacion .button-bar .button:default {
     -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
     -fx-border-width: 0;
     -fx-text-fill: white;
     -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.45), 14, 0.2, 0, 3);
 }
 
-.dialog-reserva .button-bar .button:default:hover {
+.dialog-asignacion .button-bar .button:default:hover {
     -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
 }
 
-.dialog-reserva .dialog-link {
+.dialog-asignacion .dialog-link {
     -fx-text-fill: #4fc3ff;
     -fx-font-size: 11.5px;
     -fx-font-weight: bold;
@@ -369,7 +370,7 @@
     -fx-padding: 4 16 10 16;
 }
 
-.dialog-reserva .dialog-link:hover {
+.dialog-asignacion .dialog-link:hover {
     -fx-text-fill: #8fe0ff;
     -fx-underline: true;
 }

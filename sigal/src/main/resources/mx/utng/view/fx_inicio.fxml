@@ -56,7 +56,7 @@
                         </HBox>
                     </VBox>
 
-                    <VBox fx:id="cardReservaciones" onMouseClicked="#onCardReservaciones" spacing="14.0" styleClass="stat-card-purple" HBox.hgrow="ALWAYS">
+                    <VBox fx:id="cardAsignaciones" onMouseClicked="#onCardAsignaciones" spacing="14.0" styleClass="stat-card-purple" HBox.hgrow="ALWAYS">
                         <StackPane styleClass="stat-icon-box-purple">
                             <Group>
                                 <Rectangle arcHeight="3" arcWidth="3" height="17" styleClass="icon-stroke-purple" width="20" x="-10" y="-8" />
@@ -101,7 +101,7 @@
                     </VBox>
                 </HBox>
 
-                <!-- FILA INFERIOR: Calendario / Reservaciones del día / Avisos -->
+                <!-- FILA INFERIOR: Calendario / Asignaciones del día / Avisos -->
                 <HBox spacing="20.0" styleClass="menu-lower-row">
                     <padding>
                         <Insets bottom="30.0" left="34.0" right="34.0" top="14.0" />
@@ -188,7 +188,7 @@
                             </HBox>
                             <HBox alignment="CENTER" spacing="6.0">
                                 <Circle radius="4.0" styleClass="legend-dot-blue" />
-                                <Label styleClass="legend-text" text="Reservado" />
+                                <Label styleClass="legend-text" text="Asignado" />
                             </HBox>
                             <HBox alignment="CENTER" spacing="6.0">
                                 <Circle radius="4.0" styleClass="legend-dot-orange" />
@@ -201,35 +201,35 @@
                         </HBox>
                     </VBox>
 
-                    <!-- Reservaciones del día -->
+                    <!-- Asignaciones del día -->
                     <VBox spacing="14.0" styleClass="panel-card" HBox.hgrow="ALWAYS">                        <VBox spacing="2.0">
                             <Label styleClass="panel-title" text="Asignaciones del día" />
-                            <Label fx:id="lblFechaReservaciones" styleClass="panel-subtitle-muted" text="25 de Julio de 2026" />
+                            <Label fx:id="lblFechaAsignaciones" styleClass="panel-subtitle-muted" text="25 de Julio de 2026" />
                         </VBox>
 
-                        <HBox spacing="12.0" styleClass="reservation-item-blue">
+                        <HBox spacing="12.0" styleClass="asignacion-item-blue">
                             <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="reservation-time" text="08:00 AM - 09:30 AM" />
-                                <Label styleClass="reservation-name" text="Laboratorio TI-1" />
-                                <Label styleClass="reservation-sub" text="Programación II" />
+                                <Label styleClass="asignacion-time" text="08:00 AM - 09:30 AM" />
+                                <Label styleClass="asignacion-name" text="Laboratorio TI-1" />
+                                <Label styleClass="asignacion-sub" text="Programación II" />
                             </VBox>
-                            <Label styleClass="badge-reservado" text="Reservado" />
+                            <Label styleClass="badge-asignado" text="Asignado" />
                         </HBox>
 
-                        <HBox spacing="12.0" styleClass="reservation-item-blue">
+                        <HBox spacing="12.0" styleClass="asignacion-item-blue">
                             <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="reservation-time" text="10:00 AM - 11:30 AM" />
-                                <Label styleClass="reservation-name" text="Laboratorio WAN" />
-                                <Label styleClass="reservation-sub" text="Redes de Computadoras" />
+                                <Label styleClass="asignacion-time" text="10:00 AM - 11:30 AM" />
+                                <Label styleClass="asignacion-name" text="Laboratorio WAN" />
+                                <Label styleClass="asignacion-sub" text="Redes de Computadoras" />
                             </VBox>
-                            <Label styleClass="badge-reservado" text="Reservado" />
+                            <Label styleClass="badge-asignado" text="Asignado" />
                         </HBox>
 
-                        <HBox spacing="12.0" styleClass="reservation-item-orange">
+                        <HBox spacing="12.0" styleClass="asignacion-item-orange">
                             <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="reservation-time" text="12:00 PM - 01:30 PM" />
-                                <Label styleClass="reservation-name" text="Sala Audiovisual" />
-                                <Label styleClass="reservation-sub" text="Presentación Proyecto" />
+                                <Label styleClass="asignacion-time" text="12:00 PM - 01:30 PM" />
+                                <Label styleClass="asignacion-name" text="Sala Audiovisual" />
+                                <Label styleClass="asignacion-sub" text="Presentación Proyecto" />
                             </VBox>
                             <Label styleClass="badge-ocupado" text="Ocupado" />
                         </HBox>
@@ -274,7 +274,7 @@
                             </StackPane>
                             <VBox spacing="3.0" HBox.hgrow="ALWAYS">
                                 <Label styleClass="notice-title" text="Nuevo laboratorio disponible" wrapText="true" />
-                                <Label styleClass="notice-text" text="Se ha habilitado el Laboratorio Fotografía para reservaciones." wrapText="true" />
+                                <Label styleClass="notice-text" text="Se ha habilitado el Laboratorio Fotografía para asignaciones." wrapText="true" />
                                 <Label styleClass="notice-time" text="Hace 1 día" />
                             </VBox>
                         </HBox>
@@ -285,7 +285,7 @@
                             </StackPane>
                             <VBox spacing="3.0" HBox.hgrow="ALWAYS">
                                 <Label styleClass="notice-title" text="Recordatorio" wrapText="true" />
-                                <Label styleClass="notice-text" text="Recuerda cancelar tus reservaciones si no podrás asistir." wrapText="true" />
+                                <Label styleClass="notice-text" text="Recuerda cancelar tus asignaciones si no podrás asistir." wrapText="true" />
                                 <Label styleClass="notice-time" text="Hace 2 días" />
                             </VBox>
                         </HBox>

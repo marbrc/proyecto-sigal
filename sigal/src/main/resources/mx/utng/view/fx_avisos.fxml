@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane styleClass="page-root" stylesheets="@styles_avisos.css" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AvisosController">
+<StackPane styleClass="page-root" stylesheets="@styles_avisos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AvisosController">
 
     <VBox spacing="16.0">
         <padding>
@@ -21,10 +21,7 @@
 
         <!-- ============ ENCABEZADO ============ -->
         <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <VBox spacing="4.0">
-                <Label styleClass="title" text="Avisos" />
-                <Label styleClass="dim" text="Consulta los avisos e incidencias registradas en el sistema. Puedes marcar como leídos y registrar nuevos avisos." />
-            </VBox>
+            <VBox spacing="4.0" />
             <Region HBox.hgrow="ALWAYS" />
             <Button fx:id="btnNuevoAviso" onAction="#onNuevoAviso" styleClass="primary-btn" text="+  Nuevo aviso" />
         </HBox>
@@ -34,23 +31,23 @@
             <Label styleClass="card-title" text="Filtros de búsqueda" />
 
             <HBox spacing="14.0">
-                <VBox spacing="6.0" prefWidth="180.0">
+                <VBox prefWidth="180.0" spacing="6.0">
                     <Label styleClass="field-label" text="Espacio" />
                     <ComboBox fx:id="cmbFiltroEspacio" prefWidth="180.0" promptText="Todos" styleClass="input-combo" />
                 </VBox>
-                <VBox spacing="6.0" prefWidth="180.0">
+                <VBox prefWidth="180.0" spacing="6.0">
                     <Label styleClass="field-label" text="Tipo de aviso" />
                     <ComboBox fx:id="cmbFiltroTipo" prefWidth="180.0" promptText="Todos" styleClass="input-combo" />
                 </VBox>
-                <VBox spacing="6.0" prefWidth="180.0">
+                <VBox prefWidth="180.0" spacing="6.0">
                     <Label styleClass="field-label" text="Estado" />
                     <ComboBox fx:id="cmbFiltroEstado" prefWidth="180.0" promptText="Todos" styleClass="input-combo" />
                 </VBox>
-                <VBox spacing="6.0" prefWidth="160.0">
+                <VBox prefWidth="160.0" spacing="6.0">
                     <Label styleClass="field-label" text="Desde" />
                     <DatePicker fx:id="dpDesde" prefWidth="160.0" styleClass="input-combo" />
                 </VBox>
-                <VBox spacing="6.0" prefWidth="160.0">
+                <VBox prefWidth="160.0" spacing="6.0">
                     <Label styleClass="field-label" text="Hasta" />
                     <DatePicker fx:id="dpHasta" prefWidth="160.0" styleClass="input-combo" />
                 </VBox>
@@ -117,7 +114,7 @@
                     <Label fx:id="lblExito" styleClass="resumen-valor" text="0" />
                 </HBox>
 
-                <VBox styleClass="info-box" spacing="4.0">
+                <VBox spacing="4.0" styleClass="info-box">
                     <Label styleClass="info-box-title" text="ℹ  Información" />
                     <Label styleClass="info-box-text" text="Los avisos te mantienen informado sobre eventos, incidencias y novedades de los espacios académicos." wrapText="true" />
                 </VBox>

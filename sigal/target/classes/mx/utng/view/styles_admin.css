@@ -10,6 +10,7 @@
     -fx-border-color: rgba(79, 195, 255, 0.25);
     -fx-border-width: 1;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 40, 0.25, 0, 10);
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
 
 .admin-icon-box {

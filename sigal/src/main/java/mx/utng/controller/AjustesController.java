@@ -6,9 +6,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import mx.utng.dao.UsuarioDAO;
+import mx.utng.model.Usuario;
+import mx.utng.util.AvatarUtil;
 import mx.utng.util.ThemeManager;
 
 public class AjustesController {
@@ -23,6 +26,8 @@ public class AjustesController {
     @FXML private Label lblRol;
     @FXML private Label lblCorreo;
     @FXML private Label lblUltimoAcceso;
+    @FXML private Label lblAvatarIcono;
+    @FXML private ImageView imgAvatarAjustes;
 
     // ---- Notificaciones ----
     @FXML private ToggleButton toggleMantenimiento;
@@ -71,6 +76,21 @@ public class AjustesController {
         lblRol.setText(menuController.getRolActual());
         lblCorreo.setText(menuController.getCorreoActual());
         lblUltimoAcceso.setText(menuController.getHoraAccesoTexto());
+
+        // Precarga los switches de notificaciones con lo que ya está
+        // guardado en tb_usuario, en vez de arrancar siempre "Activado".
+        Usuario usuario = usuarioDAO.obtenerPorId(menuController.getIdUsuarioActual());
+        if (usuario != null) {
+            boolean activas = Boolean.parseBoolean(usuario.getNotificaciones());
+            toggleMantenimiento.setSelected(activas);
+            toggleRecordatorios.setSelected(activas);
+            toggleReportes.setSelected(activas);
+            actualizarEstadoToggle(toggleMantenimiento, lblEstadoMantenimiento);
+            actualizarEstadoToggle(toggleRecordatorios, lblEstadoRecordatorios);
+            actualizarEstadoToggle(toggleReportes, lblEstadoReportes);
+        }
+
+        AvatarUtil.aplicar(imgAvatarAjustes, lblAvatarIcono, usuario != null ? usuario.getFotoPerfil() : null);
     }
 
     // =========================================================
@@ -145,13 +165,22 @@ public class AjustesController {
     @FXML
     private void guardarCambios(ActionEvent event) {
         if (menuController != null) {
-            boolean guardado = usuarioDAO.actualizarTema(
-                    menuController.getIdUsuarioActual(),
-                    ThemeManager.getTema().getValorBD());
+            int idUsuario = menuController.getIdUsuarioActual();
 
-            if (!guardado) {
-                mostrarAviso("No se pudo guardar",
-                        "Tus preferencias de notificaciones se aplicaron, pero no se pudo guardar el tema. Intenta de nuevo.");
+            boolean temaGuardado = usuarioDAO.actualizarTema(
+                    idUsuario, ThemeManager.getTema().getValorBD());
+
+            // tb_usuario.Notificaciones es un solo interruptor general (todavía
+            // no hay una columna por cada tipo de aviso), así que se guarda
+            // como "activas" si al menos uno de los tres switches está prendido.
+            boolean notifActivas = toggleMantenimiento.isSelected()
+                    || toggleRecordatorios.isSelected()
+                    || toggleReportes.isSelected();
+            boolean notifGuardadas = usuarioDAO.actualizarNotificaciones(idUsuario, notifActivas);
+
+            if (!temaGuardado || !notifGuardadas) {
+                mostrarAviso("No se pudo guardar todo",
+                        "Algunas preferencias no se pudieron guardar en la base de datos. Intenta de nuevo.");
                 return;
             }
         }

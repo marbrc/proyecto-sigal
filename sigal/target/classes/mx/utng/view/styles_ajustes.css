@@ -1,0 +1,236 @@
+/* =========================================================
+   SIGAL - Estructura de "Ajustes" y "Acerca del sistema"
+   -----------------------------------------------------------
+   Antes, fx_ajustes.fxml y fx_acerca.fxml NO tenían su propia
+   hoja de estilos: toda su apariencia (tamaños, tipografia,
+   paddings, alineación) dependía por completo de qué theme_*.css
+   hubiera cargado ThemeManager en ese momento. Como theme_dark.css
+   y theme_light.css no traían exactamente las mismas reglas
+   "estructurales" que theme_azul.css (por ejemplo, a .card le
+   faltaba el padding y no había -fx-font-family en ningún lado),
+   al cambiar de tema esta pantalla se veía "chueca": cambiaba de
+   tipografía, perdía el padding interno y el contenido se recorría
+   hacia arriba.
+
+   Esta hoja fija la ESTRUCTURA (tipografía, tamaños, paddings,
+   bordes, alineación) igual sin importar el tema. Los theme_*.css
+   solo deben tocar COLOR a partir de ahora. Usa !important
+   únicamente en las propiedades estructurales para blindarlas
+   contra cualquier valor viejo que pudiera quedar en un theme_*.css.
+   ========================================================= */
+
+.ajustes-content, .acerca-content, .app-content {
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif !important;
+}
+
+.header-icon-box {
+    -fx-background-radius: 14 !important;
+    -fx-border-radius: 14 !important;
+    -fx-min-width: 52 !important;
+    -fx-min-height: 52 !important;
+    -fx-max-width: 52 !important;
+    -fx-max-height: 52 !important;
+}
+.header-icon {
+    -fx-font-size: 22px !important;
+}
+
+.page-title {
+    -fx-font-size: 26px !important;
+    -fx-font-weight: bold !important;
+}
+.page-subtitle {
+    -fx-font-size: 12.5px !important;
+}
+
+.card {
+    -fx-background-radius: 14 !important;
+    -fx-border-radius: 14 !important;
+    -fx-border-width: 1 !important;
+    -fx-padding: 20 !important;
+}
+.card-icon {
+    -fx-font-size: 18px !important;
+}
+.card-title {
+    -fx-font-size: 15px !important;
+    -fx-font-weight: bold !important;
+}
+.card-subtitle {
+    -fx-font-size: 11px !important;
+}
+
+.avatar-circle {
+    -fx-stroke-width: 1.5 !important;
+}
+.avatar-icon {
+    -fx-font-size: 28px !important;
+}
+
+.field-label {
+    -fx-font-size: 10.5px !important;
+    -fx-font-weight: bold !important;
+}
+.field-value {
+    -fx-font-size: 13.5px !important;
+}
+
+.link-button {
+    -fx-font-size: 12.5px !important;
+    -fx-alignment: CENTER_LEFT !important;
+    -fx-padding: 12 14 12 14 !important;
+    -fx-background-radius: 10 !important;
+    -fx-cursor: hand !important;
+}
+
+.notif-row {
+    -fx-background-radius: 10 !important;
+    -fx-padding: 12 !important;
+    -fx-alignment: CENTER_LEFT !important;
+}
+.notif-icon-blue, .notif-icon-orange, .notif-icon-green {
+    -fx-font-size: 16px !important;
+    -fx-background-radius: 8 !important;
+    -fx-padding: 6 !important;
+}
+.notif-title {
+    -fx-font-size: 12.5px !important;
+    -fx-font-weight: bold !important;
+}
+.notif-desc {
+    -fx-font-size: 10.5px !important;
+}
+.notif-status, .notif-status-off {
+    -fx-font-size: 9.5px !important;
+    -fx-font-weight: bold !important;
+}
+
+.switch {
+    -fx-background-radius: 20, 18 !important;
+    -fx-background-insets: 0, 3 25 3 3 !important;
+    -fx-text-fill: transparent !important;
+    -fx-min-width: 46 !important;
+    -fx-pref-width: 46 !important;
+    -fx-max-width: 46 !important;
+    -fx-min-height: 24 !important;
+    -fx-pref-height: 24 !important;
+    -fx-max-height: 24 !important;
+    -fx-cursor: hand !important;
+}
+.switch:selected {
+    -fx-background-insets: 0, 3 3 3 25 !important;
+}
+
+.info-box {
+    -fx-background-radius: 10 !important;
+    -fx-padding: 12 !important;
+    -fx-border-radius: 10 !important;
+}
+.info-text {
+    -fx-font-size: 10.5px !important;
+}
+
+/* temas */
+.theme-card {
+    -fx-background-radius: 12 !important;
+    -fx-border-radius: 12 !important;
+    -fx-padding: 18 !important;
+    -fx-cursor: hand !important;
+}
+.theme-card-selected {
+    -fx-background-radius: 12 !important;
+    -fx-border-width: 2 !important;
+    -fx-border-radius: 12 !important;
+    -fx-padding: 18 !important;
+    -fx-cursor: hand !important;
+}
+.theme-icon {
+    -fx-font-size: 22px !important;
+}
+.theme-label {
+    -fx-font-size: 12px !important;
+    -fx-font-weight: bold !important;
+}
+
+.save-bar {
+    -fx-background-radius: 14 !important;
+    -fx-border-radius: 14 !important;
+    -fx-padding: 18 22 18 22 !important;
+}
+.save-icon {
+    -fx-font-size: 20px !important;
+}
+.save-title {
+    -fx-font-size: 13.5px !important;
+    -fx-font-weight: bold !important;
+}
+.save-subtitle {
+    -fx-font-size: 10.5px !important;
+}
+
+.btn-guardar {
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-font-size: 12.5px !important;
+    -fx-background-radius: 10 !important;
+    -fx-padding: 12 22 12 22 !important;
+    -fx-cursor: hand !important;
+}
+.btn-guardar:hover {
+    -fx-scale-x: 1.02 !important;
+    -fx-scale-y: 1.02 !important;
+}
+
+.brand-title {
+    -fx-font-size: 30px !important;
+    -fx-font-weight: bold !important;
+}
+.brand-subtitle {
+    -fx-font-size: 13px !important;
+}
+.divider {
+    -fx-background-radius: 4 !important;
+}
+.brand-desc {
+    -fx-font-size: 12.5px !important;
+}
+
+.info-row {
+    -fx-padding: 14 4 14 4 !important;
+    -fx-alignment: TOP_LEFT !important;
+}
+.info-divider {
+    -fx-min-height: 1 !important;
+    -fx-max-height: 1 !important;
+}
+.info-icon-box {
+    -fx-background-radius: 10 !important;
+    -fx-min-width: 40 !important;
+    -fx-min-height: 40 !important;
+    -fx-max-width: 40 !important;
+    -fx-max-height: 40 !important;
+}
+.info-icon {
+    -fx-font-size: 16px !important;
+}
+.info-title {
+    -fx-font-size: 13.5px !important;
+    -fx-font-weight: bold !important;
+}
+
+.team-member, .team-group-label, .team-group-value {
+    -fx-font-size: 12px !important;
+}
+.team-group-value {
+    -fx-font-weight: bold !important;
+}
+
+.footer-text {
+    -fx-font-size: 10.5px !important;
+}
+
+/* Evita el fondo blanco por defecto del viewport del ScrollPane */
+.scroll-pane, .scroll-pane .viewport, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}

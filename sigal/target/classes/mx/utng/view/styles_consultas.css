@@ -6,6 +6,8 @@
 
 .consultas-scroll {
     -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
+
 }
 .consultas-scroll > .viewport {
     -fx-background-color: transparent;

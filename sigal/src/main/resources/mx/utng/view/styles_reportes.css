@@ -7,6 +7,7 @@
 
 .page-root {
     -fx-background-color: #060b22;
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
 
 .scroll-limpio, .scroll-limpio > .viewport {

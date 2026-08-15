@@ -13,6 +13,7 @@ public class Usuario {
     private String estado;
     private String tema;
     private String notificaciones;
+    private byte[] fotoPerfil;
 
     // Constructor vacío
     public Usuario() {
@@ -106,6 +107,15 @@ public class Usuario {
 
     public void setNotificaciones(String notificaciones) {
         this.notificaciones = notificaciones;
+    }
+
+    /** Foto de perfil en bytes (columna FotoPerfil, tipo MEDIUMBLOB). Puede ser null si el usuario no ha subido una. */
+    public byte[] getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(byte[] fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 
     @Override

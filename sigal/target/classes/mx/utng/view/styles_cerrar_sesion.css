@@ -8,6 +8,7 @@
    está abierto. */
 .logout-overlay {
     -fx-background-color: rgba(2, 6, 20, 0.72);
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
 
 /* ===================== TARJETA ===================== */

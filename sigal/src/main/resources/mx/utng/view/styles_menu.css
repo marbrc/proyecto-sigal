@@ -63,6 +63,21 @@
     -fx-background-color: transparent;
     -fx-text-fill: #9aa6c9;
 }
+
+.nav-toggle-btn {
+    -fx-background-color: rgba(79,195,255,0.12);
+    -fx-background-radius: 999;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-max-width: 32;
+    -fx-max-height: 32;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+}
+.nav-toggle-btn:hover {
+    -fx-background-color: rgba(79,195,255,0.28);
+}
+
 .nav-item:hover {
     -fx-background-color: rgba(120,150,255,0.10);
     -fx-text-fill: #eef1fb;
@@ -316,15 +331,15 @@
 .legend-dot-orange { -fx-fill: #ffaa3c; }
 .legend-dot-purple { -fx-fill: #a259ff; }
 
-/* Reservaciones */
-.reservation-item-blue {
+/* Asignaciones */
+.asignacion-item-blue {
     -fx-background-color: rgba(255,255,255,0.03);
     -fx-background-radius: 0 10 10 0;
     -fx-border-width: 0 0 0 3;
     -fx-padding: 12 14 12 14;
     -fx-border-color: #4fa3ff;
 }
-.reservation-item-orange {
+.asignacion-item-orange {
     -fx-background-color: rgba(255,255,255,0.03);
     -fx-background-radius: 0 10 10 0;
     -fx-border-width: 0 0 0 3;
@@ -332,20 +347,20 @@
     -fx-border-color: #ffaa3c;
 }
 
-.reservation-time {
+.asignacion-time {
     -fx-text-fill: #7c8bb5;
     -fx-font-size: 11px;
 }
-.reservation-name {
+.asignacion-name {
     -fx-text-fill: white;
     -fx-font-size: 13.5px;
     -fx-font-weight: bold;
 }
-.reservation-sub {
+.asignacion-sub {
     -fx-text-fill: #9aa6c9;
     -fx-font-size: 11.5px;
 }
-.badge-reservado {
+.badge-asignado {
     -fx-background-color: rgba(79,163,255,0.18);
     -fx-text-fill: #6fb8ff;
     -fx-background-radius: 8;

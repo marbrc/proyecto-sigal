@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import mx.utng.dao.UsuarioDAO;
 import mx.utng.model.Usuario;
@@ -41,6 +42,9 @@ public class LoginController {
     @FXML
     private Button btnIniciarSesion;
 
+    @FXML
+    private StackPane rootLogin;
+
   
 
     //==========================
@@ -60,6 +64,16 @@ public class LoginController {
 
         txtContrasenaVisible.textProperty().bindBidirectional(pwdContrasena.textProperty());
 
+        // El login ahora también respeta el último tema elegido (Azul/Oscuro/Claro),
+        // igual que el resto del sistema. Antes solo se aplicaba después de
+        // iniciar sesión, así que la pantalla de login siempre se veía azul.
+        if (rootLogin != null) {
+            rootLogin.sceneProperty().addListener((obs, escenaVieja, escenaNueva) -> {
+                if (escenaNueva != null) {
+                    ThemeManager.apply(escenaNueva);
+                }
+            });
+        }
 
     }
 
@@ -221,6 +235,7 @@ public class LoginController {
             MenuController controller = loader.getController();
             controller.setUsuarioActual(usuario.getIdUsuario(), usuario.getNombre(), usuario.getRol());
             controller.setSesionExtra(usuario.getCorreoElectronico(), LocalDateTime.now());
+            controller.setFotoPerfilSesion(usuario.getFotoPerfil());
 
             Stage stage = (Stage) btnIniciarSesion.getScene().getWindow();
 

@@ -87,7 +87,7 @@
 
                         <Region maxWidth="140.0" minHeight="3.0" prefHeight="3.0" styleClass="hero-divider" />
 
-                        <Label maxWidth="560.0" styleClass="hero-desc" text="Administra, reserva y consulta la disponibilidad de laboratorios de forma eficiente." textAlignment="CENTER" wrapText="true" />
+                        <Label maxWidth="560.0" styleClass="hero-desc" text="Administra, asigna y consulta la disponibilidad de laboratorios de forma eficiente." textAlignment="CENTER" wrapText="true" />
                         <Label fx:id="lblSaludo" styleClass="hero-saludo" text="¡Bienvenido!" wrapText="true"/> 
                         <HBox alignment="CENTER" spacing="20.0">
                             <Button fx:id="btnIniciarSesion" onAction="#iniciarSesion" contentDisplay="GRAPHIC_ONLY" prefHeight="66.0" prefWidth="300.0" styleClass="btn-primary">
@@ -213,21 +213,21 @@
                         </GridPane>
                     </VBox>
 
-                    <!-- Próximas reservaciones -->
+                    <!-- Próximas asignaciones -->
                     <VBox spacing="10.0" styleClass="card">
-                        <Label styleClass="card-title" text="🗓  Próximas reservaciones" />
-                        <VBox spacing="2.0" styleClass="reservation-row">
-                            <Label styleClass="reservation-name" text="Lab. de Programación" />
+                        <Label styleClass="card-title" text="🗓  Próximas asignaciones" />
+                        <VBox spacing="2.0" styleClass="asignacion-row">
+                            <Label styleClass="asignacion-name" text="Lab. de Programación" />
                             <HBox alignment="CENTER_LEFT" spacing="8.0">
-                                <Label styleClass="reservation-time" text="11:00 AM - 01:00 PM" />
+                                <Label styleClass="asignacion-time" text="11:00 AM - 01:00 PM" />
                                 <Region HBox.hgrow="ALWAYS" />
                                 <Label styleClass="badge-confirmed" text="Confirmada" />
                             </HBox>
                         </VBox>
-                        <VBox spacing="2.0" styleClass="reservation-row">
-                            <Label styleClass="reservation-name" text="Lab. de Redes" />
+                        <VBox spacing="2.0" styleClass="asignacion-row">
+                            <Label styleClass="asignacion-name" text="Lab. de Redes" />
                             <HBox alignment="CENTER_LEFT" spacing="8.0">
-                                <Label styleClass="reservation-time" text="03:00 PM - 05:00 PM" />
+                                <Label styleClass="asignacion-time" text="03:00 PM - 05:00 PM" />
                                 <Region HBox.hgrow="ALWAYS" />
                                 <Label styleClass="badge-pending" text="Pendiente" />
                             </HBox>

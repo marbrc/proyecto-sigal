@@ -5,7 +5,7 @@ import javafx.beans.property.StringProperty;
 
 /**
  * Representa una fila dentro del modal de detalle
- * (espacios, reservaciones, disponibilidad o avisos).
+ * (espacios, asignaciones, disponibilidad o avisos).
  */
 public class DetalleItem {
 

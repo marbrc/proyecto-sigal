@@ -8,15 +8,18 @@ mx\utng\controller\ProfesoresController$NumeroFilaCell.class
 mx\utng\model\DetalleItem.class
 mx\utng\dao\AsignacionDAO.class
 mx\utng\util\ThemeManager.class
+mx\utng\dao\ProfesorDAO.class
 mx\utng\controller\AvisosController$AccionesCell.class
 mx\utng\controller\InicioController.class
 mx\utng\controller\AvisosController$TipoBadgeCell.class
 mx\utng\controller\CerrarSesionController.class
 mx\utng\dao\AvisoDAO.class
+mx\utng\model\AsignacionHorario.class
 mx\utng\controller\MenuController.class
 module-info.class
 mx\utng\controller\AvisosController$EstadoBadgeCell.class
 mx\utng\model\Asignaciones.class
+mx\utng\controller\ProfesoresController$RolBadgeCell.class
 mx\utng\controller\EspaciosController.class
 mx\utng\controller\AsignacionesController$3.class
 mx\utng\util\ReporteExportador.class
@@ -24,6 +27,7 @@ mx\utng\controller\LoginController.class
 mx\utng\model\EstadoCelda.class
 mx\utng\controller\AjustesController.class
 mx\utng\PrimaryController.class
+mx\utng\util\AvatarUtil.class
 mx\utng\model\Usuario.class
 mx\utng\controller\AvisosController.class
 mx\utng\controller\HorarioController.class
@@ -36,6 +40,7 @@ mx\utng\controller\EspaciosController$AccionesCell.class
 mx\utng\dao\ConsultaDAO.class
 mx\utng\controller\DisponibilidadController$1.class
 mx\utng\controller\AsignacionesController$1.class
+mx\utng\controller\ProfesoresController$NombreCompletoCell.class
 mx\utng\util\ThemeManager$Tema.class
 mx\utng\controller\EspaciosController$EstadoBadgeCell.class
 mx\utng\model\EspacioRegistro.class

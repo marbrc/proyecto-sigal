@@ -32,14 +32,15 @@ import mx.utng.dao.AsignacionDAO;
 import mx.utng.model.Asignaciones;
 
 /**
- * Controlador de la pantalla "Asignaciones" (fx_asignaciones.fxml).
+ * Controlador de la pantalla "Asignaciones" (fx
+ * _asignaciones.fxml).
  *
  * Administra el formulario para dar de alta una nueva asignación
- * (reservación de un espacio) y la tabla de asignaciones registradas.
- *
+ * (asignación de un espacio) y la tabla de asignaciones registradas.
+ 
  * Este controlador es solo del CONTENIDO: el sidebar, el topbar y el
  * cierre de sesión los maneja MenuController, que es quien carga este
- * FXML dentro de su contentPane.
+ * FXML dentro de su contentPane
  */
 public class AsignacionesController implements Initializable {
 
@@ -219,11 +220,11 @@ public class AsignacionesController implements Initializable {
                     return;
                 }
                 badge.setText(estado);
-                // Estado en tb_asignacion es ENUM('Libre','Ocupado','Reservado','Cancelado')
+                // Estado en tb_asignacion es ENUM('Libre','Ocupado','Asignado','Cancelado')
                 badge.getStyleClass().removeAll("badge-confirmada", "badge-pendiente", "badge-cancelada");
                 switch (estado) {
                     case "Ocupado" -> badge.getStyleClass().add("badge-confirmada");
-                    case "Reservado" -> badge.getStyleClass().add("badge-pendiente");
+                    case "Asignado" -> badge.getStyleClass().add("badge-pendiente");
                     case "Libre" -> badge.getStyleClass().add("badge-confirmada");
                     default -> badge.getStyleClass().add("badge-cancelada"); // Cancelado
                 }
@@ -382,7 +383,7 @@ public class AsignacionesController implements Initializable {
                 txtGrupo.getText(),
                 txtNumAlumnos.getText(),
                 txtActividad.getText(),
-                "Reservado"
+                "Asignado"
         );
 
         boolean guardada;

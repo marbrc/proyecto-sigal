@@ -9,14 +9,11 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <!--
@@ -31,9 +28,8 @@
     que no necesita fondo de pantalla completa: el fondo lo pone el
     "cascarón" del menú (fx_menu.fxml).
 -->
-<ScrollPane fitToWidth="true" styleClass="consultas-scroll" stylesheets="@styles_consultas.css"
-            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="mx.utng.controller.ConsultaController">
+
+<ScrollPane fitToWidth="true" styleClass="consultas-scroll" stylesheets="@styles_consultas.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.ConsultaController">
 
     <VBox spacing="20.0" styleClass="consultas-content">
         <padding>
@@ -41,20 +37,7 @@
         </padding>
 
         <!-- ===== Encabezado ===== -->
-        <HBox alignment="CENTER_LEFT" spacing="16.0">
-            <StackPane styleClass="header-icon-box">
-                <ImageView fitHeight="26.0" fitWidth="26.0" preserveRatio="true">
-                    <image>
-                        <Image url="@assets/logo.png" />
-                    </image>
-                </ImageView>
-            </StackPane>
-            <VBox>
-                <Label styleClass="page-title" text="Consultas" />
-                <Label styleClass="page-subtitle"
-                       text="Consulta asignaciones registradas en el sistema mediante diferentes tipos de filtros." />
-            </VBox>
-        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" />
 
         <!-- ===== Tarjeta de filtros ===== -->
         <VBox spacing="16.0" styleClass="consultas-card">
@@ -82,16 +65,11 @@
                 <Label styleClass="filter-label" text="Estado de la asignación" GridPane.columnIndex="4" GridPane.rowIndex="0" />
 
                 <!-- Fila 2: campos -->
-                <ComboBox fx:id="cmbProfesor" maxWidth="Infinity" promptText="Todos"
-                          GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <TextField fx:id="txtSolicitante" promptText="Nombre del solicitante"
-                           GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <ComboBox fx:id="cmbTipoEspacio" maxWidth="Infinity" promptText="Todos"
-                          GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                <ComboBox fx:id="cmbEspacio" maxWidth="Infinity" promptText="Todos"
-                          GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                <ComboBox fx:id="cmbEstado" maxWidth="Infinity" promptText="Todos"
-                          GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cmbProfesor" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="txtSolicitante" promptText="Nombre del solicitante" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cmbTipoEspacio" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cmbEspacio" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cmbEstado" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="4" GridPane.rowIndex="1" />
 
                 <!-- Fila 3: etiquetas -->
                 <Label styleClass="filter-label" text="Carrera" GridPane.columnIndex="0" GridPane.rowIndex="2" />
@@ -99,12 +77,9 @@
                 <Label styleClass="filter-label" text="Grupo" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
                 <!-- Fila 4: campos -->
-                <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Todos"
-                          GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <TextField fx:id="txtMateria" promptText="Nombre de la materia"
-                           GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <TextField fx:id="txtGrupo" promptText="Ej. GTID235"
-                           GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <TextField fx:id="txtMateria" promptText="Nombre de la materia" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="txtGrupo" promptText="Ej. GTID235" GridPane.columnIndex="2" GridPane.rowIndex="3" />
 
             </GridPane>
 

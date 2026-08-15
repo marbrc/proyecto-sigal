@@ -63,7 +63,7 @@
         </HBox>
         <HBox alignment="CENTER_LEFT" spacing="6.0">
             <Rectangle arcHeight="4.0" arcWidth="4.0" fill="#4fc3ff" height="14.0" width="14.0" />
-            <Label styleClass="legend-text" text="Reservado" />
+            <Label styleClass="legend-text" text="Asignado" />
         </HBox>
         <HBox alignment="CENTER_LEFT" spacing="6.0">
             <Rectangle arcHeight="4.0" arcWidth="4.0" fill="#f59e0b" height="14.0" width="14.0" />

@@ -63,7 +63,7 @@ public class ConsultaController {
             "Sala de usos múltiples"
     };
 
-    private static final String[] ESTADOS = { "Libre", "Ocupado", "Reservado", "Cancelado" };
+    private static final String[] ESTADOS = { "Libre", "Ocupado", "Asignado", "Cancelado" };
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 

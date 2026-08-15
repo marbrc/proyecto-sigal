@@ -5,13 +5,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<ScrollPane fitToWidth="true" styleClass="ajustes-content" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AjustesController">
+<ScrollPane fitToWidth="true" styleClass="ajustes-content" stylesheets="@styles_ajustes.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.AjustesController">
 
     <VBox fx:id="rootAjustes" spacing="20.0" styleClass="ajustes-content">
         <padding>
@@ -33,7 +34,8 @@
 
                 <StackPane alignment="CENTER" prefHeight="90.0">
                     <Circle radius="40.0" styleClass="avatar-circle" />
-                    <Label styleClass="avatar-icon" text="👤" />
+                    <Label fx:id="lblAvatarIcono" styleClass="avatar-icon" text="👤" />
+                    <ImageView fx:id="imgAvatarAjustes" fitHeight="80.0" fitWidth="80.0" managed="false" preserveRatio="false" visible="false" />
                 </StackPane>
 
                 <VBox spacing="2.0">
@@ -79,8 +81,8 @@
                 <HBox spacing="12.0" styleClass="notif-row">
                     <Label styleClass="notif-icon-orange" text="🗓" />
                     <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                        <Label styleClass="notif-title" text="Recordatorios de reservaciones" wrapText="true" />
-                        <Label styleClass="notif-desc" text="Recibe recordatorios sobre tus reservaciones próximas y confirmaciones." wrapText="true" />
+                        <Label styleClass="notif-title" text="Recordatorios de asignaciones" wrapText="true" />
+                        <Label styleClass="notif-desc" text="Recibe recordatorios sobre tus asignaciones próximas y confirmaciones." wrapText="true" />
                     </VBox>
                     <VBox alignment="CENTER" spacing="2.0">
                         <ToggleButton fx:id="toggleRecordatorios" onAction="#onToggleRecordatorios" selected="true" styleClass="switch" />

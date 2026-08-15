@@ -117,7 +117,7 @@ public class DisponibilidadController implements Initializable {
                 new Espacio("Aula 101", "Aula teórica", "45", "Disponible",
                         "—", "Todo el día libre", "—"),
                 new Espacio("Aula 102", "Aula teórica", "45", "Cancelado",
-                        "Reservación cancelada hoy", "Disponible desde ahora", "—"),
+                        "Asignación cancelada hoy", "Disponible desde ahora", "—"),
                 new Espacio("Sala de Juntas", "Sala administrativa", "12", "Disponible",
                         "—", "Todo el día libre", "Administración")
         );

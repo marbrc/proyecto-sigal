@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane styleClass="login-root" stylesheets="@styles_login.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.LoginController">
+<StackPane fx:id="rootLogin" styleClass="login-root" stylesheets="@styles_login.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.LoginController">
 
     <!-- TARJETA DE LOGIN -->
     <StackPane styleClass="login-card">
@@ -59,7 +59,7 @@
                         <StackPane styleClass="login-info-icon-box">
                             <Region styleClass="icon-building icon-md icon-white" />
                         </StackPane>
-                        <Label maxWidth="380.0" styleClass="login-info-text" text="Administra espacios, horarios y reservaciones del Edificio F en un solo lugar." wrapText="true" />
+                        <Label maxWidth="380.0" styleClass="login-info-text" text="Administra espacios, horarios y asignaciones del Edificio F en un solo lugar." wrapText="true" />
                     </HBox>
 
                     <HBox alignment="CENTER_LEFT" maxWidth="480.0" spacing="12.0">
