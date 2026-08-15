@@ -34,7 +34,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
 import mx.utng.dao.AvisoDAO;
 import mx.utng.model.Aviso;
 
@@ -56,6 +55,8 @@ public class AvisosController implements Initializable {
     @FXML private DatePicker dpHasta;
     @FXML private Button btnLimpiarFiltros;
     @FXML private Button btnBuscar;
+    @FXML private TextArea txtDescripcion;
+    @FXML private TextArea txtComentarios;
 
     // -------- Encabezado / acciones --------
     @FXML private Button btnNuevoAviso;
@@ -83,7 +84,8 @@ public class AvisosController implements Initializable {
     private static final String[] TIPOS = { "Información", "Advertencia", "Error", "Éxito" };
     private static final String[] ESTADOS = { "No leído", "Leído" };
 
-    private final AvisoDAO avisoDAO = new AvisoDAO();
+    private AvisoDAO avisoDAO = new AvisoDAO();
+
 
     /** texto del combo -> ID_Espacio real en BD (para el filtro y el dialogo "Nuevo aviso") */
     private Map<String, Integer> mapaEspacios;
@@ -157,10 +159,42 @@ public class AvisosController implements Initializable {
     //  FILTROS
     // ============================================================
 
+    
+
     @FXML
     private void onBuscar() {
+        buscar();
         aplicarFiltros();
     }
+
+    private void buscar() {
+
+    Integer idEspacio = null;
+    if (cmbFiltroEspacio.getValue() != null) {
+        idEspacio = mapaEspacios.get(cmbFiltroEspacio.getValue());
+    }
+
+    String tipo = (cmbFiltroTipo.getValue() != null) ? cmbFiltroTipo.getValue().toString() : null;
+    String descripcion = txtDescripcion.getText();
+    String comentarios = txtComentarios.getText();
+    String estado = (cmbFiltroEstado.getValue() != null) ? cmbFiltroEstado.getValue().toString() : null;
+
+    LocalDate fechaDesde = dpDesde.getValue();
+    LocalDate fechaHasta = dpHasta.getValue();
+
+    var resultados = avisoDAO.buscarAvisos(
+        idEspacio,
+        tipo, descripcion, comentarios,
+        estado,
+        fechaDesde, fechaHasta
+);
+
+
+avisos.setAll(resultados);
+lblContador.setText(String.valueOf(resultados.size()));
+
+}
+
 
     @FXML
     private void onLimpiarFiltros() {
@@ -172,27 +206,40 @@ public class AvisosController implements Initializable {
         aplicarFiltros();
     }
 
-    private void aplicarFiltros() {
-        String espacio = cmbFiltroEspacio.getValue();
-        String tipo = cmbFiltroTipo.getValue();
-        String estado = cmbFiltroEstado.getValue();
-        LocalDate desde = dpDesde.getValue();
-        LocalDate hasta = dpHasta.getValue();
+private void aplicarFiltros() {
+    String espacio = cmbFiltroEspacio.getValue();
+    String tipo = cmbFiltroTipo.getValue();
+    String estado = cmbFiltroEstado.getValue();
+    LocalDate desde = dpDesde.getValue();
+    LocalDate hasta = dpHasta.getValue();
 
-        avisosFiltrados.setPredicate(aviso -> {
-            boolean coincideEspacio = espacio == null || espacio.equals("Todos") || espacio.equals(aviso.getEspacio());
-            boolean coincideTipo = tipo == null || tipo.equals("Todos") || tipo.equals(aviso.getTipoAviso());
-            boolean coincideEstado = estado == null || estado.equals("Todos") || estado.equals(aviso.getEstado());
+    DateTimeFormatter fmtUI = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-            LocalDate fechaAviso = LocalDate.parse(aviso.getFecha(), FORMATO_FECHA_UI);
-            boolean coincideDesde = desde == null || !fechaAviso.isBefore(desde);
-            boolean coincideHasta = hasta == null || !fechaAviso.isAfter(hasta);
+    avisosFiltrados.setPredicate(aviso -> {
+        boolean coincideEspacio = espacio == null || espacio.equals("Todos") || espacio.equals(aviso.getEspacio());
+        boolean coincideTipo = tipo == null || tipo.equals("Todos") || tipo.equals(aviso.getTipoAviso());
+        boolean coincideEstado = estado == null || estado.equals("Todos") || estado.equals(aviso.getEstado());
 
-            return coincideEspacio && coincideTipo && coincideEstado && coincideDesde && coincideHasta;
-        });
+        String fechaStr = aviso.getFecha();
+        if (fechaStr == null || fechaStr.isBlank()) return false;
 
-        actualizarContador();
-    }
+        LocalDate fechaAviso;
+        try {
+            // Asumiendo que aviso.getFecha() es exactamente dd/MM/yyyy
+            fechaAviso = LocalDate.parse(fechaStr, fmtUI);
+        } catch (Exception e) {
+            return false; // evita que reviente y desaparezca el FXML
+        }
+
+        boolean coincideDesde = desde == null || !fechaAviso.isBefore(desde);
+        boolean coincideHasta = hasta == null || !fechaAviso.isAfter(hasta);
+
+        return coincideEspacio && coincideTipo && coincideEstado && coincideDesde && coincideHasta;
+    });
+
+    actualizarContador();
+}
+
 
     private void actualizarContador() {
         int total = avisosFiltrados == null ? 0 : avisosFiltrados.size();
@@ -218,7 +265,7 @@ public class AvisosController implements Initializable {
 
         resultado.ifPresent(nuevo -> {
             Integer idEspacio = nuevo.getIdEspacio();
-            int idUsuario = (menuController != null) ? menuController.getIdUsuarioActual() : 0;
+            int idUsuario = (menuController != null) ? menuController.getIdUsuarioActual() : 1;
 
             if (idUsuario <= 0) {
                 mostrarAlerta(AlertType.WARNING, "Sesión no disponible",
