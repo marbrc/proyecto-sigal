@@ -13,13 +13,7 @@
 
 <StackPane fx:id="rootRecuperar" styleClass="login-root" stylesheets="@styles_login.css,@styles_recuperar.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.RecuperarContrasenaController">
 
-    <!-- BOTÓN REGRESAR A LOGIN -->
-    <HBox alignment="TOP_LEFT" pickOnBounds="false" StackPane.alignment="TOP_LEFT">
-        <padding>
-            <Insets top="10.0" left="28.0" />
-        </padding>
-        <Button fx:id="btnCerrar" onAction="#onRegresarLogin" styleClass="login-back-btn" text="←  Regresar a inicio de sesión" />
-    </HBox>
+
 
     <StackPane styleClass="login-card recuperar-card">
         <VBox alignment="CENTER" maxWidth="460.0" prefWidth="460.0" spacing="0.0">
