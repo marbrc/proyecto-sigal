@@ -26,17 +26,18 @@ CREATE TABLE `tb_asignacion` (
   `ID_Asignacion` int(11) NOT NULL AUTO_INCREMENT,
   `TipoUsuario` enum('Profesor','Administrativo','Alumno','Otro') NOT NULL,
   `NombreSolicitante` varchar(100) DEFAULT NULL,
-  `Materia` varchar(100) DEFAULT NULL,
-  `Grupo` varchar(20) DEFAULT NULL,
+  `ID_Materia` int(11) DEFAULT NULL,
   `NumAlumnos` int(11) DEFAULT NULL,
   `Fecha` date NOT NULL,
   `HoraInicio` time NOT NULL,
   `HoraTermino` time NOT NULL,
   `Actividad` varchar(255) DEFAULT NULL,
-  `Estado` enum('Libre','Ocupado','Reservado','Cancelado') NOT NULL,
+  `Estado` enum('Libre','Ocupado','Asignado','Cancelado') NOT NULL,
   `JustificacionCancelacion` varchar(255) DEFAULT NULL,
   `OtraCarrera` varchar(100) DEFAULT NULL,
   `ID_Carrera` int(11) DEFAULT NULL,
+  `ID_Grupo` int(11) DEFAULT NULL,
+  `OtroGrupo` varchar(50) DEFAULT NULL,
   `ID_Profesor` int(11) DEFAULT NULL,
   `ID_Usuario` int(11) NOT NULL,
   `ID_Espacio` int(11) NOT NULL,
@@ -45,11 +46,15 @@ CREATE TABLE `tb_asignacion` (
   KEY `ID_Profesor` (`ID_Profesor`),
   KEY `ID_Usuario` (`ID_Usuario`),
   KEY `ID_Espacio` (`ID_Espacio`),
+  KEY `ID_Grupo` (`ID_Grupo`),
+  KEY `tb_asignacion_ibfk_6` (`ID_Materia`),
   CONSTRAINT `tb_asignacion_ibfk_1` FOREIGN KEY (`ID_Carrera`) REFERENCES `tb_carrera` (`ID_Carrera`),
   CONSTRAINT `tb_asignacion_ibfk_2` FOREIGN KEY (`ID_Profesor`) REFERENCES `tb_profesor` (`ID_Profesor`),
   CONSTRAINT `tb_asignacion_ibfk_3` FOREIGN KEY (`ID_Usuario`) REFERENCES `tb_usuario` (`ID_Usuario`),
-  CONSTRAINT `tb_asignacion_ibfk_4` FOREIGN KEY (`ID_Espacio`) REFERENCES `tb_espacio` (`ID_Espacio`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `tb_asignacion_ibfk_4` FOREIGN KEY (`ID_Espacio`) REFERENCES `tb_espacio` (`ID_Espacio`),
+  CONSTRAINT `tb_asignacion_ibfk_5` FOREIGN KEY (`ID_Grupo`) REFERENCES `tb_grupo` (`ID_Grupo`),
+  CONSTRAINT `tb_asignacion_ibfk_6` FOREIGN KEY (`ID_Materia`) REFERENCES `tb_materia` (`ID_Materia`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -58,7 +63,7 @@ CREATE TABLE `tb_asignacion` (
 
 LOCK TABLES `tb_asignacion` WRITE;
 /*!40000 ALTER TABLE `tb_asignacion` DISABLE KEYS */;
-INSERT INTO `tb_asignacion` VALUES (2,'Profesor','mar','poo','GTID235',18,'2026-08-06','10:00:00','11:50:00','Practica','Reservado',NULL,'Desarrlollo',NULL,NULL,1,3),(3,'Profesor','maria','poo','GTID235',16,'2026-08-12','09:00:00','10:50:00','practica 3','Reservado',NULL,'desarrollo',NULL,NULL,1,4);
+INSERT INTO `tb_asignacion` VALUES (2,'Profesor','mar',NULL,18,'2026-08-06','10:00:00','11:50:00','Practica','Cancelado',NULL,'Desarrlollo',NULL,NULL,NULL,NULL,1,3),(4,'Administrativo','mar',NULL,13,'2026-08-13','10:00:00','11:50:00','wert','Asignado',NULL,'mae',NULL,NULL,NULL,NULL,1,2),(5,'Profesor','mar',NULL,NULL,'2026-08-11','10:00:00','10:50:00',NULL,'Asignado',NULL,NULL,NULL,NULL,NULL,NULL,1,12),(6,'Profesor','Javier',NULL,16,'2026-08-14','09:00:00','09:50:00','R1','Asignado',NULL,'Mercadotecnia',NULL,NULL,NULL,1,3,10),(7,'Alumno','Maria',NULL,12,'2026-08-14','09:00:00','09:50:00','r2','Asignado',NULL,NULL,NULL,NULL,NULL,NULL,3,10);
 /*!40000 ALTER TABLE `tb_asignacion` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -71,4 +76,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-05 15:17:31
+-- Dump completed on 2026-08-15 20:25:46

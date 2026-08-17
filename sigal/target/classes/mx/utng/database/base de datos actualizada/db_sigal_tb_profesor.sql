@@ -32,7 +32,7 @@ CREATE TABLE `tb_profesor` (
   PRIMARY KEY (`ID_Profesor`),
   KEY `FK_Profesor_Usuario` (`ID_Usuario`),
   CONSTRAINT `FK_Profesor_Usuario` FOREIGN KEY (`ID_Usuario`) REFERENCES `tb_usuario` (`ID_Usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +41,7 @@ CREATE TABLE `tb_profesor` (
 
 LOCK TABLES `tb_profesor` WRITE;
 /*!40000 ALTER TABLE `tb_profesor` DISABLE KEYS */;
+INSERT INTO `tb_profesor` VALUES (1,'Guillermo','Hernandez','Ojeda','guillermohernandezojeda@utng.edu.mx',1),(2,'Luis','Aguayo','Lopez','us@utng.edu.mx',3);
 /*!40000 ALTER TABLE `tb_profesor` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-05 15:17:31
+-- Dump completed on 2026-08-15 20:25:46

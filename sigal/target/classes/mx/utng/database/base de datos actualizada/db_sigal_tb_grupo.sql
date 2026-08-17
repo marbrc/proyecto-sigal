@@ -16,36 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tb_aviso`
+-- Table structure for table `tb_grupo`
 --
 
-DROP TABLE IF EXISTS `tb_aviso`;
+DROP TABLE IF EXISTS `tb_grupo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tb_aviso` (
-  `ID_Aviso` int(11) NOT NULL AUTO_INCREMENT,
-  `FechaHora` datetime NOT NULL,
-  `TipoAviso` varchar(30) NOT NULL,
-  `Descripcion` varchar(255) NOT NULL,
-  `Estado` varchar(20) NOT NULL,
-  `Comentarios` varchar(255) DEFAULT NULL,
-  `ID_Espacio` int(11) DEFAULT NULL,
-  `ID_Usuario` int(11) NOT NULL,
-  PRIMARY KEY (`ID_Aviso`),
-  KEY `ID_Espacio` (`ID_Espacio`),
-  KEY `ID_Usuario` (`ID_Usuario`),
-  CONSTRAINT `tb_aviso_ibfk_1` FOREIGN KEY (`ID_Espacio`) REFERENCES `tb_espacio` (`ID_Espacio`),
-  CONSTRAINT `tb_aviso_ibfk_2` FOREIGN KEY (`ID_Usuario`) REFERENCES `tb_usuario` (`ID_Usuario`)
+CREATE TABLE `tb_grupo` (
+  `ID_Grupo` int(11) NOT NULL AUTO_INCREMENT,
+  `NombreGrupo` varchar(50) NOT NULL,
+  `Capacidad` int(11) NOT NULL,
+  `Cuatrimestre` tinyint(3) unsigned NOT NULL,
+  `Turno` enum('Matutino','Vespertino') NOT NULL,
+  `ID_Carrera` int(11) NOT NULL,
+  PRIMARY KEY (`ID_Grupo`),
+  KEY `ID_Carrera` (`ID_Carrera`),
+  CONSTRAINT `tb_grupo_ibfk_1` FOREIGN KEY (`ID_Carrera`) REFERENCES `tb_carrera` (`ID_Carrera`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_aviso`
+-- Dumping data for table `tb_grupo`
 --
 
-LOCK TABLES `tb_aviso` WRITE;
-/*!40000 ALTER TABLE `tb_aviso` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tb_aviso` ENABLE KEYS */;
+LOCK TABLES `tb_grupo` WRITE;
+/*!40000 ALTER TABLE `tb_grupo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_grupo` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -57,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-05 15:17:31
+-- Dump completed on 2026-08-15 20:25:45

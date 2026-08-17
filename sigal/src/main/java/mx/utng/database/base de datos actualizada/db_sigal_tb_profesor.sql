@@ -16,38 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tb_usuario`
+-- Table structure for table `tb_profesor`
 --
 
-DROP TABLE IF EXISTS `tb_usuario`;
+DROP TABLE IF EXISTS `tb_profesor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tb_usuario` (
-  `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tb_profesor` (
+  `ID_Profesor` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(50) NOT NULL,
   `ApellidoPaterno` varchar(50) NOT NULL,
   `ApellidoMaterno` varchar(50) DEFAULT NULL,
-  `NombreUsuario` varchar(30) NOT NULL,
-  `CorreoElectronico` varchar(100) NOT NULL,
-  `Contrasena` varchar(100) NOT NULL,
-  `Rol` enum('Superusuario','Usuario') NOT NULL,
-  `Estado` enum('Activo','Inactivo') NOT NULL,
-  `Tema` varchar(20) DEFAULT NULL,
-  `Notificaciones` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`ID_Usuario`),
-  UNIQUE KEY `NombreUsuario` (`NombreUsuario`),
-  UNIQUE KEY `CorreoElectronico` (`CorreoElectronico`)
+  `CorreoElectronico` varchar(100) DEFAULT NULL,
+  `ID_Usuario` int(11) NOT NULL,
+  PRIMARY KEY (`ID_Profesor`),
+  KEY `FK_Profesor_Usuario` (`ID_Usuario`),
+  CONSTRAINT `FK_Profesor_Usuario` FOREIGN KEY (`ID_Usuario`) REFERENCES `tb_usuario` (`ID_Usuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_usuario`
+-- Dumping data for table `tb_profesor`
 --
 
-LOCK TABLES `tb_usuario` WRITE;
-/*!40000 ALTER TABLE `tb_usuario` DISABLE KEYS */;
-INSERT INTO `tb_usuario` VALUES (1,'Mar','Rodríguez','Bárcenas','mar_admin','mariagrod29@icloud.com','12345','Superusuario','Activo','AZUL_ORIGINAL',1),(2,'	Rodri','Mendez','Lopez','rodro_usuario','rodro@icloud.com','12345','Usuario','Activo','Oscuro',1);
-/*!40000 ALTER TABLE `tb_usuario` ENABLE KEYS */;
+LOCK TABLES `tb_profesor` WRITE;
+/*!40000 ALTER TABLE `tb_profesor` DISABLE KEYS */;
+INSERT INTO `tb_profesor` VALUES (1,'Guillermo','Hernandez','Ojeda','guillermohernandezojeda@utng.edu.mx',1),(2,'Luis','Aguayo','Lopez','us@utng.edu.mx',3);
+/*!40000 ALTER TABLE `tb_profesor` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -59,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-05 15:17:32
+-- Dump completed on 2026-08-15 20:25:46
