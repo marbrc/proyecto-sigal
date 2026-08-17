@@ -42,7 +42,7 @@
                     <Label styleClass="field-label" text="Usuario" />
                     <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="input-box">
                         <Region styleClass="icon-user icon-sm icon-muted" />
-                        <TextField fx:id="txtUsuarioRec" promptText="usuario@utng.edu.mx" styleClass="input-field" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="txtUsuarioRec" promptText="usuario_sigal" styleClass="input-field" HBox.hgrow="ALWAYS" />
                     </HBox>
                 </VBox>
 
