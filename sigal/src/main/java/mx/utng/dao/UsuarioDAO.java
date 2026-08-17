@@ -53,6 +53,39 @@ public class UsuarioDAO {
 
     }
 
+    /** Busca un usuario activo que coincida con NombreUsuario y CorreoElectronico (para "olvidé mi contraseña"). */
+    public Usuario buscarPorUsuarioYCorreo(String nombreUsuario, String correo) {
+        String sql = """
+                SELECT *
+                FROM tb_usuario
+                WHERE NombreUsuario = ?
+                AND CorreoElectronico = ?
+                AND Estado = 'Activo'
+                """;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombreUsuario);
+            ps.setString(2, correo);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("ID_Usuario"));
+                u.setNombre(rs.getString("Nombre"));
+                u.setNombreUsuario(rs.getString("NombreUsuario"));
+                u.setCorreoElectronico(rs.getString("CorreoElectronico"));
+                return u;
+            }
+            return null;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     // ============================================================
     //  PANTALLA "MI CUENTA"
     // ============================================================
