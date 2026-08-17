@@ -2,209 +2,125 @@ package mx.utng.controller;
 
 import java.io.IOException;
 
-import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import mx.utng.dao.UsuarioDAO;
 
-// Controller de fx_registro.fxml (pantalla "Crear cuenta" de SIGAL).
 public class RegistroController {
 
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private TextField txtApellidoPaterno;
-    @FXML
-    private TextField txtApellidoMaterno;
-    @FXML
-    private TextField txtCorreo;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtApellidoPaterno;
+    @FXML private TextField txtApellidoMaterno;
+    @FXML private TextField txtNombreUsuario;
+    @FXML private TextField txtCorreo;
+    @FXML private PasswordField pwdContrasena;
+    @FXML private TextField txtContrasenaVisible;
+    @FXML private PasswordField pwdConfirmarContrasena;
+    @FXML private TextField txtConfirmarContrasenaVisible;
+    @FXML private Button btnToggleContrasena;
+    @FXML private Button btnToggleConfirmarContrasena;
 
-    // Contraseña (campo oculto + campo visible que se van intercambiando)
-    @FXML
-    private PasswordField pwdContrasena;
-    @FXML
-    private TextField txtContrasenaVisible;
-    @FXML
-    private Button btnToggleContrasena;
-    
-    // Confirmar contraseña (mismo patrón)
-    @FXML
-    private PasswordField pwdConfirmarContrasena;
-    @FXML
-    private TextField txtConfirmarContrasenaVisible;
-    @FXML
-    private Button btnToggleConfirmarContrasena;
-    
-    @FXML
-    private ComboBox<String> cmbRol;
-
-    @FXML
-    private Button btnRegistrarse;
-    @FXML
-    private Button btnVolverLogin;
-
-    // Guardan si la contraseña se está mostrando en texto plano o no
+    private final UsuarioDAO dao = new UsuarioDAO();
     private boolean contrasenaVisible = false;
-    private boolean confirmarContrasenaVisible = false;
+    private boolean confirmarVisible = false;
 
-    // Se ejecuta al abrir la pantalla
     @FXML
-    public void initialize() {
+    public void onRegistrarse(ActionEvent event) {
+        String nombre = txtNombre.getText().trim();
+        String apPaterno = txtApellidoPaterno.getText().trim();
+        String apMaterno = txtApellidoMaterno.getText().trim();
+        String nombreUsuario = txtNombreUsuario.getText().trim();
+        String correo = txtCorreo.getText().trim();
+        
+        String contrasena = contrasenaVisible ? txtContrasenaVisible.getText() : pwdContrasena.getText();
+        String confirmar = confirmarVisible ? txtConfirmarContrasenaVisible.getText() : pwdConfirmarContrasena.getText();
 
-    cmbRol.setItems(FXCollections.observableArrayList(
-            "Usuario",
-            "🔒 Administrador"));
-
-    cmbRol.setOnAction(e -> {
-
-        if ("🔒 Administrador".equals(cmbRol.getValue())) {
-
-            AdminController.abrirVentana(
-                    cmbRol.getScene().getWindow()
-            );
-
+        // Validar campos obligatorios
+        if (nombre.isEmpty() || apPaterno.isEmpty() || nombreUsuario.isEmpty()
+                || correo.isEmpty() || contrasena.isEmpty()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Completa todos los campos obligatorios.");
+            return;
         }
 
-    });
+        // Validar que las contraseñas coincidan
+        if (!contrasena.equals(confirmar)) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Las contraseñas no coinciden.");
+            return;
+        }
 
-}
-    // =========================================================
-    // MOSTRAR / OCULTAR CONTRASEÑA
-    // =========================================================
-    // La idea: el PasswordField (pwdContrasena) y el TextField (txtContrasenaVisible)
-    // están encimados en el mismo lugar (un StackPane). Solo se ve uno a la vez.
-    // Al picarle al ojito, se intercambian y se copia el texto de uno al otro.
+        // Validar que no exista el nombre de usuario
+     if (dao.existeNombreUsuario(nombreUsuario, -1)) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Ese nombre de usuario ya está en uso.");
+            return;
+        }
 
-    @FXML
-    private void onToggleContrasena() {
+        // Validar que no exista el correo
+        if (dao.existeCorreo(correo)) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Ya existe una cuenta con ese correo.");
+            return;
+        }
 
-        contrasenaVisible = !contrasenaVisible;
-
-        if (contrasenaVisible) {
-            // Copiamos lo que hay escrito al campo visible, y lo mostramos
-            txtContrasenaVisible.setText(pwdContrasena.getText());
-            txtContrasenaVisible.setVisible(true);
-            txtContrasenaVisible.setManaged(true);
-            pwdContrasena.setVisible(false);
-            pwdContrasena.setManaged(false);
+        // Guardar usuario en BD
+        boolean ok = dao.registrar(nombre, apPaterno, apMaterno, nombreUsuario, correo, contrasena);
+        if (ok) {
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Cuenta creada exitosamente. Ya puedes iniciar sesión.");
+            onVolverLogin(event);
         } else {
-            // Regresamos lo escrito al campo oculto, y ocultamos el texto
-            pwdContrasena.setText(txtContrasenaVisible.getText());
-            pwdContrasena.setVisible(true);
-            pwdContrasena.setManaged(true);
-            txtContrasenaVisible.setVisible(false);
-            txtContrasenaVisible.setManaged(false);
+            mostrarAlerta(Alert.AlertType.ERROR, "No se pudo registrar. Intenta de nuevo.");
         }
-
-        // La rayita (Line) sobre el ojo indica "contraseña visible" cuando se muestra
     }
 
     @FXML
-    private void onToggleConfirmarContrasena() {
+    public void onToggleContrasena(ActionEvent event) {
+        contrasenaVisible = !contrasenaVisible;
+        if (contrasenaVisible) {
+            txtContrasenaVisible.setText(pwdContrasena.getText());
+        } else {
+            pwdContrasena.setText(txtContrasenaVisible.getText());
+        }
+        pwdContrasena.setVisible(!contrasenaVisible);
+        pwdContrasena.setManaged(!contrasenaVisible);
+        txtContrasenaVisible.setVisible(contrasenaVisible);
+        txtContrasenaVisible.setManaged(contrasenaVisible);
+    }
 
-        confirmarContrasenaVisible = !confirmarContrasenaVisible;
-
-        if (confirmarContrasenaVisible) {
+    @FXML
+    public void onToggleConfirmarContrasena(ActionEvent event) {
+        confirmarVisible = !confirmarVisible;
+        if (confirmarVisible) {
             txtConfirmarContrasenaVisible.setText(pwdConfirmarContrasena.getText());
-            txtConfirmarContrasenaVisible.setVisible(true);
-            txtConfirmarContrasenaVisible.setManaged(true);
-            pwdConfirmarContrasena.setVisible(false);
-            pwdConfirmarContrasena.setManaged(false);
         } else {
             pwdConfirmarContrasena.setText(txtConfirmarContrasenaVisible.getText());
-            pwdConfirmarContrasena.setVisible(true);
-            pwdConfirmarContrasena.setManaged(true);
-            txtConfirmarContrasenaVisible.setVisible(false);
-            txtConfirmarContrasenaVisible.setManaged(false);
         }
-
+        pwdConfirmarContrasena.setVisible(!confirmarVisible);
+        pwdConfirmarContrasena.setManaged(!confirmarVisible);
+        txtConfirmarContrasenaVisible.setVisible(confirmarVisible);
+        txtConfirmarContrasenaVisible.setManaged(confirmarVisible);
     }
 
-    // Trae la contraseña actual sin importar cuál de los dos campos
-    // (oculto o visible) es el que se está mostrando ahorita
-    private String obtenerContrasena() {
-        return contrasenaVisible ? txtContrasenaVisible.getText() : pwdContrasena.getText();
-    }
-
-    private String obtenerConfirmarContrasena() {
-        return confirmarContrasenaVisible ? txtConfirmarContrasenaVisible.getText() : pwdConfirmarContrasena.getText();
-    }
-
-    // =========================================================
-    // REGISTRARSE
-    // =========================================================
-    // IMPORTANTE: todavía no está conectado a la base de datos.
-    // Aquí solo se validan los campos. Cuando me pases el
-    // UsuarioDAO / modelo Usuario de SIGAL (con los nombres
-    // reales de columnas de tb_usuario), completamos esta parte
-    // para que sí inserte el registro de verdad.
     @FXML
-    private void onRegistrarse() {
-
-        String nombre = txtNombre.getText();
-        String apellidoPaterno = txtApellidoPaterno.getText();
-        String apellidoMaterno = txtApellidoMaterno.getText();
-        String correo = txtCorreo.getText();
-        String contrasena = obtenerContrasena();
-        String confirmar = obtenerConfirmarContrasena();
-        String rol = cmbRol.getValue();
-
-        if (nombre.isBlank() || apellidoPaterno.isBlank() || apellidoMaterno.isBlank()
-                || correo.isBlank() || contrasena.isBlank() || confirmar.isBlank() || rol == null) {
-            mostrarMensaje(Alert.AlertType.ERROR, "Complete todos los campos.");
-            return;
-        }
-
-        if (!contrasena.equals(confirmar)) {
-            mostrarMensaje(Alert.AlertType.ERROR, "Las contraseñas no coinciden.");
-            return;
-        }
-
-        // TODO: aquí falta llamar al DAO real, algo como:
-        // Usuario usuario = new Usuario();
-        // usuario.setNombre(nombre);
-        // ... etc
-        // if (dao.guardar(usuario)) { ... }
-
-        mostrarMensaje(Alert.AlertType.INFORMATION,
-                "Los datos son válidos. Falta conectar esto con la base de datos de SIGAL.");
-    }
-
-    // =========================================================
-    // VOLVER AL LOGIN
-    // =========================================================
-    @FXML
-    private void onVolverLogin() {
-
+    public void onVolverLogin(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/mx/utng/view/fx_login.fxml"));
-
-            Parent root = loader.load();
-
-            Stage stage = (Stage) btnVolverLogin.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/mx/utng/view/fx_login.fxml"));
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.centerOnScreen();
-            stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
+            mostrarAlerta(Alert.AlertType.ERROR, "Error al cargar la vista de inicio de sesión.");
         }
     }
 
-    private void mostrarMensaje(Alert.AlertType tipo, String mensaje) {
-        Alert alerta = new Alert(tipo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.show();
+    private void mostrarAlerta(Alert.AlertType tipo, String msg) {
+        Alert alert = new Alert(tipo, msg);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
-
 }
-

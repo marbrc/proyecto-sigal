@@ -265,5 +265,48 @@ public class UsuarioDAO {
             return false;
         }
     }
+    /** true si ya existe una cuenta con ese correo. */
+    public boolean existeCorreo(String correo) {
+        String sql = "SELECT COUNT(*) FROM tb_usuario WHERE CorreoElectronico = ?";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, correo);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return true;
+        }
+    }
+
+    /** Inserta un nuevo usuario. */
+    public boolean registrar(String nombre, String apellidoPaterno, String apellidoMaterno,
+                              String nombreUsuario, String correo, String contrasena) {
+        String sql = """
+                INSERT INTO tb_usuario
+                    (Nombre, ApellidoPaterno, ApellidoMaterno, NombreUsuario, CorreoElectronico, Contrasena)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+            ps.setString(2, apellidoPaterno);
+            ps.setString(3, apellidoMaterno);
+            ps.setString(4, nombreUsuario);
+            ps.setString(5, correo);
+            ps.setString(6, contrasena);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }
