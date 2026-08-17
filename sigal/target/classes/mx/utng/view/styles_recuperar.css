@@ -1,0 +1,29 @@
+/* =========================================================
+   ESTILOS DE LA PANTALLA "RECUPERAR CONTRASEÑA" (fx_recuperar_contrasena.fxml)
+   Reutiliza las clases de styles_login.css y solo agrega lo propio.
+   ========================================================= */
+
+.recuperar-card {
+    -fx-min-width: 460;
+}
+
+.recuperar-btn-secundario {
+    -fx-background-color: rgba(15,22,50,0.85);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(120,150,255,0.35);
+    -fx-border-radius: 12;
+    -fx-text-fill: #c7cfe8;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.recuperar-btn-secundario:hover {
+    -fx-border-color: #4fa3ff;
+    -fx-text-fill: #ffffff;
+}
+
+.codigo-field {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 6px;
+}
