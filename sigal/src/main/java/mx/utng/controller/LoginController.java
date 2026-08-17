@@ -143,6 +143,56 @@ public class LoginController {
     }
 
     //==========================
+    // OLVIDÉ MI CONTRASEÑA
+    //==========================
+
+    @FXML
+    private void onOlvidasteContrasena() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/mx/utng/view/fx_recuperar_contrasena.fxml"));
+
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnIniciarSesion.getScene().getWindow();
+            Scene escena = new Scene(root);
+            stage.setScene(escena);
+            stage.setTitle("SIGAL - Recuperar contraseña");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarError("Error del sistema", "No fue posible abrir la recuperación de contraseña.");
+            e.printStackTrace();
+        }
+    }
+
+    //==========================
+    // REGRESAR A BIENVENIDA
+    //==========================
+
+    @FXML
+    private void onRegresarBienvenida() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/mx/utng/view/fx_bienvenida.fxml"));
+
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnIniciarSesion.getScene().getWindow();
+            Scene escena = new Scene(root);
+            stage.setScene(escena);
+            stage.setTitle("SIGAL - Sistema Integral de Gestión y Asignación de Laboratorios");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarError("Error del sistema", "No fue posible regresar a la pantalla de bienvenida.");
+            e.printStackTrace();
+        }
+    }
+
+    //==========================
     // VALIDAR CAMPOS
     //==========================
 
