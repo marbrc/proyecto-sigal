@@ -263,19 +263,3 @@
     -fx-text-fill: #4fa3ff;
     -fx-font-size: 10.5px;
 }
-
-.login-back-btn {
-    -fx-background-color: rgba(15,22,50,0.55);
-    -fx-background-radius: 10;
-    -fx-border-color: rgba(120,150,255,0.35);
-    -fx-border-radius: 10;
-    -fx-text-fill: #c7cfe8;
-    -fx-font-size: 12.5px;
-    -fx-font-weight: bold;
-    -fx-padding: 8 16 8 16;
-    -fx-cursor: hand;
-}
-.login-back-btn:hover {
-    -fx-border-color: #4fa3ff;
-    -fx-text-fill: #ffffff;
-}

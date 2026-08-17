@@ -12,7 +12,6 @@
     -fx-background-color: #060b22;
 }
 
-
 /* ---------------- SIDEBAR ---------------- */
 .menu-sidebar {
     -fx-background-color: #0a1130;
@@ -93,7 +92,6 @@
 .nav-item-logout:hover {
     -fx-background-color: rgba(255,107,107,0.10);
 }
-
 
 /* ============================== TOPBAR ============================== */
 menu-content-bg {
@@ -621,4 +619,13 @@ menu-content-bg {
 .asig-pagination .number-button:selected {
     -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
     -fx-text-fill: white;
+}
+.field-combo .text-field {
+    -fx-background-color: #0d1526;
+    -fx-text-fill: #e6eefc;
+    -fx-prompt-text-fill: #57708f;
+    -fx-font-size: 11.5px;
+    -fx-padding: 4 8 4 8;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
 }

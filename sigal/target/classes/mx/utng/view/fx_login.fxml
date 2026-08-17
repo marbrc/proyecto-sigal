@@ -19,14 +19,6 @@
 
 <StackPane fx:id="rootLogin" styleClass="login-root" stylesheets="@styles_login.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.LoginController">
 
-    <!-- BOTÓN REGRESAR A BIENVENIDA -->
-    <HBox alignment="TOP_LEFT" pickOnBounds="false" StackPane.alignment="TOP_LEFT">
-        <padding>
-            <Insets top="24.0" left="28.0" />
-        </padding>
-        <Button fx:id="btnRegresarBienvenida" onAction="#onRegresarBienvenida" styleClass="login-back-btn" text="←  Regresar" />
-    </HBox>
-
     <!-- TARJETA DE LOGIN -->
     <StackPane styleClass="login-card">
 
@@ -141,7 +133,7 @@
                 <HBox alignment="CENTER_LEFT">
                     <CheckBox fx:id="chkRecordarme" selected="true" styleClass="login-checkbox" text="Recordarme" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <Hyperlink fx:id="lnkOlvidasteContrasena" onAction="#onOlvidasteContrasena" styleClass="login-forgot-link" text="¿Olvidaste tu contraseña?" />
+                    <Hyperlink styleClass="login-forgot-link" text="¿Olvidaste tu contraseña?" />
                 </HBox>
 
                 <Region minHeight="30.0" prefHeight="30.0" />

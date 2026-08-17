@@ -3,13 +3,6 @@ package mx.utng.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-/**
- * Modelo que representa una asignación (asignación) de un espacio
- * (aula, laboratorio o sala) dentro del sistema SIGAL.
- *
- * Se usa tanto para llenar el formulario "Nueva asignación" como
- * para mostrar las filas de la tabla "Asignaciones registradas".
- */
 public class Asignaciones {
 
     /** ID_Asignacion real de tb_asignacion (para editar/eliminar en la BD). */
@@ -127,4 +120,3 @@ public class Asignaciones {
     public void setEstado(String value) { estado.set(value); }
     public StringProperty estadoProperty() { return estado; }
 }
-
