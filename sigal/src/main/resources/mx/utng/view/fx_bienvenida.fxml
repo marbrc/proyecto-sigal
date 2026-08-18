@@ -254,12 +254,7 @@
                     <Insets bottom="22.0" left="0.0" right="0.0" top="10.0" />
                 </padding>
 
-                <HBox alignment="CENTER_LEFT" maxWidth="480.0" styleClass="quote-card">
-                    <VBox spacing="6.0">
-                        <Label styleClass="quote-text" text="La tecnología es mejor cuando une a las personas." wrapText="true" />
-                        <Label styleClass="quote-author" text="— Matt Mullenweg" />
-                    </VBox>
-                </HBox>
+              
 
                 <HBox alignment="CENTER" spacing="8.0" />
             </VBox>
