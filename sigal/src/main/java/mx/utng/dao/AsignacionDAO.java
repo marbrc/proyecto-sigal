@@ -177,6 +177,41 @@ public java.util.List<String> listarNombresSolicitantes() {
     }
     return lista;
 }
+public java.util.List<String> listarMaterias() {
+    java.util.List<String> lista = new java.util.ArrayList<>();
+    String sql = "SELECT Nombre FROM tb_materia ORDER BY Nombre";
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            lista.add(rs.getString("Nombre"));
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
+public java.util.List<String> listarGrupos() {
+    java.util.List<String> lista = new java.util.ArrayList<>();
+    String sql = "SELECT NombreGrupo FROM tb_grupo ORDER BY NombreGrupo";
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            lista.add(rs.getString("NombreGrupo"));
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
+
 /**
  * true si ya existe una asignación vigente (no cancelada) en ese espacio
  * y fecha, cuyo horario se traslapa con el que se quiere guardar.
@@ -216,11 +251,36 @@ public boolean existeConflictoHorario(int idEspacio, java.time.LocalDate fecha,
         return true; // ante la duda, no dejar guardar y que revises el error en consola
     }
 }
+public List<String> listarNombresSolicitantes1() {
+
+    List<String> nombres = new ArrayList<>();
+
+    String sql = """
+        SELECT NombreSolicitante
+        FROM tb_solicitante
+        ORDER BY NombreSolicitante
+        """;
+
+    try (
+        Connection con = Conexion.conectar();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery()
+    ) {
+        while (rs.next()) {
+            nombres.add(rs.getString("NombreSolicitante"));
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return nombres;
+}
 
 /** Espacios de un tipo específico (Laboratorio/Aula/Sala), para el combo dependiente. */
 public Map<String, Integer> listarEspaciosPorTipo(String tipo) {
     Map<String, Integer> mapa = new LinkedHashMap<>();
-    String sql = "SELECT ID_Espacio, NombreEspacio FROM tb_espacio WHERE Tipo = ? ORDER BY NombreEspacio";
+    String sql = "SELECT ID_Espacio, NombreEspacio FROM tb_espacio WHERE TipoEspacio = ? ORDER BY NombreEspacio";
 
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sql)) {
@@ -240,14 +300,30 @@ public Map<String, Integer> listarEspaciosPorTipo(String tipo) {
 
 /** Tipo (Laboratorio/Aula/Sala) de un espacio ya guardado, para precargar el formulario al editar. */
 public String obtenerTipoEspacio(String nombreEspacio) {
-    String sql = "SELECT Tipo FROM tb_espacio WHERE NombreEspacio = ?";
+    String sql = "SELECT TipoEspacio FROM tb_espacio WHERE NombreEspacio = ?";
 
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sql)) {
 
         ps.setString(1, nombreEspacio);
         try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) return rs.getString("Tipo");
+            if (rs.next()) return rs.getString("TipoEspacio");
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+public String obtenerlistarecomendacion(String nombre) {
+    String sql = "SELECT nombre FROM tb_materia WHERE nombre = ?";
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, nombre);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getString("nombre");
         }
 
     } catch (SQLException e) {
@@ -349,10 +425,13 @@ public String obtenerTipoEspacio(String nombreEspacio) {
         ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
 
         String sql = """
-                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante, a.Materia, a.Grupo,
+                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante, m.nombre , g.NombreGrupo,
                        a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
-                       a.Carrera, e.NombreEspacio
+                       c.NombreCarrera, e.NombreEspacio
                 FROM tb_asignacion a
+                join tb_carrera c on c.ID_Carrera = a.ID_Carrera
+                JOIN tb_grupo g on g.ID_Grupo = a.ID_Grupo
+                JOIN tb_materia m on m.ID_Materia = a.ID_Materia
                 JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
                 ORDER BY a.Fecha DESC, a.HoraInicio DESC
                 """;
@@ -442,10 +521,13 @@ public String obtenerTipoEspacio(String nombreEspacio) {
         ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
 
         String sql = """
-                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante, a.Materia, a.Grupo,
+                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante, m.nombre , g.NombreGrupo,
                        a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
-                       a.Carrera, e.NombreEspacio
+                       c.NombreCarrera, e.NombreEspacio
                 FROM tb_asignacion a
+                join tb_carrera c on c.ID_Carrera = a.ID_Carrera
+                JOIN tb_grupo g on g.ID_Grupo = a.ID_Grupo
+                join tb_materia m on m.ID_Materia = a.ID_Materia
                 JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
                 WHERE a.Fecha = CURDATE() AND a.Estado <> 'Cancelado'
                 ORDER BY a.HoraInicio ASC
@@ -516,11 +598,12 @@ public String obtenerTipoEspacio(String nombreEspacio) {
         List<AsignacionHorario> lista = new ArrayList<>();
  
         String sql = """
-                SELECT a.ID_Asignacion, a.NombreSolicitante, a.Materia, a.Fecha,
+                SELECT a.ID_Asignacion, a.NombreSolicitante, m.nombre, a.Fecha,
                        a.HoraInicio, a.HoraTermino, a.Estado,
                        e.NombreEspacio,
                        CONCAT_WS(' ', p.Nombre, p.ApellidoPaterno, p.ApellidoMaterno) AS NombreProfesor
                 FROM tb_asignacion a
+                Join tb_materia m on m.ID_Materia = a.ID_Materia
                 JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
                 LEFT JOIN tb_profesor p ON p.ID_Profesor = a.ID_Profesor
                 WHERE a.Fecha BETWEEN ? AND ?
