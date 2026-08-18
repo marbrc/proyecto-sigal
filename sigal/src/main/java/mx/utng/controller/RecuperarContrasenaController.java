@@ -350,7 +350,8 @@ public class RecuperarContrasenaController {
             Scene escena = new Scene(root);
             stage.setScene(escena);
             stage.setTitle("SIGAL - Inicio de sesión");
-            stage.centerOnScreen();
+            stage.setMaximized(false);
+            stage.setMaximized(true);     
             stage.show();
 
         } catch (IOException e) {

@@ -306,7 +306,8 @@ public class BienvenidaController implements Initializable {
 
         stage.setScene(scene);
         stage.setTitle("SIGAL - Inicio de sesión");
-        stage.centerOnScreen();
+        stage.setMaximized(false);
+        stage.setMaximized(true);
         stage.show();
 
     } catch (IOException e) {
@@ -333,7 +334,7 @@ public class BienvenidaController implements Initializable {
                 .getWindow();
 
         stage.setScene(new Scene(root));
-        stage.centerOnScreen();
+        stage.setMaximized(true);
         stage.show();
 
     } catch (IOException e) {

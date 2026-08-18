@@ -158,7 +158,7 @@ public class LoginController {
             Scene escena = new Scene(root);
             stage.setScene(escena);
             stage.setTitle("SIGAL - Recuperar contraseña");
-            stage.centerOnScreen();
+            stage.setMaximized(true);
             stage.show();
 
         } catch (IOException e) {
@@ -183,7 +183,7 @@ public class LoginController {
             Scene escena = new Scene(root);
             stage.setScene(escena);
             stage.setTitle("SIGAL - Sistema Integral de Gestión y Asignación de Laboratorios");
-            stage.centerOnScreen();
+            stage.setMaximized(true);
             stage.show();
 
         } catch (IOException e) {
@@ -292,7 +292,7 @@ public class LoginController {
             Scene escena = new Scene(root);
             stage.setScene(escena);
             stage.setTitle("SIGAL - Sistema Integral de Gestión y Asignación de Laboratorios");
-            stage.centerOnScreen();
+            stage.setMaximized(true);
             stage.show();
 
             // El tema (Azul/Oscuro/Claro) que el usuario guardó la última vez

@@ -112,6 +112,8 @@ public class RegistroController {
             Parent root = FXMLLoader.load(getClass().getResource("/mx/utng/view/fx_login.fxml"));
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setMaximized(false);
+            stage.setMaximized(true);
         } catch (IOException e) {
             e.printStackTrace();
             mostrarAlerta(Alert.AlertType.ERROR, "Error al cargar la vista de inicio de sesión.");

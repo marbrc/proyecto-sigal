@@ -143,8 +143,7 @@ public class AdminController {
             escena.setFill(null);
 
             ventana.setScene(escena);
-            ventana.centerOnScreen();
-            ventana.showAndWait();
+            ventana.setMaximized(true);            ventana.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
