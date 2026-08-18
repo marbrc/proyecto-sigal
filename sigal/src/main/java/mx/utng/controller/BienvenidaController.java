@@ -306,8 +306,11 @@ public class BienvenidaController implements Initializable {
 
         stage.setScene(scene);
         stage.setTitle("SIGAL - Inicio de sesión");
-        stage.setMaximized(false);
-        stage.setMaximized(true);
+        javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
         stage.show();
 
     } catch (IOException e) {
@@ -334,7 +337,11 @@ public class BienvenidaController implements Initializable {
                 .getWindow();
 
         stage.setScene(new Scene(root));
-        stage.setMaximized(true);
+        javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
         stage.show();
 
     } catch (IOException e) {

@@ -350,8 +350,11 @@ public class RecuperarContrasenaController {
             Scene escena = new Scene(root);
             stage.setScene(escena);
             stage.setTitle("SIGAL - Inicio de sesión");
-            stage.setMaximized(false);
-            stage.setMaximized(true);     
+            javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+            stage.setX(bounds.getMinX());
+            stage.setY(bounds.getMinY());
+            stage.setWidth(bounds.getWidth());
+            stage.setHeight(bounds.getHeight());    
             stage.show();
 
         } catch (IOException e) {

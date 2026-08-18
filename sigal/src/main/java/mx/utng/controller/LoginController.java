@@ -158,7 +158,11 @@ public class LoginController {
             Scene escena = new Scene(root);
             stage.setScene(escena);
             stage.setTitle("SIGAL - Recuperar contraseña");
-            stage.setMaximized(true);
+            javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+            stage.setX(bounds.getMinX());
+            stage.setY(bounds.getMinY());
+            stage.setWidth(bounds.getWidth());
+            stage.setHeight(bounds.getHeight());
             stage.show();
 
         } catch (IOException e) {
@@ -183,7 +187,11 @@ public class LoginController {
             Scene escena = new Scene(root);
             stage.setScene(escena);
             stage.setTitle("SIGAL - Sistema Integral de Gestión y Asignación de Laboratorios");
-            stage.setMaximized(true);
+            javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+            stage.setX(bounds.getMinX());
+            stage.setY(bounds.getMinY());
+            stage.setWidth(bounds.getWidth());
+            stage.setHeight(bounds.getHeight());
             stage.show();
 
         } catch (IOException e) {
@@ -292,7 +300,11 @@ public class LoginController {
             Scene escena = new Scene(root);
             stage.setScene(escena);
             stage.setTitle("SIGAL - Sistema Integral de Gestión y Asignación de Laboratorios");
-            stage.setMaximized(true);
+            javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+            stage.setX(bounds.getMinX());
+            stage.setY(bounds.getMinY());
+            stage.setWidth(bounds.getWidth());
+            stage.setHeight(bounds.getHeight());
             stage.show();
 
             // El tema (Azul/Oscuro/Claro) que el usuario guardó la última vez

@@ -883,8 +883,11 @@ public class MenuController {
 
                 stage.setScene(new javafx.scene.Scene(raizLogin));
                 stage.setTitle("SIGAL - Iniciar sesion");
-                stage.setMaximized(false);
-                stage.setMaximized(true);
+                javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+                stage.setX(bounds.getMinX());
+                stage.setY(bounds.getMinY());
+                stage.setWidth(bounds.getWidth());
+                stage.setHeight(bounds.getHeight());
                 stage.show();
 
                 detenerReloj();
