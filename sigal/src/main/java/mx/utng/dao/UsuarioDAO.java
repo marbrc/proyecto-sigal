@@ -54,6 +54,7 @@ public class UsuarioDAO {
     }
 
     /** Busca un usuario activo que coincida con NombreUsuario y CorreoElectronico (para "olvidé mi contraseña"). */
+       /** Busca un usuario activo que coincida con NombreUsuario y CorreoElectronico (para "olvidé mi contraseña"). */
     public Usuario buscarPorUsuarioYCorreo(String nombreUsuario, String correo) {
         String sql = """
                 SELECT *
@@ -85,6 +86,7 @@ public class UsuarioDAO {
             return null;
         }
     }
+
 
     // ============================================================
     //  PANTALLA "MI CUENTA"

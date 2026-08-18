@@ -4,7 +4,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -47,8 +46,8 @@ public class AsignacionesController implements Initializable {
     @FXML private ComboBox<String> cmbTipoEspacio;
     @FXML private ComboBox<String> cmbEspacio;
     @FXML private ComboBox<String> cmbCarrera;
-    @FXML private TextField txtMateria;
-    @FXML private TextField txtGrupo;
+    @FXML private ComboBox<String> cmbMateria;
+    @FXML private ComboBox<String> cmbGrupo;
     @FXML private TextField txtNumAlumnos;
     @FXML private DatePicker dpFecha;
     @FXML private ComboBox<String> cmbHoraInicio;
@@ -89,7 +88,6 @@ public class AsignacionesController implements Initializable {
 
     private final AsignacionDAO asignacionDAO = new AsignacionDAO();
     private Map<String, Integer> mapaEspacios = new LinkedHashMap<>();
-
     private Asignaciones asignacionEnEdicion = null;
 
     @Override
@@ -105,42 +103,119 @@ public class AsignacionesController implements Initializable {
     //  Combos y carga de datos
     // ============================================================
 
+    
+
     private void cargarCombos() {
-        cmbNombreSolicitante.setEditable(true);
-        cmbNombreSolicitante.setEditable(true);
-cmbNombreSolicitante.getStyleClass().add("combo-box-editable");
-        cmbNombreSolicitante.setItems(FXCollections.observableArrayList(asignacionDAO.listarNombresSolicitantes()));
-        cmbSolicitante.valueProperty().addListener((obs, antes, tipo) -> {
-    cmbNombreSolicitante.setValue(null);
-    if ("Maestro".equals(tipo)) {
-        cmbNombreSolicitante.setItems(FXCollections.observableArrayList(asignacionDAO.listarNombresProfesores()));
-    } else {
-        cmbNombreSolicitante.setItems(FXCollections.observableArrayList(asignacionDAO.listarNombresSolicitantes()));
-    }
-});
-        cmbSolicitante.setItems(FXCollections.observableArrayList("Maestro", "Administrativo", "Alumno"));
 
-        cmbCarrera.setItems(FXCollections.observableArrayList(CARRERAS));
+    // Combo de solicitantes
+    cmbSolicitante.setItems(
+        FXCollections.observableArrayList(
+            "Docente",
+            "Administrativo"
+        )
+    );
 
-        ObservableList<String> horas = generarHoras();
-        cmbHoraInicio.setItems(horas);
-        cmbHoraTermino.setItems(FXCollections.observableArrayList(horas));
+    cmbNombreSolicitante.setEditable(true);
+    cmbNombreSolicitante.getStyleClass().add("combo-box-editable");
 
-        cmbTipoEspacio.setItems(FXCollections.observableArrayList("Laboratorio", "Aula", "Sala"));
-        cmbEspacio.setDisable(true);
+    // Valores iniciales
+    cmbNombreSolicitante.setItems(
+        FXCollections.observableArrayList(
+            asignacionDAO.listarNombresSolicitantes()
+        )
+    );
 
-        cmbTipoEspacio.valueProperty().addListener((obs, antes, tipo) -> {
-            cmbEspacio.setValue(null);
-            if (tipo == null) {
-                cmbEspacio.setItems(FXCollections.observableArrayList());
-                cmbEspacio.setDisable(true);
-                return;
-            }
-            mapaEspacios = asignacionDAO.listarEspaciosPorTipo(tipo);
-            cmbEspacio.setItems(FXCollections.observableArrayList(new ArrayList<>(mapaEspacios.keySet())));
-            cmbEspacio.setDisable(false);
-        });
-    }
+    cmbSolicitante.valueProperty().addListener((obs, valorAnterior, tipo) -> {
+
+        // Limpiar selección y texto escrito
+        cmbNombreSolicitante.getSelectionModel().clearSelection();
+        cmbNombreSolicitante.setValue(null);
+
+        if (cmbNombreSolicitante.isEditable()) {
+            cmbNombreSolicitante.getEditor().clear();
+        }
+
+        if ("Maestro".equals(tipo)) {
+            cmbNombreSolicitante.setItems(
+                FXCollections.observableArrayList(
+                    asignacionDAO.listarNombresProfesores()
+                )
+            );
+        } else {
+            cmbNombreSolicitante.setItems(
+                FXCollections.observableArrayList(
+                    asignacionDAO.listarNombresSolicitantes()
+                )
+            );
+        }
+    });
+
+    // Otros combos
+    cmbCarrera.setItems(
+        FXCollections.observableArrayList(CARRERAS)
+    );
+
+    cmbMateria.setItems(FXCollections.observableArrayList(
+        asignacionDAO.listarMaterias()
+    ));
+
+    cmbGrupo.setItems(
+        FXCollections.observableArrayList(
+            asignacionDAO.listarGrupos()
+        )
+    );
+
+    ObservableList<String> horas = generarHoras();
+
+    cmbHoraInicio.setItems(horas);
+    cmbHoraTermino.setItems(
+        FXCollections.observableArrayList(horas)
+    );
+
+    // Combo de tipos de espacio
+    cmbTipoEspacio.setItems(
+        FXCollections.observableArrayList(
+            "Lab. de cómputo",
+            "Aula común",
+            "Especializado",
+            "Sala múltiple"
+        )
+    );
+
+    
+    // El combo dependiente inicia deshabilitado
+    cmbEspacio.setDisable(true);
+    cmbEspacio.getItems().clear();
+
+    cmbTipoEspacio.valueProperty().addListener((obs, valorAnterior, tipo) -> {
+
+        // Limpiar combo dependiente
+        cmbEspacio.getSelectionModel().clearSelection();
+        cmbEspacio.getItems().clear();
+        cmbEspacio.setValue(null);
+
+        if (cmbEspacio.isEditable()) {
+            cmbEspacio.getEditor().clear();
+        }
+
+        // Si no hay tipo seleccionado, permanece deshabilitado
+        if (tipo == null || tipo.trim().isEmpty()) {
+            cmbEspacio.setDisable(true);
+            return;
+        }
+
+        // Consultar espacios según el tipo seleccionado
+        mapaEspacios = asignacionDAO.listarEspaciosPorTipo(tipo);
+
+        cmbEspacio.setItems(
+            FXCollections.observableArrayList(
+                mapaEspacios.keySet()
+            )
+        );
+
+        cmbEspacio.setDisable(mapaEspacios.isEmpty());
+    });
+}
 
     private ObservableList<String> generarHoras() {
         ObservableList<String> horas = FXCollections.observableArrayList();
@@ -306,8 +381,8 @@ cmbNombreSolicitante.getStyleClass().add("combo-box-editable");
         cmbEspacio.setValue(asignacion.getEspacio());
 
         cmbCarrera.setValue(asignacion.getCarrera());
-        txtMateria.setText(asignacion.getMateria());
-        txtGrupo.setText(asignacion.getGrupo());
+        cmbMateria.setValue(asignacion.getMateria());
+        cmbGrupo.setValue(asignacion.getGrupo());
         txtNumAlumnos.setText(asignacion.getNumAlumnos());
 
         try {
@@ -353,8 +428,8 @@ cmbNombreSolicitante.getStyleClass().add("combo-box-editable");
                 || cmbTipoEspacio.getValue() == null
                 || cmbEspacio.getValue() == null
                 || cmbCarrera.getValue() == null
-                || txtMateria.getText().isBlank()
-                || txtGrupo.getText().isBlank()
+                || cmbMateria.getValue() == null || cmbMateria.getValue().isBlank()
+                || cmbGrupo.getValue() == null
                 || txtNumAlumnos.getText().isBlank()
                 || dpFecha.getValue() == null
                 || cmbHoraInicio.getValue() == null
@@ -418,8 +493,8 @@ if (hayConflicto) {
                 cmbNombreSolicitante.getValue(),
                 "—",
                 cmbCarrera.getValue(),
-                txtMateria.getText(),
-                txtGrupo.getText(),
+                cmbMateria.getValue(),
+                cmbGrupo.getValue(),
                 txtNumAlumnos.getText(),
                 txtActividad.getText(),
                 "Asignado"
@@ -457,8 +532,8 @@ if (hayConflicto) {
         cmbEspacio.setValue(null);
         cmbEspacio.setDisable(true);
         cmbCarrera.setValue(null);
-        txtMateria.clear();
-        txtGrupo.clear();
+        cmbMateria.setValue(null);
+        cmbGrupo.setValue(null);
         txtNumAlumnos.clear();
         dpFecha.setValue(null);
         cmbHoraInicio.setValue(null);
@@ -476,3 +551,4 @@ if (hayConflicto) {
         alerta.showAndWait();
     }
 }
+
