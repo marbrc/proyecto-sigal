@@ -89,7 +89,7 @@
                         </VBox>
                         <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                             <Label styleClass="field-label" text="Grupo *" />
-                     <ComboBox fx:id="cmbCarrera1" maxWidth="Infinity" promptText="Seleccionar grupo" styleClass="field-combo" />
+                     <ComboBox fx:id="cmbGrupo" maxWidth="Infinity" promptText="Seleccionar grupo" styleClass="field-combo" />
                         </VBox>
                         <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                             <Label styleClass="field-label" text="Número de alumnos *" />
