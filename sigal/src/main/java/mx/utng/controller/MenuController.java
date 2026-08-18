@@ -65,6 +65,7 @@ public class MenuController {
     @FXML private Button navAsignaciones;
     @FXML private Button navRegistroEspacios;
     @FXML private Button navProfesores;
+    @FXML private Button navCatalogoAcademico;
     @FXML private Button navHorarios;
     @FXML private Button navConsultas;
     @FXML private Button navReportes;
@@ -208,6 +209,26 @@ public class MenuController {
             case "fx_horarios":
                 titulo = "Horarios";
                 descripcion = "Visualiza y organiza los horarios por espacio";
+                break;
+            case "fx_catalogo_academico":
+                titulo = "Catálogo Académico";
+                descripcion = "Administra materias, grupos, carreras y áreas académicas";
+                break;
+            case "fx_materias":
+                titulo = "Materias";
+                descripcion = "Catálogo Académico › Materias";
+                break;
+            case "fx_grupos":
+                titulo = "Grupos";
+                descripcion = "Catálogo Académico › Grupos";
+                break;
+            case "fx_carreras":
+                titulo = "Carreras";
+                descripcion = "Catálogo Académico › Carreras";
+                break;
+            case "fx_area_academica":
+                titulo = "Área Académica";
+                descripcion = "Catálogo Académico › Área Académica";
                 break;
             case "fx_consultas":
                 titulo = "Consultas";
@@ -430,6 +451,9 @@ public class MenuController {
             case "navProfesores":
                 cargarModulo("fx_profesores");
                 break;
+            case "navCatalogoAcademico":
+                cargarModulo("fx_catalogo_academico");
+                break;
             case "navHorarios":
                 cargarModulo("fx_horarios");
                 break;
@@ -484,7 +508,7 @@ public class MenuController {
     /** Lista de los botones de navegacion del sidebar (sin Cerrar Sesion). */
     private Button[] obtenerBotonesNav() {
         return new Button[]{
-                navInicio, navAsignaciones, navRegistroEspacios, navProfesores,
+                navInicio, navAsignaciones, navRegistroEspacios, navProfesores, navCatalogoAcademico,
                 navHorarios, navConsultas, navReportes, navAvisos, navAjustes, navCuenta, navAcerca
         };
     }
@@ -567,6 +591,18 @@ public class MenuController {
                 ajustesController.setMenuController(this);
             } else if (controlador instanceof HorarioController horarioController) {
                 horarioController.setMenuController(this);
+            } else if (controlador instanceof CatalogoAcademicoController catalogoController) {
+                catalogoController.setMenuController(this);
+            } else if (controlador instanceof MateriasController materiasController) {
+                materiasController.setMenuController(this);
+            } else if (controlador instanceof GruposController gruposController) {
+                gruposController.setMenuController(this);
+            } else if (controlador instanceof CarrerasController carrerasController) {
+                carrerasController.setMenuController(this);
+            } else if (controlador instanceof AreaAcademicaController areaAcademicaController) {
+                areaAcademicaController.setMenuController(this);
+            } else if (controlador instanceof PlaceholderController placeholderController) {
+                placeholderController.configurar(nombreFxml, this);
             }
 
             contentPane.getChildren().clear();

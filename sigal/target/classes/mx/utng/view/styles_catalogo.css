@@ -1,0 +1,154 @@
+/* =========================================================
+   SIGAL - Estilos pantalla "Catálogo Académico"
+   (fx_catalogo_academico.fxml)
+   ========================================================= */
+
+.catalogo-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.catalogo-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.catalogo-root {
+    -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
+}
+
+.catalogo-page-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+.catalogo-page-subtitle {
+    -fx-text-fill: #9aa6c9;
+    -fx-font-size: 13px;
+}
+
+/* ---------------- TARJETAS GRANDES ---------------- */
+.catalogo-tile {
+    -fx-min-height: 200px;
+    -fx-pref-height: 200px;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-padding: 24;
+    -fx-content-display: TOP;
+}
+
+.tile-icon-box {
+    -fx-min-width: 62px;
+    -fx-min-height: 62px;
+    -fx-max-width: 62px;
+    -fx-max-height: 62px;
+    -fx-background-radius: 999;
+    -fx-background-color: rgba(255,255,255,0.14);
+}
+.tile-icon {
+    -fx-font-size: 28px;
+}
+
+.tile-title {
+    -fx-text-fill: white;
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+}
+
+.tile-desc {
+    -fx-text-fill: rgba(255,255,255,0.78);
+    -fx-font-size: 12px;
+    -fx-max-width: 240px;
+}
+
+/* ---- Materias: azul ---- */
+.tile-materias {
+    -fx-background-color: linear-gradient(to bottom right, #1c4fd6, #2f8fff);
+    -fx-border-color: rgba(120,170,255,0.35);
+    -fx-effect: dropshadow(gaussian, rgba(47,143,255,0.35), 22, 0.15, 0, 6);
+}
+.tile-materias:hover {
+    -fx-background-color: linear-gradient(to bottom right, #2058e8, #4aa0ff);
+    -fx-effect: dropshadow(gaussian, rgba(47,143,255,0.55), 28, 0.2, 0, 8);
+}
+
+/* ---- Grupos: morado ---- */
+.tile-grupos {
+    -fx-background-color: linear-gradient(to bottom right, #5b2fd6, #9457ff);
+    -fx-border-color: rgba(180,140,255,0.35);
+    -fx-effect: dropshadow(gaussian, rgba(148,87,255,0.35), 22, 0.15, 0, 6);
+}
+.tile-grupos:hover {
+    -fx-background-color: linear-gradient(to bottom right, #6a3af0, #a56bff);
+    -fx-effect: dropshadow(gaussian, rgba(148,87,255,0.55), 28, 0.2, 0, 8);
+}
+
+/* ---- Carreras: verde azulado ---- */
+.tile-carreras {
+    -fx-background-color: linear-gradient(to bottom right, #0f9b8e, #22c6b6);
+    -fx-border-color: rgba(120,220,205,0.35);
+    -fx-effect: dropshadow(gaussian, rgba(34,198,182,0.35), 22, 0.15, 0, 6);
+}
+.tile-carreras:hover {
+    -fx-background-color: linear-gradient(to bottom right, #12b0a1, #35dcca);
+    -fx-effect: dropshadow(gaussian, rgba(34,198,182,0.55), 28, 0.2, 0, 8);
+}
+
+/* ---- Area academica: naranja/rosa ---- */
+.tile-area {
+    -fx-background-color: linear-gradient(to bottom right, #d6572f, #ff8a5b);
+    -fx-border-color: rgba(255,180,140,0.35);
+    -fx-effect: dropshadow(gaussian, rgba(255,138,91,0.35), 22, 0.15, 0, 6);
+}
+.tile-area:hover {
+    -fx-background-color: linear-gradient(to bottom right, #e8622f, #ff9d70);
+    -fx-effect: dropshadow(gaussian, rgba(255,138,91,0.55), 28, 0.2, 0, 8);
+}
+
+/* ---------------- PANTALLAS "EN CONSTRUCCION" DE CADA CATALOGO ---------------- */
+.placeholder-root {
+    -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
+}
+.placeholder-card {
+    -fx-background-color: #0a1130;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: rgba(120,150,255,0.18);
+    -fx-border-width: 1;
+    -fx-padding: 46;
+}
+.placeholder-icon-box {
+    -fx-min-width: 76px;
+    -fx-min-height: 76px;
+    -fx-max-width: 76px;
+    -fx-max-height: 76px;
+    -fx-background-radius: 999;
+    -fx-background-color: rgba(79,195,255,0.14);
+}
+.placeholder-icon {
+    -fx-font-size: 34px;
+}
+.placeholder-title {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+.placeholder-desc {
+    -fx-text-fill: #9aa6c9;
+    -fx-font-size: 13px;
+    -fx-max-width: 360px;
+}
+.btn-volver-catalogo {
+    -fx-background-color: linear-gradient(to right, #2f6bff, #7b2ff7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 10;
+    -fx-padding: 12 22;
+    -fx-cursor: hand;
+}
+.btn-volver-catalogo:hover {
+    -fx-effect: dropshadow(gaussian, rgba(80,90,255,0.5), 16, 0.25, 0, 3);
+}

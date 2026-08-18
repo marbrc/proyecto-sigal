@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="catalogo-scroll" stylesheets="@styles_catalogo.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.CatalogoAcademicoController">
+
+    <VBox spacing="24.0" styleClass="catalogo-root">
+        <padding>
+            <Insets bottom="34.0" left="34.0" right="34.0" top="20.0" />
+        </padding>
+
+
+        <!-- ============ CUADRICULA DE TARJETAS GRANDES ============ -->
+        <VBox spacing="22.0">
+
+            <HBox spacing="22.0">
+                <!-- MATERIAS -->
+                <Button fx:id="btnMaterias" maxWidth="Infinity" onAction="#onAbrirMaterias" styleClass="catalogo-tile, tile-materias" HBox.hgrow="ALWAYS">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10.0">
+                            <StackPane styleClass="tile-icon-box">
+                                <Label styleClass="tile-icon" text="📘" />
+                            </StackPane>
+                            <Label styleClass="tile-title" text="Materias" />
+                            <Label styleClass="tile-desc" text="Consulta y administra el catálogo de materias" textAlignment="CENTER" wrapText="true" />
+                        </VBox>
+                    </graphic>
+                </Button>
+
+                <!-- GRUPOS -->
+                <Button fx:id="btnGrupos" maxWidth="Infinity" onAction="#onAbrirGrupos" styleClass="catalogo-tile, tile-grupos" HBox.hgrow="ALWAYS">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10.0">
+                            <StackPane styleClass="tile-icon-box">
+                                <Label styleClass="tile-icon" text="👥" />
+                            </StackPane>
+                            <Label styleClass="tile-title" text="Grupos" />
+                            <Label styleClass="tile-desc" text="Administra los grupos por cuatrimestre y turno" textAlignment="CENTER" wrapText="true" />
+                        </VBox>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <HBox spacing="22.0">
+                <!-- CARRERAS -->
+                <Button fx:id="btnCarreras" maxWidth="Infinity" onAction="#onAbrirCarreras" styleClass="catalogo-tile, tile-carreras" HBox.hgrow="ALWAYS">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10.0">
+                            <StackPane styleClass="tile-icon-box">
+                                <Label styleClass="tile-icon" text="🎓" />
+                            </StackPane>
+                            <Label styleClass="tile-title" text="Carreras" />
+                            <Label styleClass="tile-desc" text="Consulta y administra las carreras registradas" textAlignment="CENTER" wrapText="true" />
+                        </VBox>
+                    </graphic>
+                </Button>
+
+                <!-- AREA ACADEMICA -->
+                <Button fx:id="btnAreaAcademica" maxWidth="Infinity" onAction="#onAbrirAreaAcademica" styleClass="catalogo-tile, tile-area" HBox.hgrow="ALWAYS">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10.0">
+                            <StackPane styleClass="tile-icon-box">
+                                <Label styleClass="tile-icon" text="🏫" />
+                            </StackPane>
+                            <Label styleClass="tile-title" text="Área Académica" />
+                            <Label styleClass="tile-desc" text="Administra las áreas académicas del edificio" textAlignment="CENTER" wrapText="true" />
+                        </VBox>
+                    </graphic>
+                </Button>
+            </HBox>
+
+        </VBox>
+
+        <Region VBox.vgrow="ALWAYS" />
+    </VBox>
+
+</ScrollPane>
