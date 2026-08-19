@@ -560,7 +560,40 @@ public class MenuController {
      * "Ver más →") puedan pedirle al menú que cambie de pantalla.
      */
     public void abrirModulo(String nombreFxml) {
+        marcarNavActivo(botonParaModulo(nombreFxml));
         cargarModulo(nombreFxml);
+    }
+
+    /**
+     * Traduce el nombre de un modulo (por ejemplo "fx_asignaciones") al
+     * boton del sidebar que le corresponde, para que abrirModulo() -llamado
+     * desde enlaces internos como "Ver más asignaciones" o "Ver todos"
+     * en el Inicio- tambien mueva el resaltado del menu lateral y no se
+     * quede marcado en "Inicio".
+     */
+    private Button botonParaModulo(String nombreFxml) {
+        if (nombreFxml == null) return navInicio;
+
+        switch (nombreFxml) {
+            case "fx_inicio": return navInicio;
+            case "fx_asignaciones": return navAsignaciones;
+            case "fx_espacios": return navRegistroEspacios;
+            case "fx_profesores": return navProfesores;
+            case "fx_catalogo_academico":
+            case "fx_materias":
+            case "fx_grupos":
+            case "fx_carreras":
+            case "fx_area_academica":
+                return navCatalogoAcademico;
+            case "fx_horarios": return navHorarios;
+            case "fx_consultas": return navConsultas;
+            case "fx_reportes": return navReportes;
+            case "fx_avisos": return navAvisos;
+            case "fx_ajustes": return navAjustes;
+            case "fx_cuenta": return navCuenta;
+            case "fx_acerca": return navAcerca;
+            default: return navInicio;
+        }
     }
 
     private void cargarModulo(String nombreFxml) {
@@ -581,7 +614,9 @@ public class MenuController {
             // regresar a este menú (por ejemplo para abrir otro módulo desde
             // un link interno), le pasamos la referencia.
             Object controlador = loader.getController();
-            if (controlador instanceof AsignacionesController asignacionesController) {
+            if (controlador instanceof InicioController inicioController) {
+                inicioController.setMenuController(this);
+            } else if (controlador instanceof AsignacionesController asignacionesController) {
                 asignacionesController.setMenuController(this);
             } else if (controlador instanceof DisponibilidadController disponibilidadController) {
                 disponibilidadController.setMenuController(this);

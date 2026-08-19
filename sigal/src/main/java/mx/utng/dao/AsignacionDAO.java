@@ -593,6 +593,81 @@ public class AsignacionDAO {
         return lista;
     }
  
+    /**
+     * Asignaciones de un dia especifico (para el calendario del Inicio:
+     * al hacer clic en un dia se listan las asignaciones de esa fecha).
+     */
+    public ObservableList<Asignaciones> listarPorFecha(LocalDate fecha) {
+
+        ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
+
+        String sql = """
+                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante,
+                       m.Nombre AS Materia, g.NombreGrupo AS Grupo,
+                       a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
+                       c.NombreCarrera AS Carrera, e.NombreEspacio
+                FROM tb_asignacion a
+                LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
+                LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
+                LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
+                INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
+                WHERE a.Fecha = ? AND a.Estado <> 'Cancelado'
+                ORDER BY a.HoraInicio ASC
+                """;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setDate(1, Date.valueOf(fecha));
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(mapearFila(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    /**
+     * Dias del mes (1-31) que tienen al menos una asignacion activa, para
+     * pintar el puntito de "Asignado" debajo del numero en el calendario
+     * del Inicio.
+     */
+    public java.util.Set<Integer> diasConAsignacionesEnMes(java.time.YearMonth mes) {
+
+        java.util.Set<Integer> dias = new java.util.HashSet<>();
+
+        String sql = """
+                SELECT DISTINCT DAY(a.Fecha) AS Dia
+                FROM tb_asignacion a
+                WHERE a.Estado <> 'Cancelado'
+                  AND a.Fecha BETWEEN ? AND ?
+                """;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setDate(1, Date.valueOf(mes.atDay(1)));
+            ps.setDate(2, Date.valueOf(mes.atEndOfMonth()));
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    dias.add(rs.getInt("Dia"));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return dias;
+    }
+
     private Asignaciones mapearFila(ResultSet rs) throws SQLException {
  
         Date fechaBD = rs.getDate("Fecha");

@@ -4,9 +4,7 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -108,15 +106,15 @@
                     </padding>
 
                     <!-- Calendario -->
-                    <VBox prefHeight="310.0" prefWidth="380.0" spacing="16.0" styleClass="panel-card">
+                    <VBox prefHeight="330.0" prefWidth="380.0" spacing="16.0" styleClass="panel-card">
                         <Label styleClass="panel-title" text="Calendario" />
 
                         <HBox alignment="CENTER" spacing="10.0">
-                            <Button styleClass="cal-nav-btn" text="‹" />
+                            <Button fx:id="btnMesAnterior" onAction="#onMesAnterior" styleClass="cal-nav-btn" text="‹" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Label styleClass="panel-subtitle" text="Julio 2026" />
+                            <Label fx:id="lblMesCalendario" styleClass="panel-subtitle" text="Mes" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Button styleClass="cal-nav-btn" text="›" />
+                            <Button fx:id="btnMesSiguiente" onAction="#onMesSiguiente" styleClass="cal-nav-btn" text="›" />
                         </HBox>
 
                         <VBox spacing="10.0">
@@ -130,111 +128,33 @@
                                 <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-weekday" text="DOM" HBox.hgrow="ALWAYS" />
                             </HBox>
 
-                            <HBox spacing="2.0">
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day-muted" text="30" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="1" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="2" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="3" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="4" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="5" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="6" HBox.hgrow="ALWAYS" />
-                            </HBox>
-
-                            <HBox spacing="2.0">
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="7" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="8" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="9" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="10" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="11" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="12" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="13" HBox.hgrow="ALWAYS" />
-                            </HBox>
-
-                            <HBox spacing="2.0">
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="14" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="15" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="16" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="17" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="18" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="19" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="20" HBox.hgrow="ALWAYS" />
-                            </HBox>
-
-                            <HBox spacing="2.0">
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="21" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="22" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="23" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="24" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day-today" text="25" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="26" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="27" HBox.hgrow="ALWAYS" />
-                            </HBox>
-
-                            <HBox spacing="2.0">
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="28" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="29" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="30" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day" text="31" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day-muted" text="1" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day-muted" text="2" HBox.hgrow="ALWAYS" />
-                                <Label alignment="CENTER" maxWidth="Infinity" styleClass="cal-day-muted" text="3" HBox.hgrow="ALWAYS" />
-                            </HBox>
+                            <!-- Las filas de dias se construyen dinamicamente en InicioController.construirCalendario() -->
+                            <VBox fx:id="calGridDias" spacing="6.0" />
                         </VBox>
 
                         <HBox alignment="CENTER" spacing="16.0" styleClass="cal-legend">
                             <HBox alignment="CENTER" spacing="6.0">
-                                <Circle radius="4.0" styleClass="legend-dot-green" />
-                                <Label styleClass="legend-text" text="Disponible" />
-                            </HBox>
-                            <HBox alignment="CENTER" spacing="6.0">
                                 <Circle radius="4.0" styleClass="legend-dot-blue" />
-                                <Label styleClass="legend-text" text="Asignado" />
-                            </HBox>
-                            <HBox alignment="CENTER" spacing="6.0">
-                                <Circle radius="4.0" styleClass="legend-dot-orange" />
-                                <Label styleClass="legend-text" text="Ocupado" />
+                                <Label styleClass="legend-text" text="Con asignaciones" />
                             </HBox>
                             <HBox alignment="CENTER" spacing="6.0">
                                 <Circle radius="4.0" styleClass="legend-dot-purple" />
-                                <Label styleClass="legend-text" text="Evento" />
+                                <Label styleClass="legend-text" text="Hoy" />
                             </HBox>
                         </HBox>
                     </VBox>
 
                     <!-- Asignaciones del día -->
-                    <VBox spacing="14.0" styleClass="panel-card" HBox.hgrow="ALWAYS">                        <VBox spacing="2.0">
+                    <VBox spacing="14.0" styleClass="panel-card" HBox.hgrow="ALWAYS">
+                        <VBox spacing="2.0">
                             <Label styleClass="panel-title" text="Asignaciones del día" />
-                            <Label fx:id="lblFechaAsignaciones" styleClass="panel-subtitle-muted" text="25 de Julio de 2026" />
+                            <Label fx:id="lblFechaAsignaciones" styleClass="panel-subtitle-muted" text="-" />
                         </VBox>
 
-                        <HBox spacing="12.0" styleClass="asignacion-item-blue">
-                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="asignacion-time" text="08:00 AM - 09:30 AM" />
-                                <Label styleClass="asignacion-name" text="Laboratorio TI-1" />
-                                <Label styleClass="asignacion-sub" text="Programación II" />
-                            </VBox>
-                            <Label styleClass="badge-asignado" text="Asignado" />
-                        </HBox>
+                        <!-- Filas reales inyectadas por InicioController.cargarAsignacionesDelDia() -->
+                        <VBox fx:id="panelAsignacionesLista" spacing="10.0" VBox.vgrow="ALWAYS" />
 
-                        <HBox spacing="12.0" styleClass="asignacion-item-blue">
-                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="asignacion-time" text="10:00 AM - 11:30 AM" />
-                                <Label styleClass="asignacion-name" text="Laboratorio WAN" />
-                                <Label styleClass="asignacion-sub" text="Redes de Computadoras" />
-                            </VBox>
-                            <Label styleClass="badge-asignado" text="Asignado" />
-                        </HBox>
-
-                        <HBox spacing="12.0" styleClass="asignacion-item-orange">
-                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="asignacion-time" text="12:00 PM - 01:30 PM" />
-                                <Label styleClass="asignacion-name" text="Sala Audiovisual" />
-                                <Label styleClass="asignacion-sub" text="Presentación Proyecto" />
-                            </VBox>
-                            <Label styleClass="badge-ocupado" text="Ocupado" />
-                        </HBox>
-
-                        <HBox alignment="CENTER" spacing="6.0">
+                        <HBox alignment="CENTER" onMouseClicked="#onVerMasAsignaciones" spacing="6.0" styleClass="panel-link-row">
                             <Label styleClass="panel-link" text="Ver más asignaciones" />
                             <Label styleClass="panel-link" text="→" />
                         </HBox>
@@ -242,53 +162,14 @@
 
                     <!-- Avisos Recientes -->
                     <VBox spacing="14.0" styleClass="panel-card" HBox.hgrow="ALWAYS">
-                    <HBox alignment="CENTER_LEFT">
+                        <HBox alignment="CENTER_LEFT">
                             <Label styleClass="panel-title" text="Avisos Recientes" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Label styleClass="panel-link-small" text="Ver todos" />
+                            <Label onMouseClicked="#onVerTodosAvisos" styleClass="panel-link-small" text="Ver todos" />
                         </HBox>
 
-                        <HBox spacing="12.0" styleClass="notice-item">
-                            <StackPane styleClass="notice-icon-box-purple">
-                                <Group>
-                                    <Polygon points="-5,-2,-1,-5,-1,5,-5,2" styleClass="notice-icon-fill-purple" />
-                                    <Polygon points="-1,-5,6,-8,6,8,-1,5" styleClass="notice-icon-stroke-purple" />
-                                    <Line endX="-3" endY="6" startX="-3" startY="2.5" styleClass="notice-icon-stroke-purple" />
-                                </Group>
-                            </StackPane>
-                            <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="notice-title" text="Mantenimiento programado" wrapText="true" />
-                                <Label styleClass="notice-text" text="El sistema estará en mantenimiento el 27 de julio de 00:00 a 04:00 AM." wrapText="true" />
-                                <Label styleClass="notice-time" text="Hace 2 horas" />
-                            </VBox>
-                        </HBox>
-
-                        <HBox spacing="12.0" styleClass="notice-item">
-                            <StackPane styleClass="notice-icon-box-blue">
-                                <Group>
-                                    <Rectangle arcHeight="2" arcWidth="2" height="10.5" styleClass="notice-icon-stroke-blue" width="12" x="-6" y="-4.5" />
-                                    <Line endX="-3" endY="-3.5" startX="-3" startY="-6.5" styleClass="notice-icon-stroke-blue-thick" />
-                                    <Line endX="3" endY="-3.5" startX="3" startY="-6.5" styleClass="notice-icon-stroke-blue-thick" />
-                                    <Line endX="6" endY="-1" startX="-6" startY="-1" styleClass="notice-icon-stroke-blue" />
-                                </Group>
-                            </StackPane>
-                            <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="notice-title" text="Nuevo laboratorio disponible" wrapText="true" />
-                                <Label styleClass="notice-text" text="Se ha habilitado el Laboratorio Fotografía para asignaciones." wrapText="true" />
-                                <Label styleClass="notice-time" text="Hace 1 día" />
-                            </VBox>
-                        </HBox>
-
-                        <HBox spacing="12.0" styleClass="notice-item">
-                            <StackPane styleClass="notice-icon-box-green">
-                                <Polyline points="-5,0,-1.5,4,5,-5" styleClass="notice-icon-stroke-green-thick" />
-                            </StackPane>
-                            <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="notice-title" text="Recordatorio" wrapText="true" />
-                                <Label styleClass="notice-text" text="Recuerda cancelar tus asignaciones si no podrás asistir." wrapText="true" />
-                                <Label styleClass="notice-time" text="Hace 2 días" />
-                            </VBox>
-                        </HBox>
+                        <!-- Filas reales inyectadas por InicioController.cargarAvisosPanel() -->
+                        <VBox fx:id="panelAvisosLista" spacing="12.0" VBox.vgrow="ALWAYS" />
                     </VBox>
 
                 </HBox>
@@ -299,14 +180,14 @@
     <!-- MODAL DE DETALLE (oculto al inicio) -->
     <StackPane fx:id="modalOverlay" mouseTransparent="true" opacity="0.0" styleClass="modal-scrim" visible="false">
 
-        <StackPane maxHeight="620.0" maxWidth="900.0" styleClass="modal-card">
+        <StackPane maxHeight="640.0" maxWidth="760.0" minWidth="640.0" styleClass="modal-card">
             <VBox spacing="0.0">
 
                 <HBox alignment="CENTER_LEFT" styleClass="modal-header">
                     <padding>
-                        <Insets bottom="18.0" left="26.0" right="26.0" top="22.0" />
+                        <Insets bottom="18.0" left="30.0" right="30.0" top="24.0" />
                     </padding>
-                    <VBox spacing="2.0">
+                    <VBox spacing="3.0">
                         <Label fx:id="lblModalTitulo" styleClass="modal-title" text="Espacios registrados" />
                         <Label fx:id="lblModalSubtitulo" styleClass="modal-subtitle" text="Detalle e historial" />
                     </VBox>
@@ -314,33 +195,17 @@
                     <Button fx:id="btnCerrarModal" onAction="#onCerrarModal" styleClass="modal-close-btn" text="✕" />
                 </HBox>
 
-                <VBox spacing="16.0" styleClass="modal-body" VBox.vgrow="ALWAYS">
+                <VBox spacing="18.0" styleClass="modal-body" VBox.vgrow="ALWAYS">
                     <padding>
-                        <Insets bottom="22.0" left="26.0" right="26.0" top="18.0" />
+                        <Insets bottom="26.0" left="30.0" right="30.0" top="20.0" />
                     </padding>
 
-                    <TableView fx:id="tablaDetalle" editable="true" styleClass="modal-table" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="colNombre" prefWidth="220.0" text="Nombre">
-                                <cellValueFactory><PropertyValueFactory property="nombre" /></cellValueFactory>
-                            </TableColumn>
-                            <TableColumn fx:id="colTipo" prefWidth="180.0" text="Tipo">
-                                <cellValueFactory><PropertyValueFactory property="tipo" /></cellValueFactory>
-                            </TableColumn>
-                            <TableColumn fx:id="colCapacidad" prefWidth="120.0" text="Capacidad">
-                                <cellValueFactory><PropertyValueFactory property="capacidad" /></cellValueFactory>
-                            </TableColumn>
-                            <TableColumn fx:id="colEstado" prefWidth="140.0" text="Estado">
-                                <cellValueFactory><PropertyValueFactory property="estado" /></cellValueFactory>
-                            </TableColumn>
-                        </columns>
-                    </TableView>
+                    <ListView fx:id="listaDetalle" prefHeight="380.0" styleClass="modal-list" VBox.vgrow="ALWAYS" />
 
-                    <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <HBox alignment="CENTER_LEFT" spacing="14.0">
                         <Button fx:id="btnAgregarFila" onAction="#onAgregarFila" styleClass="modal-btn-secondary" text="+  Agregar" />
-                        <Button fx:id="btnEliminarFila" onAction="#onEliminarFila" styleClass="modal-btn-secondary" text="Eliminar seleccionado" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label styleClass="modal-hint" text="Doble clic en una celda para editarla" />
+                        <Label styleClass="modal-hint" text="Doble clic en una tarjeta para editarla" />
                         <Button fx:id="btnGuardarCambios" onAction="#onGuardarCambios" styleClass="modal-btn-primary" text="Guardar cambios" />
                     </HBox>
                 </VBox>
