@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
  * "Avisos" (fx_avisos.fxml). Mapea directamente a la tabla tb_aviso.
  */
 public class Aviso {
-
+//AVISOOOOOOS
     private final SimpleIntegerProperty idAviso;
     private final SimpleStringProperty fecha;          // dd/MM/yyyy, para mostrar en la tabla
     private final SimpleStringProperty espacio;         // NombreEspacio, o "General" si no aplica
