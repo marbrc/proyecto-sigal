@@ -460,9 +460,9 @@ public class AsignacionDAO {
                        a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
                        c.NombreCarrera AS Carrera, e.NombreEspacio
                 FROM tb_asignacion a
-                INNER JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
-                INNER JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
-                INNER JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
+                LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
+                LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
+                LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
                 INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
                 ORDER BY a.Fecha DESC, a.HoraInicio DESC
                 """;
@@ -570,9 +570,9 @@ public class AsignacionDAO {
                        a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
                        c.NombreCarrera AS Carrera, e.NombreEspacio
                 FROM tb_asignacion a
-                INNER JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
-                INNER JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
-                INNER JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
+                LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
+                LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
+                LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
                 INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
                 WHERE a.Fecha = CURDATE() AND a.Estado <> 'Cancelado'
                 ORDER BY a.HoraInicio ASC

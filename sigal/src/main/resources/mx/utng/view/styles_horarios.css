@@ -2,12 +2,12 @@
    SIGAL - Estilos pantalla Horarios
    Misma paleta azul-cian neon que fx_asignaciones (styles_asignaciones.css).
    ========================================================= */
-
+ 
 .page-root {
     -fx-background-color: #060b22;
     -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
-
+ 
 /* ===================== TARJETAS / FILTROS ===================== */
 .card {
     -fx-background-color: rgba(15,22,50,0.75);
@@ -18,13 +18,13 @@
     -fx-padding: 16;
     -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.35), 22, 0.25, 0, 0);
 }
-
+ 
 .field-label {
     -fx-text-fill: #9db4d1;
     -fx-font-size: 10.5px;
     -fx-font-weight: bold;
 }
-
+ 
 .input-combo {
     -fx-background-color: #0d1526;
     -fx-background-radius: 8;
@@ -34,42 +34,42 @@
     -fx-mark-color: #4fc3ff;
     -fx-min-height: 38;
 }
-
+ 
 .input-combo .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: #e6eefc;
     -fx-font-size: 11.5px;
     -fx-padding: 6 0 6 10;
 }
-
+ 
 .input-combo .arrow-button {
     -fx-background-color: transparent;
 }
-
+ 
 .input-combo .arrow {
     -fx-background-color: #4fc3ff;
 }
-
+ 
 .input-combo:focused,
 .input-combo:showing {
     -fx-border-color: #4fc3ff;
 }
-
+ 
 .input-combo .list-view {
     -fx-background-color: #0d1526;
     -fx-border-color: rgba(79,195,255,0.25);
     -fx-border-radius: 8;
     -fx-background-radius: 8;
 }
-
+ 
 .input-combo .list-cell:filled:hover {
     -fx-background-color: rgba(79,195,255,0.15);
 }
-
+ 
 .input-combo .list-cell:filled:selected {
     -fx-background-color: rgba(79,195,255,0.25);
 }
-
+ 
 .input-date {
     -fx-background-color: #0d1526;
     -fx-background-radius: 8;
@@ -78,21 +78,21 @@
     -fx-border-width: 1;
     -fx-min-height: 38;
 }
-
+ 
 .input-date .text-field {
     -fx-background-color: transparent;
     -fx-text-fill: #e6eefc;
     -fx-font-size: 11.5px;
 }
-
+ 
 .input-date .arrow-button {
     -fx-background-color: transparent;
 }
-
+ 
 .input-date .arrow-button .arrow {
     -fx-background-color: #4fc3ff;
 }
-
+ 
 /* Toggle Vista: Diaria / Semanal / Mensual */
 .view-toggle-group {
     -fx-background-color: #0d1526;
@@ -102,7 +102,7 @@
     -fx-border-width: 1;
     -fx-padding: 3;
 }
-
+ 
 .view-toggle-btn {
     -fx-background-color: transparent;
     -fx-text-fill: #9db4d1;
@@ -112,12 +112,12 @@
     -fx-padding: 7 13 7 13;
     -fx-cursor: hand;
 }
-
+ 
 .view-toggle-btn:selected {
     -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
     -fx-text-fill: white;
 }
-
+ 
 /* ===================== BOTONES ===================== */
 .btn-primary {
     -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
@@ -129,15 +129,15 @@
     -fx-padding: 10 18 10 18;
     -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.45), 18, 0.2, 0, 4);
 }
-
+ 
 .btn-primary:hover {
     -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
 }
-
+ 
 .btn-primary:pressed {
     -fx-background-color: linear-gradient(to right, #1a5cb8, #3aa8e6);
 }
-
+ 
 .btn-secondary {
     -fx-background-color: transparent;
     -fx-background-radius: 8;
@@ -150,42 +150,42 @@
     -fx-cursor: hand;
     -fx-padding: 10 16 10 16;
 }
-
+ 
 .btn-secondary:hover {
     -fx-background-color: rgba(157,180,209,0.08);
 }
-
+ 
 /* ===================== LEYENDA ===================== */
 .legend-title {
     -fx-text-fill: #9db4d1;
     -fx-font-size: 12.5px;
     -fx-font-weight: bold;
 }
-
+ 
 .legend-text {
     -fx-text-fill: #9db4d1;
     -fx-font-size: 12px;
 }
-
+ 
 /* ===================== CUADRÍCULA ===================== */
 .grid-scroll {
     -fx-background-color: transparent;
     -fx-background: transparent;
 }
-
+ 
 .grid-scroll > .viewport {
     -fx-background-color: transparent;
 }
-
+ 
 .grid-scroll .scroll-bar:vertical,
 .grid-scroll .scroll-bar:horizontal {
     -fx-background-color: transparent;
 }
-
+ 
 .horario-grid {
     -fx-background-color: transparent;
 }
-
+ 
 .grid-header-cell {
     -fx-background-color: #0a1120;
     -fx-text-fill: #4fc3ff;
@@ -195,7 +195,7 @@
     -fx-border-color: transparent transparent rgba(79,195,255,0.12) transparent;
     -fx-border-width: 0 0 1 0;
 }
-
+ 
 .grid-hora-cell {
     -fx-background-color: #0d1526;
     -fx-text-fill: #9db4d1;
@@ -205,34 +205,34 @@
     -fx-border-color: transparent rgba(79,195,255,0.08) rgba(79,195,255,0.08) transparent;
     -fx-border-width: 0 1 1 0;
 }
-
+ 
 .grid-cell {
     -fx-border-color: transparent rgba(79,195,255,0.08) rgba(79,195,255,0.08) transparent;
     -fx-border-width: 0 1 1 0;
     -fx-cursor: hand;
 }
-
+ 
 .cell-estado-text {
     -fx-font-size: 11.5px;
     -fx-font-weight: bold;
 }
-
+ 
 .cell-detalle-text {
     -fx-font-size: 10px;
     -fx-text-alignment: center;
 }
-
+ 
 .cell-libre {
     -fx-background-color: rgba(34,197,94,0.08);
 }
 .cell-libre .cell-estado-text {
     -fx-text-fill: #4ade80;
 }
-
+ 
 .cell-libre:hover {
     -fx-background-color: rgba(34,197,94,0.18);
 }
-
+ 
 .cell-asignado {
     -fx-background-color: rgba(79,195,255,0.14);
 }
@@ -242,11 +242,11 @@
 .cell-asignado .cell-detalle-text {
     -fx-text-fill: #cfe0f5;
 }
-
+ 
 .cell-asignado:hover {
     -fx-background-color: rgba(79,195,255,0.24);
 }
-
+ 
 .cell-ocupado {
     -fx-background-color: rgba(245,158,11,0.14);
 }
@@ -256,11 +256,11 @@
 .cell-ocupado .cell-detalle-text {
     -fx-text-fill: #cfe0f5;
 }
-
+ 
 .cell-ocupado:hover {
     -fx-background-color: rgba(245,158,11,0.24);
 }
-
+ 
 .divisor-vespertino {
     -fx-background-color: #0a1120;
     -fx-text-fill: #4fc3ff;
@@ -271,51 +271,55 @@
     -fx-border-color: transparent transparent rgba(79,195,255,0.12) transparent;
     -fx-border-width: 0 0 1 0;
 }
-
+ 
+.grid-cell:hover {
+    -fx-background-color: rgba(79,195,255,0.10);
+}
+ 
 /* ===================== ESTADOS VACÍOS ===================== */
 .empty-icon {
     -fx-font-size: 34px;
 }
-
+ 
 .empty-title {
     -fx-text-fill: white;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
-
+ 
 .empty-text {
     -fx-text-fill: #7c8bb5;
     -fx-font-size: 12.5px;
 }
-
+ 
 /* ===================== FOOTER ===================== */
 .footer-icon {
     -fx-text-fill: #4fc3ff;
     -fx-font-size: 12px;
 }
-
+ 
 .footer-text {
     -fx-text-fill: #7c8bb5;
     -fx-font-size: 11.5px;
 }
-
+ 
 /* ===================== DIÁLOGO DE ASIGNACIÓN ===================== */
 .dialog-asignacion {
     -fx-background-color: #0a1120;
 }
-
+ 
 .dialog-asignacion .label {
     -fx-text-fill: #cfe0f5;
 }
-
+ 
 .dialog-asignacion .header-panel {
     -fx-background-color: #0a1120;
 }
-
+ 
 .dialog-asignacion .header-panel .label {
     -fx-text-fill: white;
 }
-
+ 
 .dialog-asignacion .text-field,
 .dialog-asignacion .combo-box {
     -fx-background-color: #0d1526;
@@ -324,15 +328,15 @@
     -fx-border-radius: 7;
     -fx-border-color: rgba(79,195,255,0.20);
 }
-
+ 
 .dialog-asignacion .content {
     -fx-background-color: #0a1120;
 }
-
+ 
 .dialog-asignacion .button-bar {
     -fx-background-color: #0a1120;
 }
-
+ 
 .dialog-asignacion .button-bar .button {
     -fx-background-color: transparent;
     -fx-background-radius: 8;
@@ -345,22 +349,22 @@
     -fx-cursor: hand;
     -fx-padding: 8 16 8 16;
 }
-
+ 
 .dialog-asignacion .button-bar .button:hover {
     -fx-background-color: rgba(157,180,209,0.08);
 }
-
+ 
 .dialog-asignacion .button-bar .button:default {
     -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
     -fx-border-width: 0;
     -fx-text-fill: white;
     -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.45), 14, 0.2, 0, 3);
 }
-
+ 
 .dialog-asignacion .button-bar .button:default:hover {
     -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
 }
-
+ 
 .dialog-asignacion .dialog-link {
     -fx-text-fill: #4fc3ff;
     -fx-font-size: 11.5px;
@@ -369,8 +373,9 @@
     -fx-border-color: transparent;
     -fx-padding: 4 16 10 16;
 }
-
+ 
 .dialog-asignacion .dialog-link:hover {
     -fx-text-fill: #8fe0ff;
     -fx-underline: true;
 }
+ 

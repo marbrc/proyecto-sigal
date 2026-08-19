@@ -4,15 +4,18 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-
+ 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -38,6 +41,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import mx.utng.dao.AsignacionDAO;
 import mx.utng.dao.EspacioDAO;
@@ -413,37 +417,162 @@ public class HorarioController implements javafx.fxml.Initializable {
         return List.of();
     }
     private void renderizarMensual() {
-        VBox aviso =
-                new VBox();
-        aviso.setAlignment(
-                Pos.CENTER
-        );
-        aviso.setSpacing(8.0);
-        aviso.setPadding(
-                new Insets(60)
-        );
-        Label icono =
-                new Label("🗓");
-        icono.getStyleClass()
-                .add("empty-icon");
-        Label titulo =
-                new Label("Vista mensual");
-        titulo.getStyleClass()
-                .add("empty-title");
-        Label texto =
-                new Label(
-                        "La vista mensual no está disponible en este preview. Usa \"Diaria\" o \"Semanal\"."
+        LocalDate base =
+                dpFecha.getValue() == null
+                        ? LocalDate.now()
+                        : dpFecha.getValue();
+        LocalDate primerDiaMes = base.withDayOfMonth(1);
+        LocalDate ultimoDiaMes = primerDiaMes.plusMonths(1).minusDays(1);
+        LocalDate inicioCalendario =
+                primerDiaMes.minusDays(
+                        primerDiaMes.getDayOfWeek().getValue() - 1L
                 );
-        texto.getStyleClass()
-                .add("empty-text");
-        aviso.getChildren().addAll(
-                icono,
-                titulo,
-                texto
-        );
-        contenedorGrid
-                .getChildren()
-                .add(aviso);
+        LocalDate finCalendario =
+                ultimoDiaMes.plusDays(
+                        7L - ultimoDiaMes.getDayOfWeek().getValue()
+                );
+ 
+        String espacioSeleccionado = cmbEspacio.getValue();
+        Integer idEspacio =
+                (
+                        espacioSeleccionado == null ||
+                        espacioSeleccionado.equals("Todos los espacios")
+                )
+                        ? null
+                        : mapaEspacios.get(espacioSeleccionado);
+ 
+        List<AsignacionHorario> asignacionesMes =
+                asignacionDAO.listarParaHorario(idEspacio, inicioCalendario, finCalendario);
+        Map<LocalDate, List<AsignacionHorario>> porDia = new HashMap<>();
+        for (AsignacionHorario a : asignacionesMes) {
+            porDia.computeIfAbsent(a.getFecha(), k -> new ArrayList<>()).add(a);
+        }
+ 
+        VBox contenedorMes = new VBox(10);
+ 
+        HBox encabezadoMes = new HBox(10);
+        encabezadoMes.setAlignment(Pos.CENTER_LEFT);
+        Button btnMesAnterior = new Button("‹");
+        btnMesAnterior.getStyleClass().add("btn-secondary");
+        Button btnMesSiguiente = new Button("›");
+        btnMesSiguiente.getStyleClass().add("btn-secondary");
+        Label lblMes = new Label(nombreMesEs(base));
+        lblMes.getStyleClass().add("empty-title");
+        Region espaciador = new Region();
+        HBox.setHgrow(espaciador, Priority.ALWAYS);
+        btnMesAnterior.setOnAction(e -> {
+            dpFecha.setValue(base.minusMonths(1));
+            renderizar();
+        });
+        btnMesSiguiente.setOnAction(e -> {
+            dpFecha.setValue(base.plusMonths(1));
+            renderizar();
+        });
+        encabezadoMes.getChildren().addAll(btnMesAnterior, lblMes, btnMesSiguiente, espaciador);
+ 
+        GridPane calendario = new GridPane();
+        calendario.getStyleClass().add("horario-grid");
+        calendario.setHgap(0);
+        calendario.setVgap(0);
+        for (int i = 0; i < 7; i++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setHgrow(Priority.ALWAYS);
+            cc.setFillWidth(true);
+            calendario.getColumnConstraints().add(cc);
+        }
+        String[] diasSemanaCorto = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
+        for (int i = 0; i < 7; i++) {
+            calendario.add(celdaEncabezado(diasSemanaCorto[i]), i, 0);
+        }
+        RowConstraints rcEncabezado = new RowConstraints();
+        rcEncabezado.setPrefHeight(40);
+        calendario.getRowConstraints().add(rcEncabezado);
+ 
+        LocalDate cursor = inicioCalendario;
+        int fila = 1;
+        while (!cursor.isAfter(finCalendario)) {
+            RowConstraints rc = new RowConstraints();
+            rc.setPrefHeight(90);
+            rc.setVgrow(Priority.ALWAYS);
+            calendario.getRowConstraints().add(rc);
+            for (int col = 0; col < 7; col++) {
+                boolean delMesActual = cursor.getMonth() == base.getMonth() && cursor.getYear() == base.getYear();
+                List<AsignacionHorario> delDia =
+                        porDia.getOrDefault(cursor, List.of()).stream()
+                                .sorted(Comparator.comparing(AsignacionHorario::getHoraInicio))
+                                .collect(Collectors.toList());
+                calendario.add(celdaDiaMensual(cursor, delMesActual, delDia), col, fila);
+                cursor = cursor.plusDays(1);
+            }
+            fila++;
+        }
+ 
+        contenedorMes.getChildren().addAll(encabezadoMes, calendario);
+        contenedorGrid.getChildren().add(contenedorMes);
+    }
+    private String nombreMesEs(LocalDate fecha) {
+        String mes = fecha.getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "MX"));
+        String mesCapitalizado = mes.substring(0, 1).toUpperCase() + mes.substring(1);
+        return mesCapitalizado + " " + fecha.getYear();
+    }
+    private VBox celdaDiaMensual(
+            LocalDate fecha,
+            boolean delMesActual,
+            List<AsignacionHorario> asignacionesDelDia) {
+        VBox caja = new VBox(4);
+        caja.setPadding(new Insets(8));
+        caja.getStyleClass().add("grid-cell");
+        caja.setMaxWidth(Double.MAX_VALUE);
+        caja.setMaxHeight(Double.MAX_VALUE);
+        if (!delMesActual) {
+            caja.setOpacity(0.35);
+        }
+ 
+        Label lblNumero = new Label(String.valueOf(fecha.getDayOfMonth()));
+        lblNumero.getStyleClass().add("cell-estado-text");
+        boolean esHoy = fecha.equals(LocalDate.now());
+        if (esHoy) {
+            lblNumero.setStyle("-fx-text-fill: #4fc3ff; -fx-underline: true;");
+        }
+        caja.getChildren().add(lblNumero);
+ 
+        if (!asignacionesDelDia.isEmpty()) {
+            boolean hayOcupado =
+                    asignacionesDelDia.stream()
+                            .anyMatch(a -> "Ocupado".equals(a.getEstado()));
+            caja.getStyleClass().add(hayOcupado ? "cell-ocupado" : "cell-asignado");
+ 
+            int maxAMostrar = 3;
+            for (int i = 0; i < Math.min(maxAMostrar, asignacionesDelDia.size()); i++) {
+                AsignacionHorario a = asignacionesDelDia.get(i);
+                String quien =
+                        (a.getDocente() == null || a.getDocente().isBlank())
+                                ? (a.getMateria() == null ? "" : a.getMateria())
+                                : a.getDocente();
+                Label lblItem = new Label(
+                        a.getHoraInicio().toString().substring(0, 5) + " " + quien
+                );
+                lblItem.getStyleClass().add("cell-detalle-text");
+                lblItem.setWrapText(true);
+                caja.getChildren().add(lblItem);
+            }
+            if (asignacionesDelDia.size() > maxAMostrar) {
+                Label lblMas = new Label(
+                        "+" + (asignacionesDelDia.size() - maxAMostrar) + " más"
+                );
+                lblMas.getStyleClass().add("cell-detalle-text");
+                caja.getChildren().add(lblMas);
+            }
+        } else {
+            caja.getStyleClass().add("cell-libre");
+        }
+ 
+        caja.setOnMouseClicked(e -> {
+            dpFecha.setValue(fecha);
+            tglDiaria.setSelected(true);
+            renderizar();
+        });
+        return caja;
     }
     private void renderizarGrid(
             List<String> dias) {
