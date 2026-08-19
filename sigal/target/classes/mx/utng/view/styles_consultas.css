@@ -97,53 +97,39 @@
 /* El calendario emergente (date-picker-popup) es una ventana aparte,
    NO vive dentro del ".date-picker" -- por eso todos sus selectores
    van con el prefijo ".date-picker-popup", nunca ".date-picker X" */
-.date-picker-popup {
-    -fx-background-color: #0c1b33;
-    -fx-border-color: rgba(79,163,255,0.35);
+.field-combo, .field-date {
+    -fx-background-color: #0d1526;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: rgba(79,195,255,0.20);
     -fx-border-width: 1;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
+    -fx-mark-color: #4fc3ff;
 }
-.date-picker-popup > .month-year-pane {
-    -fx-background-color: #10203f;
-    -fx-background-radius: 10 10 0 0;
-}
-.date-picker-popup .spinner .button,
-.date-picker-popup .spinner .label {
+
+.field-combo .list-cell, .field-date .text-field {
     -fx-text-fill: #e6eefc;
     -fx-background-color: transparent;
+    -fx-prompt-text-fill: #57708f;
+    -fx-font-size: 11.5px;
+    -fx-padding: 4 8 4 8;
 }
-.date-picker-popup .spinner .button:hover {
-    -fx-background-color: rgba(79,163,255,0.18);
-}
-.date-picker-popup .day-name-cell {
-    -fx-text-fill: #7c8bb5;
-    -fx-font-weight: bold;
-}
-.date-picker-popup .day-cell {
+
+.field-combo .arrow-button, .field-date .arrow-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #e6eefc;
-    -fx-alignment: center;
 }
-.date-picker-popup .day-cell:hover {
-    -fx-background-color: rgba(79,163,255,0.20);
+
+.field-combo .arrow, .field-date .arrow {
+    -fx-background-color: #4fc3ff;
 }
-.date-picker-popup .day-cell:selected {
-    -fx-background-color: #4fa3ff;
-    -fx-text-fill: white;
-    -fx-background-radius: 6;
+
+.field-combo .combo-box-popup .list-view,
+.field-date .date-picker-popup {
+    -fx-background-color: #0d1526;
+    -fx-border-color: rgba(79,195,255,0.25);
 }
-.date-picker-popup .day-cell.today {
-    -fx-border-color: rgba(79,163,255,0.6);
-    -fx-border-radius: 6;
-}
-.date-picker-popup .day-cell:disabled,
-.date-picker-popup .day-cell.next-month,
-.date-picker-popup .day-cell.previous-month {
-    -fx-text-fill: rgba(230,238,252,0.30);
-}
-.date-picker-popup .week-number-cell {
-    -fx-text-fill: #5a6690;
+
+.field-combo .combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(79,195,255,0.15);
 }
 
 /* ---------------- BOTONES ---------------- */
