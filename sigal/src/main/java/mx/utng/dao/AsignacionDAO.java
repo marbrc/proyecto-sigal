@@ -241,6 +241,7 @@ public boolean existeConflictoHorario(int idEspacio, java.time.LocalDate fecha,
         ps.setInt(3, idAsignacionExcluir);
         ps.setTime(4, Time.valueOf(horaTermino + ":00"));
         ps.setTime(5, Time.valueOf(horaInicio + ":00"));
+        
 
         try (ResultSet rs = ps.executeQuery()) {
             return rs.next() && rs.getInt(1) > 0;
@@ -336,48 +337,87 @@ public String obtenerlistarecomendacion(String nombre) {
     //  INSERTAR
     // ============================================================
 
-    public boolean insertar(Asignaciones a, int idUsuario, int idEspacio) {
-        String sql = """
-                INSERT INTO tb_asignacion
-                    (TipoUsuario, NombreSolicitante, Materia, Grupo, NumAlumnos, Fecha,
-                     HoraInicio, HoraTermino, Actividad, Estado, Carrera, ID_Usuario, ID_Espacio)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """;
+public boolean insertar(Asignaciones a, int idUsuario, int idEspacio) {
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    String sql = """
+        INSERT INTO tb_asignacion
+            (
+                TipoUsuario,
+                NombreSolicitante,
+                ID_Materia,
+                ID_Grupo,
+                NumAlumnos,
+                Fecha,
+                HoraInicio,
+                HoraTermino,
+                Actividad,
+                Estado,
+                ID_Carrera,
+                ID_Usuario,
+                ID_Espacio
+            )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
-            ps.setString(1, a.getTipoSolicitante());
-            ps.setString(2, a.getNombreSolicitante());
-            ps.setString(3, a.getMateria());
-            ps.setString(4, a.getGrupo());
-            ps.setInt(5, Integer.parseInt(a.getNumAlumnos()));
-            ps.setDate(6, Date.valueOf(LocalDate.parse(a.getFecha(), FORMATO_FECHA_UI)));
-            ps.setTime(7, Time.valueOf(a.getHoraInicio() + ":00"));
-            ps.setTime(8, Time.valueOf(a.getHoraTermino() + ":00"));
-            ps.setString(9, a.getActividad());
-            ps.setString(10, "Asignado");
-            ps.setString(11, a.getCarrera());
-            ps.setInt(12, idUsuario);
-            ps.setInt(13, idEspacio);
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(
+             sql,
+             Statement.RETURN_GENERATED_KEYS
+         )) {
 
-            int filasAfectadas = ps.executeUpdate();
-            if (filasAfectadas == 0) return false;
+        ps.setString(1, a.getTipoSolicitante());
+        ps.setString(2, a.getNombreSolicitante());
 
-            try (ResultSet llaves = ps.getGeneratedKeys()) {
-                if (llaves.next()) {
-                    int idGenerado = llaves.getInt(1);
-                    a.setIdAsignacion(idGenerado);
-                    a.setId("ASG-" + String.format("%04d", idGenerado));
-                }
-            }
-            return true;
+ 
+        ps.setInt(3, Integer.parseInt(a.getIdMateria()));
+        ps.setInt(4, Integer.parseInt(a.getIdGrupo()));
+        ps.setInt(5, Integer.parseInt(a.getNumAlumnos()));
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        ps.setDate(
+            6,
+            Date.valueOf(
+                LocalDate.parse(a.getFecha(), FORMATO_FECHA_UI)
+            )
+        );
+
+        ps.setTime(7, Time.valueOf(a.getHoraInicio() + ":00"));
+        ps.setTime(8, Time.valueOf(a.getHoraTermino() + ":00"));
+
+        ps.setString(9, a.getActividad());
+        ps.setString(10, "Asignado");
+
+        ps.setInt(11, Integer.parseInt(a.getIdCarrera()));
+        ps.setInt(12, idUsuario);
+        ps.setInt(13, idEspacio);
+
+        int filasAfectadas = ps.executeUpdate();
+
+        if (filasAfectadas == 0) {
             return false;
         }
+
+        try (ResultSet rs = ps.getGeneratedKeys()) {
+            if (rs.next()) {
+                int idGenerado = rs.getInt(1);
+
+                a.setIdAsignacion(idGenerado);
+                a.setId("ASG-" + String.format("%04d", idGenerado));
+            }
+        }
+
+        return true;
+
+    } catch (NumberFormatException e) {
+        System.err.println("NumAlumnos no contiene un número válido.");
+        e.printStackTrace();
+        return false;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
 
     // ============================================================
     //  ACTUALIZAR
@@ -421,35 +461,53 @@ public String obtenerlistarecomendacion(String nombre) {
     //  LISTAR (tabla "Asignaciones registradas")
     // ============================================================
 
-    public ObservableList<Asignaciones> listarTodas() {
-        ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
+public ObservableList<Asignaciones> listarTodas() {
 
-        String sql = """
-                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante, m.nombre , g.NombreGrupo,
-                       a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
-                       c.NombreCarrera, e.NombreEspacio
-                FROM tb_asignacion a
-                join tb_carrera c on c.ID_Carrera = a.ID_Carrera
-                JOIN tb_grupo g on g.ID_Grupo = a.ID_Grupo
-                JOIN tb_materia m on m.ID_Materia = a.ID_Materia
-                JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
-                ORDER BY a.Fecha DESC, a.HoraInicio DESC
-                """;
+    ObservableList<Asignaciones> lista =
+            FXCollections.observableArrayList();
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+    String sql = """
+        SELECT
+            a.ID_Asignacion,
+            a.TipoUsuario,
+            a.NombreSolicitante,
+            m.nombre AS Materia,
+            g.NombreGrupo AS Grupo,
+            a.NumAlumnos,
+            a.Fecha,
+            a.HoraInicio,
+            a.HoraTermino,
+            a.Actividad,
+            a.Estado,
+            c.NombreCarrera AS Carrera,
+            e.NombreEspacio
+        FROM tb_asignacion a
+        INNER JOIN tb_carrera c
+            ON c.ID_Carrera = a.ID_Carrera
+        INNER JOIN tb_grupo g
+            ON g.ID_Grupo = a.ID_Grupo
+        INNER JOIN tb_materia m
+            ON m.ID_Materia = a.ID_Materia
+        INNER JOIN tb_espacio e
+            ON e.ID_Espacio = a.ID_Espacio
+        ORDER BY a.Fecha DESC, a.HoraInicio DESC
+        """;
 
-            while (rs.next()) {
-                lista.add(mapearFila(rs));
-            }
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            lista.add(mapearFila(rs));
         }
 
-        return lista;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return lista;
+}
+
 
     // ============================================================
     //  DASHBOARD (fx_inicio.fxml)
@@ -517,139 +575,110 @@ public String obtenerlistarecomendacion(String nombre) {
         }
     }
 
-    public ObservableList<Asignaciones> listarDeHoy() {
-        ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
+ public ObservableList<Asignaciones> listarDeHoy() {
 
-        String sql = """
-                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante, m.nombre , g.NombreGrupo,
-                       a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
-                       c.NombreCarrera, e.NombreEspacio
-                FROM tb_asignacion a
-                join tb_carrera c on c.ID_Carrera = a.ID_Carrera
-                JOIN tb_grupo g on g.ID_Grupo = a.ID_Grupo
-                join tb_materia m on m.ID_Materia = a.ID_Materia
-                JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
-                WHERE a.Fecha = CURDATE() AND a.Estado <> 'Cancelado'
-                ORDER BY a.HoraInicio ASC
-                """;
+    ObservableList<Asignaciones> lista =
+            FXCollections.observableArrayList();
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+    String sql = """
+        SELECT
+            a.ID_Asignacion,
+            a.TipoUsuario,
+            a.NombreSolicitante,
+            m.nombre AS Materia,
+            g.NombreGrupo AS Grupo,
+            a.NumAlumnos,
+            a.Fecha,
+            a.HoraInicio,
+            a.HoraTermino,
+            a.Actividad,
+            a.Estado,
+            c.NombreCarrera AS Carrera,
+            e.NombreEspacio
+        FROM tb_asignacion a
+        INNER JOIN tb_carrera c
+            ON c.ID_Carrera = a.ID_Carrera
+        INNER JOIN tb_grupo g
+            ON g.ID_Grupo = a.ID_Grupo
+        INNER JOIN tb_materia m
+            ON m.ID_Materia = a.ID_Materia
+        INNER JOIN tb_espacio e
+            ON e.ID_Espacio = a.ID_Espacio
+        WHERE a.Fecha = CURDATE()
+          AND a.Estado <> 'Cancelado'
+        ORDER BY a.HoraInicio ASC
+        """;
 
-            while (rs.next()) {
-                lista.add(mapearFila(rs));
-            }
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            lista.add(mapearFila(rs));
         }
 
-        return lista;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return lista;
+}
+
 
     private Asignaciones mapearFila(ResultSet rs) throws SQLException {
-        String carrera = rs.getString("Carrera");
-        if (carrera == null || carrera.isBlank()) carrera = "—";
 
-        Asignaciones asg = new Asignaciones(
-                "ASG-" + String.format("%04d", rs.getInt("ID_Asignacion")),
-                rs.getDate("Fecha").toLocalDate().format(FORMATO_FECHA_UI),
-                rs.getTime("HoraInicio").toLocalTime().toString().substring(0, 5),
-                rs.getTime("HoraTermino").toLocalTime().toString().substring(0, 5),
-                rs.getString("NombreEspacio"),
-                rs.getString("TipoUsuario"),
-                rs.getString("NombreSolicitante"),
-                "—",
-                carrera,
-                rs.getString("Materia"),
-                rs.getString("Grupo"),
-                String.valueOf(rs.getInt("NumAlumnos")),
-                rs.getString("Actividad"),
-                rs.getString("Estado")
-        );
-        asg.setIdAsignacion(rs.getInt("ID_Asignacion"));
-        return asg;
+    Date fechaBD = rs.getDate("Fecha");
+    Time horaInicioBD = rs.getTime("HoraInicio");
+    Time horaTerminoBD = rs.getTime("HoraTermino");
+
+    String carrera = rs.getString("Carrera");
+    if (carrera == null || carrera.isBlank()) {
+        carrera = "—";
     }
 
-    // ============================================================
-    //  ELIMINAR
-    // ============================================================
-
-    public boolean eliminar(int idAsignacion) {
-        String sql = "DELETE FROM tb_asignacion WHERE ID_Asignacion = ?";
-
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, idAsignacion);
-            return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+    String materia = rs.getString("Materia");
+    if (materia == null || materia.isBlank()) {
+        materia = "—";
     }
- /**
-     * @param idEspacio si es null, trae de TODOS los espacios; si trae un
-     *                  valor, filtra solo ese espacio.
-     */
-    public List<AsignacionHorario> listarParaHorario(Integer idEspacio, LocalDate desde, LocalDate hasta) {
-        List<AsignacionHorario> lista = new ArrayList<>();
- 
-        String sql = """
-                SELECT a.ID_Asignacion, a.NombreSolicitante, m.nombre, a.Fecha,
-                       a.HoraInicio, a.HoraTermino, a.Estado,
-                       e.NombreEspacio,
-                       CONCAT_WS(' ', p.Nombre, p.ApellidoPaterno, p.ApellidoMaterno) AS NombreProfesor
-                FROM tb_asignacion a
-                Join tb_materia m on m.ID_Materia = a.ID_Materia
-                JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
-                LEFT JOIN tb_profesor p ON p.ID_Profesor = a.ID_Profesor
-                WHERE a.Fecha BETWEEN ? AND ?
-                  AND a.Estado IN ('Asignado','Ocupado')
-                  AND (? IS NULL OR a.ID_Espacio = ?)
-                ORDER BY a.Fecha, a.HoraInicio
-                """;
- 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
- 
-            ps.setDate(1, Date.valueOf(desde));
-            ps.setDate(2, Date.valueOf(hasta));
-            if (idEspacio != null) {
-                ps.setInt(3, idEspacio);
-                ps.setInt(4, idEspacio);
-            } else {
-                ps.setNull(3, Types.INTEGER);
-                ps.setNull(4, Types.INTEGER);
-            }
- 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    String nombreProfesor = rs.getString("NombreProfesor");
-                    String nombreSolicitante = rs.getString("NombreSolicitante");
-                    String docente = (nombreProfesor != null && !nombreProfesor.isBlank())
-                            ? nombreProfesor
-                            : (nombreSolicitante == null ? "" : nombreSolicitante);
- 
-                    lista.add(new AsignacionHorario(
-                            rs.getInt("ID_Asignacion"),
-                            rs.getDate("Fecha").toLocalDate(),
-                            rs.getTime("HoraInicio").toLocalTime(),
-                            rs.getTime("HoraTermino").toLocalTime(),
-                            rs.getString("NombreEspacio"),
-                            docente,
-                            rs.getString("Materia"),
-                            rs.getString("Estado")
-                    ));
-                }
-            }
- 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
- 
-        return lista;
+
+    String grupo = rs.getString("Grupo");
+    if (grupo == null || grupo.isBlank()) {
+        grupo = "—";
     }
+
+    Asignaciones asg = new Asignaciones(
+        "ASG-" + String.format(
+            "%04d",
+            rs.getInt("ID_Asignacion")
+        ),
+
+        fechaBD.toLocalDate()
+               .format(FORMATO_FECHA_UI),
+
+        horaInicioBD.toLocalTime()
+                    .toString()
+                    .substring(0, 5),
+
+        horaTerminoBD.toLocalTime()
+                      .toString()
+                      .substring(0, 5),
+
+        rs.getString("NombreEspacio"),
+        rs.getString("TipoUsuario"),
+        rs.getString("NombreSolicitante"),
+        "—",
+        carrera,
+        materia,
+        grupo,
+        String.valueOf(rs.getInt("NumAlumnos")),
+        rs.getString("Actividad"),
+        rs.getString("Estado")
+    );
+
+    asg.setIdAsignacion(
+        rs.getInt("ID_Asignacion")
+    );
+
+    return asg;
+}
 }

@@ -7,6 +7,9 @@ public class Asignaciones {
 
     /** ID_Asignacion real de tb_asignacion (para editar/eliminar en la BD). */
     private int idAsignacion;
+    private int ID_Carrera;
+    private int ID_Grupo;
+    private int ID_Materia;
 
     private final StringProperty id;
     private final StringProperty fecha;
@@ -119,4 +122,44 @@ public class Asignaciones {
     public String getEstado() { return estado.get(); }
     public void setEstado(String value) { estado.set(value); }
     public StringProperty estadoProperty() { return estado; }
+
+    public String getIdCarrera() {
+    return ID_Carrera.get();
+}
+
+public void setIdCarrera(String value) {
+    ID_Carrera.set(value);
+}
+
+public StringProperty idCarreraProperty() {
+    return ID_Carrera;
+}
+java
+
+
+public String getIdGrupo() {
+    return ID_Grupo.get();
+}
+
+public void setIdGrupo(String value) {
+    ID_Grupo.set(value);
+}
+
+public StringProperty idGrupoProperty() {
+    return ID_Grupo;
+}
+java
+
+
+public String getIdMateria() {
+    return ID_Materia.get();
+}
+
+public void setIdMateria(String value) {
+    ID_Materia.set(value);
+}
+
+public StringProperty idMateriaProperty() {
+    return ID_Materia;
+}
 }
