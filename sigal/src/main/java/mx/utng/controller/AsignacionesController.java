@@ -2,7 +2,6 @@ package mx.utng.controller;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -211,17 +210,26 @@ public class AsignacionesController implements Initializable {
     });
 }
 
-    private ObservableList<String> generarHoras() {
-        ObservableList<String> horas = FXCollections.observableArrayList();
-        LocalTime hora = LocalTime.of(7, 0);
-        LocalTime fin = LocalTime.of(21, 0);
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm");
-        while (!hora.isAfter(fin)) {
-            horas.add(hora.format(formato));
-            hora = hora.plusMinutes(30);
-        }
-        return horas;
-    }
+private ObservableList<String> generarHoras() {
+    return FXCollections.observableArrayList(
+        "8:00-8:50",
+        "9:00-9:50",
+        "10:00-10:50",
+        "11:00-11:50",
+        "11:50-12:20",
+        "12:20-13:10",
+        "13:15-14:05",
+        "14:10-15:00",
+        "15:10-16:00",
+        "16:00-16:50",
+        "17:00-17:50",
+        "17:50-18:20",
+        "18:20-19:10",
+        "19:10-20:00",
+        "20:05-20:55",
+        "21:00-21:50"
+    );
+}
 
     private void cargarDatosReales() {
         listaAsignaciones.setAll(asignacionDAO.listarTodas());
