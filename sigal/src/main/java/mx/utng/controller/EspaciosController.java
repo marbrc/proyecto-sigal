@@ -67,15 +67,14 @@ public class EspaciosController implements Initializable {
     private EspacioRegistro espacioEnEdicion;
  
     private static final String[] TIPOS = {
-            "Laboratorio de cómputo",
-            "Laboratorio especializado",
             "Aula común",
-            "Sala de usos múltiples"
+            "Lab. de cómputo",
+            "Especializado",
+            "Sala múltiple"
     };
  
     private static final String[] ESTADOS = {
             "Disponible",
-            "Ocupado",
             "En mantenimiento",
             "Fuera de servicio"
     };

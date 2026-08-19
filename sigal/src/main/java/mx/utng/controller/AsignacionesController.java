@@ -108,12 +108,7 @@ public class AsignacionesController implements Initializable {
     private void cargarCombos() {
 
     // Combo de solicitantes
-    cmbSolicitante.setItems(
-        FXCollections.observableArrayList(
-            "Docente",
-            "Administrativo"
-        )
-    );
+   cmbSolicitante.setItems(FXCollections.observableArrayList("Profesor", "Administrativo", "Alumno", "Otro"));
 
     cmbNombreSolicitante.setEditable(true);
     cmbNombreSolicitante.getStyleClass().add("combo-box-editable");
@@ -151,10 +146,9 @@ public class AsignacionesController implements Initializable {
     });
 
     // Otros combos
-    cmbCarrera.setItems(
-        FXCollections.observableArrayList(CARRERAS)
-    );
-
+   cmbCarrera.setItems(FXCollections.observableArrayList(
+    asignacionDAO.listarCarreras().keySet()
+    ));
     cmbMateria.setItems(FXCollections.observableArrayList(
         asignacionDAO.listarMaterias()
     ));
