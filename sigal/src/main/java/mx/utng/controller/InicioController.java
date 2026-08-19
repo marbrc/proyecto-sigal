@@ -545,6 +545,8 @@ public class InicioController {
 
         private boolean editando = false;
 
+        { setPrefWidth(0); }
+
         @Override
         protected void updateItem(DetalleItem item, boolean empty) {
             super.updateItem(item, empty);
