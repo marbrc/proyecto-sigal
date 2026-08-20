@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -13,7 +14,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import mx.utng.dao.AsignacionDAO;
 import mx.utng.dao.ConsultaDAO;
@@ -30,13 +30,13 @@ public class ConsultaController {
 
     // ---- Filtros ----
     @FXML private ComboBox<String> cmbProfesor;
-    @FXML private TextField txtSolicitante;
+    @FXML private ComboBox<String> cmbSolicitante;
     @FXML private ComboBox<String> cmbTipoEspacio;
     @FXML private ComboBox<String> cmbEspacio;
     @FXML private ComboBox<String> cmbEstado;
     @FXML private ComboBox<String> cmbCarrera;
-    @FXML private TextField txtMateria;
-    @FXML private TextField txtGrupo;
+    @FXML private ComboBox<String> cmbMateria;
+    @FXML private ComboBox<String> cmbGrupo;
     @FXML private DatePicker dtDesde;
     @FXML private DatePicker dtHasta;
 
@@ -56,34 +56,27 @@ public class ConsultaController {
     @FXML private TableColumn<Consultas, String> colCarrera;
     @FXML private TableColumn<Consultas, String> colMateria;
 
-    private static final String[] TIPOS_ESPACIO = {
-            "Laboratorio de cómputo",
-            "Laboratorio especializado",
-            "Aula común",
-            "Sala de usos múltiples"
-    };
-
-    private static final String[] ESTADOS = { "Libre", "Ocupado", "Asignado", "Cancelado" };
-
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private final AsignacionDAO asignacionDAO = new AsignacionDAO();
     private final ConsultaDAO consultaDAO = new ConsultaDAO();
+        private final ObservableList<Consultas> listaResultados =
+            FXCollections.observableArrayList();
 
     // Catálogos "nombre visible -> ID real en la BD"
-    private Map<String, Integer> mapaProfesores;
-    private Map<String, Integer> mapaCarreras;
-    private Map<String, Integer> mapaEspacios;
+     private Map<String, Integer> mapaEspacios;
 
     @FXML
     public void initialize() {
 
         cargarColumnas();
-        cargarCatalogos();
+        cargarCombos();
+        tblResultados.setItems(listaResultados);
+
+        lblCantidadResultados.setText("Resultados: 0");
 
         // Al abrir la pantalla se muestran todas las asignaciones
         // (sin filtros), igual que en la referencia.
-        buscar();
     }
 
     // =========================================================
@@ -103,71 +96,179 @@ public class ConsultaController {
     // =========================================================
     // CATÁLOGOS DE LOS COMBOS
     // =========================================================
-    private void cargarCatalogos() {
+      private void cargarCombos() {
 
-        mapaProfesores = asignacionDAO.listarProfesores();
-        mapaCarreras = asignacionDAO.listarCarreras();
-        mapaEspacios = asignacionDAO.listarEspacios();
+    // Combo de solicitantes
+   cmbSolicitante.setItems(FXCollections.observableArrayList("Profesor", "Administrativo", "Alumno", "Otro"));
 
-        cmbProfesor.setItems(FXCollections.observableArrayList(mapaProfesores.keySet()));
-        cmbCarrera.setItems(FXCollections.observableArrayList(mapaCarreras.keySet()));
-        cmbEspacio.setItems(FXCollections.observableArrayList(mapaEspacios.keySet()));
+    cmbSolicitante.setEditable(true);
+    cmbSolicitante.getStyleClass().add("combo-box-editable");
 
-        cmbTipoEspacio.setItems(FXCollections.observableArrayList(TIPOS_ESPACIO));
-        cmbEstado.setItems(FXCollections.observableArrayList(ESTADOS));
-    }
+    // Valores iniciales
+    cmbSolicitante.setItems(
+        FXCollections.observableArrayList(
+            asignacionDAO.listarNombresSolicitantes()
+        )
+    );
+
+    cmbSolicitante.valueProperty().addListener((obs, valorAnterior, tipo) -> {
+
+        // Limpiar selección y texto escrito
+        cmbSolicitante.getSelectionModel().clearSelection();
+        cmbSolicitante.setValue(null);
+
+        if (cmbSolicitante.isEditable()) {
+            cmbSolicitante.getEditor().clear();
+        }
+
+        if ("Maestro".equals(tipo)) {
+            cmbSolicitante.setItems(
+                FXCollections.observableArrayList(
+                    asignacionDAO.listarNombresProfesores()
+                )
+            );
+        } else {
+            cmbSolicitante.setItems(
+                FXCollections.observableArrayList(
+                    asignacionDAO.listarNombresSolicitantes()
+                )
+            );
+        }
+    });
+
+    // Otros combos
+   cmbCarrera.setItems(FXCollections.observableArrayList(
+    asignacionDAO.listarCarreras().keySet()
+    ));
+    cmbMateria.setItems(FXCollections.observableArrayList(
+        asignacionDAO.listarMaterias()
+    ));
+
+    cmbGrupo.setItems(
+        FXCollections.observableArrayList(
+            asignacionDAO.listarGrupos()
+        )
+    );
+
+
+    // Combo de tipos de espacio
+    cmbTipoEspacio.setItems(
+        FXCollections.observableArrayList(
+            "Lab. de cómputo",
+            "Aula común",
+            "Especializado",
+            "Sala múltiple"
+        )
+    );
+
+    
+    // El combo dependiente inicia deshabilitado
+    cmbEspacio.setDisable(true);
+    cmbEspacio.getItems().clear();
+
+    cmbTipoEspacio.valueProperty().addListener((obs, valorAnterior, tipo) -> {
+
+        // Limpiar combo dependiente
+        cmbEspacio.getSelectionModel().clearSelection();
+        cmbEspacio.getItems().clear();
+        cmbEspacio.setValue(null);
+
+        if (cmbEspacio.isEditable()) {
+            cmbEspacio.getEditor().clear();
+        }
+
+        // Si no hay tipo seleccionado, permanece deshabilitado
+        if (tipo == null || tipo.trim().isEmpty()) {
+            cmbEspacio.setDisable(true);
+            return;
+        }
+
+        // Consultar espacios según el tipo seleccionado
+        mapaEspacios = asignacionDAO.listarEspaciosPorTipo(tipo);
+
+        cmbEspacio.setItems(
+            FXCollections.observableArrayList(
+                mapaEspacios.keySet()
+            )
+        );
+
+        cmbEspacio.setDisable(mapaEspacios.isEmpty());
+    });
+}
 
     // =========================================================
     // BUSCAR
     // =========================================================
     @FXML
     private void onBuscar() {
-        buscar();
+        this.buscar();
     }
-
-    private void buscar() {
-
-        Integer idProfesor = mapaProfesores.get(cmbProfesor.getValue());
-        Integer idCarrera = mapaCarreras.get(cmbCarrera.getValue());
-        Integer idEspacio = mapaEspacios.get(cmbEspacio.getValue());
-
-        String solicitante = txtSolicitante.getText();
-        String materia = txtMateria.getText();
-        String grupo = txtGrupo.getText();
-        String estado = cmbEstado.getValue();
-
-        LocalDate fechaDesde = dtDesde.getValue();
-        LocalDate fechaHasta = dtHasta.getValue();
-
-        var resultados = consultaDAO.buscar(
-                idProfesor, idCarrera, idEspacio,
-                solicitante, materia, grupo, estado,
-                fechaDesde, fechaHasta
-        );
-
-        tblResultados.setItems(resultados);
-        lblCantidadResultados.setText(String.valueOf(resultados.size()));
-    }
-
-    // =========================================================
-    // LIMPIAR FILTROS
-    // =========================================================
     @FXML
     private void onLimpiarFiltros() {
-
-        cmbProfesor.setValue(null);
-        cmbCarrera.setValue(null);
-        cmbEspacio.setValue(null);
-        cmbTipoEspacio.setValue(null);
-        cmbEstado.setValue(null);
-        txtSolicitante.clear();
-        txtMateria.clear();
-        txtGrupo.clear();
-        dtDesde.setValue(null);
-        dtHasta.setValue(null);
-
-        buscar();
+        this.limpiar();
     }
+
+    @FXML
+private void buscar() {
+    String solicitante = cmbSolicitante.getValue();
+    String tipoEspacio = cmbTipoEspacio.getValue();
+    String espacio = cmbEspacio.getValue();
+    String estado = cmbEstado.getValue();
+    String carrera = cmbCarrera.getValue();
+    String materia = cmbMateria.getValue();
+    String grupo = cmbGrupo.getValue();
+
+    LocalDate fechaDesde = dtDesde.getValue();
+    LocalDate fechaHasta = dtHasta.getValue();
+
+    if (fechaDesde != null
+            && fechaHasta != null
+            && fechaDesde.isAfter(fechaHasta)) {
+
+        mostrarAlerta(
+                "La fecha desde no puede ser posterior "
+                + "a la fecha hasta."
+        );
+        return;
+    }
+
+    ObservableList<Consultas> resultados =
+            asignacionDAO.buscarConFiltros(
+                    solicitante,
+                    tipoEspacio,
+                    espacio,
+                    estado,
+                    carrera,
+                    materia,
+                    grupo,
+                    fechaDesde,
+                    fechaHasta
+            );
+
+    tblResultados.setItems(resultados);
+
+    lblCantidadResultados.setText(
+            "Resultados: " + resultados.size()
+    );
+}
+
+     @FXML
+private void limpiar() {
+    cmbSolicitante.setValue(null);
+    cmbTipoEspacio.setValue(null);
+    cmbEspacio.setValue(null);
+    cmbEstado.setValue(null);
+    cmbCarrera.setValue(null);
+    cmbMateria.setValue(null);
+    cmbGrupo.setValue(null);
+
+    dtDesde.setValue(null);
+    dtHasta.setValue(null);
+
+    tblResultados.getItems().clear();
+
+    lblCantidadResultados.setText("Resultados: 0");
+}
 
     // =========================================================
     // EXPORTAR
@@ -180,6 +281,16 @@ public class ConsultaController {
         alerta.setHeaderText(null);
         alerta.setContentText("La exportación todavía no está conectada. Dime en qué formato "
                 + "quieres exportar (Excel, PDF, CSV) y lo agregamos.");
+        alerta.showAndWait();
+    }
+
+    // =========================================================
+    // UTILIDADES
+    // =========================================================
+    private void mostrarAlerta(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.WARNING);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
 

@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import mx.utng.database.Conexion;
 import mx.utng.model.AsignacionHorario;
 import mx.utng.model.Asignaciones;
+import mx.utng.model.Consultas;
  
 /**
  * Acceso a datos de la pantalla "Asignaciones" (fx_asignaciones.fxml).
@@ -788,4 +789,125 @@ public class AsignacionDAO {
  
         return lista;
     }
+
+    public ObservableList<Consultas> buscarConFiltros(
+        String solicitante,
+        String tipoEspacio,
+        String espacio,
+        String estado,
+        String carrera,
+        String materia,
+        String grupo,
+        LocalDate fechaDesde,
+        LocalDate fechaHasta
+) {
+    ObservableList<Consultas> lista =
+            FXCollections.observableArrayList();
+
+    StringBuilder sql = new StringBuilder("""
+            SELECT 
+                a.HoraInicio,
+                a.HoraTermino,
+                e.NombreEspacio AS Espacio,
+                a.NombreSolicitante AS Solicitante,
+                g.NombreGrupo AS Grupo,
+                a.Estado,
+                a.Actividad AS Motivo,
+                c.NombreCarrera AS Carrera,
+                m.Nombre AS Materia
+            FROM tb_asignacion a
+            LEFT JOIN tb_carrera c
+                ON c.ID_Carrera = a.ID_Carrera
+            LEFT JOIN tb_grupo g
+                ON g.ID_Grupo = a.ID_Grupo
+            LEFT JOIN tb_materia m
+                ON m.ID_Materia = a.ID_Materia
+            INNER JOIN tb_espacio e
+                ON e.ID_Espacio = a.ID_Espacio
+            WHERE 1 = 1
+            """);
+
+    List<Object> parametros = new ArrayList<>();
+
+    if (solicitante != null && !solicitante.isBlank()) {
+        sql.append(" AND a.NombreSolicitante LIKE ?");
+        parametros.add("%" + solicitante + "%");
+    }
+
+    if (tipoEspacio != null && !tipoEspacio.isBlank()) {
+        sql.append(" AND e.TipoEspacio = ?");
+        parametros.add(tipoEspacio);
+    }
+
+    if (espacio != null && !espacio.isBlank()) {
+        sql.append(" AND e.NombreEspacio = ?");
+        parametros.add(espacio);
+    }
+
+    if (estado != null && !estado.isBlank()) {
+        sql.append(" AND a.Estado = ?");
+        parametros.add(estado);
+    }
+
+    if (carrera != null && !carrera.isBlank()) {
+        sql.append(" AND c.NombreCarrera = ?");
+        parametros.add(carrera);
+    }
+
+    if (materia != null && !materia.isBlank()) {
+        sql.append(" AND m.Nombre = ?");
+        parametros.add(materia);
+    }
+
+    if (grupo != null && !grupo.isBlank()) {
+        sql.append(" AND g.NombreGrupo = ?");
+        parametros.add(grupo);
+    }
+
+    if (fechaDesde != null) {
+        sql.append(" AND a.Fecha >= ?");
+        parametros.add(Date.valueOf(fechaDesde));
+    }
+
+    if (fechaHasta != null) {
+        sql.append(" AND a.Fecha <= ?");
+        parametros.add(Date.valueOf(fechaHasta));
+    }
+
+    sql.append("""
+            ORDER BY a.Fecha DESC, a.HoraInicio DESC
+            """);
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql.toString())) {
+
+        for (int i = 0; i < parametros.size(); i++) {
+            ps.setObject(i + 1, parametros.get(i));
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String horario = rs.getTime("HoraInicio")
+                        + " - "
+                        + rs.getTime("HoraTermino");
+
+                lista.add(new Consultas(
+                        horario,
+                        rs.getString("Espacio"),
+                        rs.getString("Solicitante"),
+                        rs.getString("Grupo"),
+                        rs.getString("Estado"),
+                        rs.getString("Motivo"),
+                        rs.getString("Carrera"),
+                        rs.getString("Materia")
+                ));
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return lista;
+}
 }

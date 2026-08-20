@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <!--
     fx_consultas.fxml
@@ -29,7 +18,7 @@
     "cascarón" del menú (fx_menu.fxml).
 -->
 
-<ScrollPane fitToWidth="true" styleClass="consultas-scroll" stylesheets="@styles_consultas.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.ConsultaController">
+<ScrollPane fitToWidth="true" styleClass="consultas-scroll" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.ConsultaController">
 
     <VBox spacing="20.0" styleClass="consultas-content">
         <padding>
@@ -50,50 +39,53 @@
                     <ColumnConstraints percentWidth="20" />
                     <ColumnConstraints percentWidth="20" />
                 </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints />
-                    <RowConstraints />
-                    <RowConstraints />
-                    <RowConstraints />
-                </rowConstraints>
-
-                <!-- Fila 1: etiquetas -->
-                <Label styleClass="filter-label" text="Profesor" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <Label styleClass="filter-label" text="Solicitante" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <Label styleClass="filter-label" text="Tipo de espacio" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                <Label styleClass="filter-label" text="Espacio" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                <Label styleClass="filter-label" text="Estado de la asignación" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-
-                <!-- Fila 2: campos -->
-                <ComboBox fx:id="cmbProfesor" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <TextField fx:id="txtSolicitante" promptText="Nombre del solicitante" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <ComboBox fx:id="cmbTipoEspacio" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                <ComboBox fx:id="cmbEspacio" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                <ComboBox fx:id="cmbEstado" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                <Label styleClass="filter-label" text="Solicitante" GridPane.rowIndex="3" />
+                <Label styleClass="filter-label" text="Tipo de espacio" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label styleClass="filter-label" text="Espacio" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                <Label styleClass="filter-label" text="Estado de la asignación" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                <ComboBox fx:id="cmbTipoEspacio" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <ComboBox fx:id="cmbEspacio" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                <ComboBox fx:id="cmbEstado" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="3" GridPane.rowIndex="6" />
 
                 <!-- Fila 3: etiquetas -->
-                <Label styleClass="filter-label" text="Carrera" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <Label styleClass="filter-label" text="Materia" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Label styleClass="filter-label" text="Grupo" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Label styleClass="filter-label" text="Carrera" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                <Label styleClass="filter-label" text="Materia" GridPane.rowIndex="10" />
+                <Label styleClass="filter-label" text="Grupo" GridPane.columnIndex="1" GridPane.rowIndex="10" />
 
                 <!-- Fila 4: campos -->
-                <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <TextField fx:id="txtMateria" promptText="Nombre de la materia" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <TextField fx:id="txtGrupo" promptText="Ej. GTID235" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-
+                <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <ComboBox fx:id="cmbSolicitante" maxWidth="Infinity" promptText="Todos" GridPane.rowIndex="6" />
+            <ComboBox fx:id="cmbGrupo" maxWidth="Infinity" promptText="Todos" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <ComboBox fx:id="cmbMateria" maxWidth="Infinity" promptText="Todos" GridPane.rowIndex="12" />
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+   
+               <!-- Rango de fechas + botones -->
+    
             </GridPane>
-
-            <!-- Rango de fechas + botones -->
-            <Label styleClass="filter-label" text="Rango de fechas" />
+            <Label styleClass="filter-label" text="Rango de fechas" GridPane.columnIndex="2" GridPane.rowIndex="7" />
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                 <Label styleClass="filter-inline-label" text="Desde" />
                 <DatePicker fx:id="dtDesde" prefWidth="150.0" />
                 <Label styleClass="filter-inline-label" text="Hasta" />
                 <DatePicker fx:id="dtHasta" prefWidth="150.0" />
 
-                <Region HBox.hgrow="ALWAYS" />
+                         <Region HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="btnLimpiar" onAction="#onLimpiarFiltros" styleClass="btn-secundario" text="Limpiar filtros" />
+                         <Button fx:id="btnLimpiar" onAction="#onLimpiarFiltros" styleClass="btn-secundario" text="Limpiar filtros" />
                 <Button fx:id="btnBuscar" onAction="#onBuscar" styleClass="btn-primario" text="🔍  Buscar" />
             </HBox>
 
@@ -127,5 +119,9 @@
         </VBox>
 
     </VBox>
+   <stylesheets>
+      <URL value="@con" />
+      <URL value="@styles_consultas.css" />
+   </stylesheets>
 
 </ScrollPane>
