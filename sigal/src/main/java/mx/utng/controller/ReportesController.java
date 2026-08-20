@@ -208,7 +208,7 @@ public class ReportesController {
         idEspacioFiltro
     );
 
-    tablaDetalle.setItems(detalleActual);
+    tablaReporte.setItems(detalleActual);
 }
 
 private LocalDate[] calcularRango() {
