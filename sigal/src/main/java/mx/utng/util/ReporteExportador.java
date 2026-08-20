@@ -1,278 +1,418 @@
 package mx.utng.util;
 
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+
+import mx.utng.model.Reporte;
+
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+
+import javafx.collections.ObservableList;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-
-import mx.utng.model.Reporte;
-import mx.utng.model.ResultadoReporte;
-
-/**
- * Genera el archivo de descarga de la pantalla "Reportes" en PDF, Excel
- * (.xlsx) o Word (.docx), a partir del mismo ResultadoReporte que ya
- * está pintado en pantalla (no vuelve a consultar la base de datos).
- */
 public class ReporteExportador {
 
+    private static final String[] ENCABEZADOS = {
+            "Fecha",
+            "Horario",
+            "Espacio",
+            "Solicitante",
+            "Grupo",
+            "Estado",
+            "Motivo",
+            "Carrera",
+            "Materia"
+    };
+
     private ReporteExportador() {
+        // Evita crear objetos de esta clase.
     }
 
-    // ============================================================
-    //  PDF
-    // ============================================================
-    public static void exportarPDF(ResultadoReporte resultado, String rangoTexto, File destino) throws IOException {
+    /*
+     * =========================
+     * EXPORTAR A PDF
+     * =========================
+     */
+    public static void exportarPDF(
+            Object resumen,
+            ObservableList<Reporte> detalle,
+            String rango,
+            File destino
+    ) throws IOException {
 
-        try (PDDocument documento = new PDDocument()) {
+        PdfWriter writer = new PdfWriter(destino);
+        PdfDocument pdf = new PdfDocument(writer);
 
-            PDPage pagina = new PDPage(PDRectangle.LETTER);
-            documento.addPage(pagina);
+        Document documento = new Document(
+                pdf,
+                PageSize.A4.rotate()
+        );
 
-            PDType1Font fuenteTitulo = PDType1Font.HELVETICA_BOLD;
-            PDType1Font fuenteNormal = PDType1Font.HELVETICA;
-            PDType1Font fuenteNegrita = PDType1Font.HELVETICA_BOLD;
+        documento.setMargins(25, 25, 25, 25);
 
-            float margen = 50;
-            float anchoUtil = pagina.getMediaBox().getWidth() - margen * 2;
-            float y = pagina.getMediaBox().getHeight() - margen;
+        Paragraph titulo = new Paragraph(
+                "SIGAL - Detalle del reporte de ocupación"
+        )
+                .setBold()
+                .setFontSize(16)
+                .setTextAlignment(TextAlignment.CENTER);
 
-            PDPageContentStream cs = new PDPageContentStream(documento, pagina);
+        documento.add(titulo);
 
-            // ---- Encabezado ----
-            y = escribir(cs, fuenteTitulo, 16, margen, y, "SIGAL - Reporte de ocupación de espacios");
-            y -= 6;
-            y = escribir(cs, fuenteNormal, 10, margen, y, rangoTexto);
-            y -= 14;
+        if (rango != null && !rango.isBlank()) {
+            documento.add(
+                    new Paragraph(rango)
+                            .setFontSize(10)
+                            .setTextAlignment(TextAlignment.CENTER)
+            );
+        }
 
-            // ---- Tarjetas resumen ----
-            y = escribir(cs, fuenteNegrita, 11, margen, y, "Resumen del periodo");
-            y -= 4;
-            y = escribir(cs, fuenteNormal, 10, margen, y,
-                    "Total de espacios: " + resultado.getTotalEspacios());
-            y = escribir(cs, fuenteNormal, 10, margen, y,
-                    "Espacios con asignaciones: " + resultado.getEspaciosConAsignaciones());
-            y = escribir(cs, fuenteNormal, 10, margen, y,
-                    String.format("Promedio de asignaciones por espacio: %.1f", resultado.getPromedioAsignacionesPorEspacio()));
-            y = escribir(cs, fuenteNormal, 10, margen, y,
-                    "Espacio más asignado: " + resultado.getEspacioMasAsignado());
-            y -= 16;
+        documento.add(new Paragraph(" "));
 
-            // ---- Tabla ----
-            float[] anchoCol = { anchoUtil * 0.32f, anchoUtil * 0.24f, anchoUtil * 0.22f, anchoUtil * 0.22f };
-            String[] encabezados = { "Espacio", "Horas disponibles", "Horas ocupadas", "Ocupación" };
+        Table tabla = new Table(
+                UnitValue.createPercentArray(new float[]{
+                        10, 12, 15, 17, 12, 10, 18, 15, 15
+                })
+        );
 
-            y = escribirFilaTabla(cs, fuenteNegrita, margen, y, anchoCol, encabezados);
-            cs.moveTo(margen, y + 12);
-            cs.lineTo(margen + anchoUtil, y + 12);
-            cs.stroke();
+        tabla.setWidth(UnitValue.createPercentValue(100));
 
-            for (Reporte fila : resultado.getFilas()) {
+        for (String encabezado : ENCABEZADOS) {
+            Cell celda = new Cell()
+                    .add(new Paragraph(encabezado).setBold())
+                    .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                    .setTextAlignment(TextAlignment.CENTER);
 
-                if (y < margen + 40) {
-                    // Se acabó la página: cerramos y abrimos otra.
-                    cs.close();
-                    pagina = new PDPage(PDRectangle.LETTER);
-                    documento.addPage(pagina);
-                    cs = new PDPageContentStream(documento, pagina);
-                    y = pagina.getMediaBox().getHeight() - margen;
-                }
+            tabla.addHeaderCell(celda);
+        }
 
-                String[] valores = {
-                        fila.getEspacio(),
-                        String.format("%.1f h", fila.getHorasDisponibles()),
-                        String.format("%.1f h", fila.getHorasOcupadas()),
-                        fila.getPorcentajeTexto()
-                };
-                y = escribirFilaTabla(cs, fuenteNormal, margen, y, anchoCol, valores);
+        if (detalle != null) {
+            for (Reporte reporte : detalle) {
+                tabla.addCell(celdaPDF(reporte.getFecha()));
+                tabla.addCell(celdaPDF(reporte.getHorario()));
+                tabla.addCell(celdaPDF(reporte.getEspacio()));
+                tabla.addCell(celdaPDF(reporte.getSolicitante()));
+                tabla.addCell(celdaPDF(reporte.getGrupo()));
+                tabla.addCell(celdaPDF(reporte.getEstado()));
+                tabla.addCell(celdaPDF(reporte.getMotivo()));
+                tabla.addCell(celdaPDF(reporte.getCarrera()));
+                tabla.addCell(celdaPDF(reporte.getMateria()));
             }
-
-            cs.close();
-            documento.save(destino);
         }
+
+        documento.add(tabla);
+        documento.close();
     }
 
-    private static float escribir(PDPageContentStream cs, PDType1Font fuente, float tamano,
-                                   float x, float y, String texto) throws IOException {
-        cs.beginText();
-        cs.setFont(fuente, tamano);
-        cs.newLineAtOffset(x, y);
-        cs.showText(texto == null ? "" : texto);
-        cs.endText();
-        return y - (tamano + 6);
+    private static Cell celdaPDF(String texto) {
+        return new Cell()
+                .add(new Paragraph(valor(texto)).setFontSize(8))
+                .setTextAlignment(TextAlignment.LEFT);
     }
 
-    private static float escribirFilaTabla(PDPageContentStream cs, PDType1Font fuente,
-                                            float margen, float y, float[] anchoCol, String[] valores) throws IOException {
-        float x = margen;
-        for (int i = 0; i < valores.length; i++) {
-            cs.beginText();
-            cs.setFont(fuente, 9.5f);
-            cs.newLineAtOffset(x, y);
-            cs.showText(valores[i] == null ? "" : valores[i]);
-            cs.endText();
-            x += anchoCol[i];
-        }
-        return y - 16;
-    }
+    /*
+     * =========================
+     * EXPORTAR A EXCEL
+     * =========================
+     */
+    public static void exportarExcel(
+            Object resumen,
+            ObservableList<Reporte> detalle,
+            String rango,
+            File destino
+    ) throws IOException {
 
-    // ============================================================
-    //  EXCEL (.xlsx)
-    // ============================================================
-    public static void exportarExcel(ResultadoReporte resultado, String rangoTexto, File destino) throws IOException {
+        try (Workbook libro = new XSSFWorkbook()) {
 
-        try (XSSFWorkbook libro = new XSSFWorkbook()) {
+            Sheet hoja = libro.createSheet("Detalle");
 
-            XSSFSheet hoja = libro.createSheet("Reporte");
+            CellStyle estiloTitulo = libro.createCellStyle();
+            estiloTitulo.setAlignment(HorizontalAlignment.CENTER);
 
-            Font fuenteTitulo = libro.createFont();
+            org.apache.poi.ss.usermodel.Font fuenteTitulo =
+                    libro.createFont();
+
             fuenteTitulo.setBold(true);
             fuenteTitulo.setFontHeightInPoints((short) 14);
-            CellStyle estiloTitulo = libro.createCellStyle();
+
             estiloTitulo.setFont(fuenteTitulo);
 
-            Font fuenteEncabezado = libro.createFont();
-            fuenteEncabezado.setBold(true);
             CellStyle estiloEncabezado = libro.createCellStyle();
+            estiloEncabezado.setFillForegroundColor(
+                    IndexedColors.DARK_BLUE.getIndex()
+            );
+            estiloEncabezado.setFillPattern(
+                    FillPatternType.SOLID_FOREGROUND
+            );
+            estiloEncabezado.setAlignment(
+                    HorizontalAlignment.CENTER
+            );
+            estiloEncabezado.setBorderBottom(BorderStyle.THIN);
+
+            org.apache.poi.ss.usermodel.Font fuenteEncabezado =
+                    libro.createFont();
+
+            fuenteEncabezado.setBold(true);
+            fuenteEncabezado.setColor(
+                    IndexedColors.WHITE.getIndex()
+            );
+
             estiloEncabezado.setFont(fuenteEncabezado);
 
-            int filaIdx = 0;
+            Row filaTitulo = hoja.createRow(0);
+            org.apache.poi.ss.usermodel.Cell celdaTitulo =
+                    filaTitulo.createCell(0);
 
-            filaIdx = celda(hoja, filaIdx, "SIGAL - Reporte de ocupación de espacios", estiloTitulo);
-            filaIdx = celda(hoja, filaIdx, rangoTexto, null);
-            filaIdx++;
+            celdaTitulo.setCellValue(
+                    "SIGAL - Detalle del reporte de ocupación"
+            );
+            celdaTitulo.setCellStyle(estiloTitulo);
 
-            filaIdx = celda(hoja, filaIdx, "Total de espacios:", estiloEncabezado, String.valueOf(resultado.getTotalEspacios()));
-            filaIdx = celda(hoja, filaIdx, "Espacios con asignaciones:", estiloEncabezado, String.valueOf(resultado.getEspaciosConAsignaciones()));
-            filaIdx = celda(hoja, filaIdx, "Promedio de asignaciones por espacio:", estiloEncabezado,
-                    String.format("%.1f", resultado.getPromedioAsignacionesPorEspacio()));
-            filaIdx = celda(hoja, filaIdx, "Espacio más asignado:", estiloEncabezado, resultado.getEspacioMasAsignado());
-            filaIdx++;
+            hoja.addMergedRegion(
+                    new org.apache.poi.ss.util.CellRangeAddress(
+                            0,
+                            0,
+                            0,
+                            ENCABEZADOS.length - 1
+                    )
+            );
 
-            Row encabezado = hoja.createRow(filaIdx++);
-            String[] titulos = { "Espacio", "Horas disponibles", "Horas ocupadas", "% de ocupación" };
-            for (int i = 0; i < titulos.length; i++) {
-                Cell c = encabezado.createCell(i);
-                c.setCellValue(titulos[i]);
-                c.setCellStyle(estiloEncabezado);
+            Row filaRango = hoja.createRow(1);
+            filaRango.createCell(0).setCellValue(valor(rango));
+
+            Row filaEncabezados = hoja.createRow(3);
+
+            for (int i = 0; i < ENCABEZADOS.length; i++) {
+                org.apache.poi.ss.usermodel.Cell celda =
+                        filaEncabezados.createCell(i);
+
+                celda.setCellValue(ENCABEZADOS[i]);
+                celda.setCellStyle(estiloEncabezado);
             }
 
-            for (Reporte f : resultado.getFilas()) {
-                Row fila = hoja.createRow(filaIdx++);
-                fila.createCell(0).setCellValue(f.getEspacio());
-                fila.createCell(1).setCellValue(f.getHorasDisponibles());
-                fila.createCell(2).setCellValue(f.getHorasOcupadas());
-                fila.createCell(3).setCellValue(f.getPorcentajeTexto());
+            int numeroFila = 4;
+
+            if (detalle != null) {
+                for (Reporte reporte : detalle) {
+
+                    Row fila = hoja.createRow(numeroFila++);
+
+                    fila.createCell(0).setCellValue(
+                            valor(reporte.getFecha())
+                    );
+                    fila.createCell(1).setCellValue(
+                            valor(reporte.getHorario())
+                    );
+                    fila.createCell(2).setCellValue(
+                            valor(reporte.getEspacio())
+                    );
+                    fila.createCell(3).setCellValue(
+                            valor(reporte.getSolicitante())
+                    );
+                    fila.createCell(4).setCellValue(
+                            valor(reporte.getGrupo())
+                    );
+                    fila.createCell(5).setCellValue(
+                            valor(reporte.getEstado())
+                    );
+                    fila.createCell(6).setCellValue(
+                            valor(reporte.getMotivo())
+                    );
+                    fila.createCell(7).setCellValue(
+                            valor(reporte.getCarrera())
+                    );
+                    fila.createCell(8).setCellValue(
+                            valor(reporte.getMateria())
+                    );
+                }
             }
 
-            for (int i = 0; i < titulos.length; i++) {
+            for (int i = 0; i < ENCABEZADOS.length; i++) {
                 hoja.autoSizeColumn(i);
             }
 
-            try (FileOutputStream out = new FileOutputStream(destino)) {
-                libro.write(out);
+            try (FileOutputStream salida =
+                         new FileOutputStream(destino)) {
+
+                libro.write(salida);
             }
         }
     }
 
-    private static int celda(XSSFSheet hoja, int filaIdx, String texto, CellStyle estilo) {
-        Row fila = hoja.createRow(filaIdx);
-        Cell c = fila.createCell(0);
-        c.setCellValue(texto);
-        if (estilo != null) {
-            c.setCellStyle(estilo);
-        }
-        return filaIdx + 1;
-    }
-
-    private static int celda(XSSFSheet hoja, int filaIdx, String etiqueta, CellStyle estilo, String valor) {
-        Row fila = hoja.createRow(filaIdx);
-        Cell c0 = fila.createCell(0);
-        c0.setCellValue(etiqueta);
-        if (estilo != null) {
-            c0.setCellStyle(estilo);
-        }
-        fila.createCell(1).setCellValue(valor);
-        return filaIdx + 1;
-    }
-
-    // ============================================================
-    //  WORD (.docx)
-    // ============================================================
-    public static void exportarWord(ResultadoReporte resultado, String rangoTexto, File destino) throws IOException {
+    /*
+     * =========================
+     * EXPORTAR A WORD
+     * =========================
+     */
+    public static void exportarWord(
+            Object resumen,
+            ObservableList<Reporte> detalle,
+            String rango,
+            File destino
+    ) throws IOException {
 
         try (XWPFDocument documento = new XWPFDocument()) {
 
-            XWPFParagraph titulo = documento.createParagraph();
-            titulo.setAlignment(ParagraphAlignment.LEFT);
-            XWPFRun runTitulo = titulo.createRun();
-            runTitulo.setText("SIGAL - Reporte de ocupación de espacios");
-            runTitulo.setBold(true);
-            runTitulo.setFontSize(16);
+            org.apache.poi.xwpf.usermodel.XWPFParagraph titulo =
+                    documento.createParagraph();
 
-            XWPFParagraph subtitulo = documento.createParagraph();
-            XWPFRun runSubtitulo = subtitulo.createRun();
-            runSubtitulo.setText(rangoTexto);
-            runSubtitulo.setFontSize(10);
-            runSubtitulo.setColor("666666");
+            titulo.setAlignment(
+                    org.apache.poi.xwpf.usermodel.ParagraphAlignment.CENTER
+            );
 
-            XWPFParagraph resumenTitulo = documento.createParagraph();
-            XWPFRun runResumenTitulo = resumenTitulo.createRun();
-            runResumenTitulo.setBold(true);
-            runResumenTitulo.setText("Resumen del periodo");
+            org.apache.poi.xwpf.usermodel.XWPFRun textoTitulo =
+                    titulo.createRun();
 
-            agregarLinea(documento, "Total de espacios: " + resultado.getTotalEspacios());
-            agregarLinea(documento, "Espacios con asignaciones: " + resultado.getEspaciosConAsignaciones());
-            agregarLinea(documento, String.format("Promedio de asignaciones por espacio: %.1f", resultado.getPromedioAsignacionesPorEspacio()));
-            agregarLinea(documento, "Espacio más asignado: " + resultado.getEspacioMasAsignado());
+            textoTitulo.setBold(true);
+            textoTitulo.setFontSize(16);
+            textoTitulo.setText(
+                    "SIGAL - Detalle del reporte de ocupación"
+            );
+
+            if (rango != null && !rango.isBlank()) {
+                org.apache.poi.xwpf.usermodel.XWPFParagraph parrafoRango =
+                        documento.createParagraph();
+
+                parrafoRango.setAlignment(
+                        org.apache.poi.xwpf.usermodel.ParagraphAlignment.CENTER
+                );
+
+                parrafoRango.createRun().setText(rango);
+            }
 
             documento.createParagraph();
 
-            String[] titulos = { "Espacio", "Horas disponibles", "Horas ocupadas", "% de ocupación" };
-            XWPFTable tabla = documento.createTable(resultado.getFilas().size() + 1, titulos.length);
+            XWPFTable tabla = documento.createTable(
+                    detalle == null
+                            ? 1
+                            : detalle.size() + 1,
+                    ENCABEZADOS.length
+            );
 
-            XWPFTableRow filaEncabezado = tabla.getRow(0);
-            for (int i = 0; i < titulos.length; i++) {
-                filaEncabezado.getCell(i).setText(titulos[i]);
+            tabla.setWidth("100%");
+
+            XWPFTableRow filaEncabezado =
+                    tabla.getRow(0);
+
+            for (int i = 0; i < ENCABEZADOS.length; i++) {
+                establecerTextoCelda(
+                        filaEncabezado.getCell(i),
+                        ENCABEZADOS[i],
+                        true
+                );
             }
 
-            int i = 1;
-            for (Reporte f : resultado.getFilas()) {
-                XWPFTableRow fila = tabla.getRow(i++);
-                fila.getCell(0).setText(f.getEspacio());
-                fila.getCell(1).setText(String.format("%.1f h", f.getHorasDisponibles()));
-                fila.getCell(2).setText(String.format("%.1f h", f.getHorasOcupadas()));
-                fila.getCell(3).setText(f.getPorcentajeTexto());
+            if (detalle != null) {
+
+                for (int fila = 0; fila < detalle.size(); fila++) {
+
+                    Reporte reporte = detalle.get(fila);
+                    XWPFTableRow filaWord =
+                            tabla.getRow(fila + 1);
+
+                    establecerTextoCelda(
+                            filaWord.getCell(0),
+                            reporte.getFecha(),
+                            false
+                    );
+                    establecerTextoCelda(
+                            filaWord.getCell(1),
+                            reporte.getHorario(),
+                            false
+                    );
+                    establecerTextoCelda(
+                            filaWord.getCell(2),
+                            reporte.getEspacio(),
+                            false
+                    );
+                    establecerTextoCelda(
+                            filaWord.getCell(3),
+                            reporte.getSolicitante(),
+                            false
+                    );
+                    establecerTextoCelda(
+                            filaWord.getCell(4),
+                            reporte.getGrupo(),
+                            false
+                    );
+                    establecerTextoCelda(
+                            filaWord.getCell(5),
+                            reporte.getEstado(),
+                            false
+                    );
+                    establecerTextoCelda(
+                            filaWord.getCell(6),
+                            reporte.getMotivo(),
+                            false
+                    );
+                    establecerTextoCelda(
+                            filaWord.getCell(7),
+                            reporte.getCarrera(),
+                            false
+                    );
+                    establecerTextoCelda(
+                            filaWord.getCell(8),
+                            reporte.getMateria(),
+                            false
+                    );
+                }
             }
 
-            try (FileOutputStream out = new FileOutputStream(destino)) {
-                documento.write(out);
+            try (FileOutputStream salida =
+                         new FileOutputStream(destino)) {
+
+                documento.write(salida);
             }
         }
     }
 
-    private static void agregarLinea(XWPFDocument documento, String texto) {
-        XWPFParagraph p = documento.createParagraph();
-        XWPFRun r = p.createRun();
-        r.setText(texto);
-        r.setFontSize(10);
+    private static void establecerTextoCelda(
+            XWPFTableCell celda,
+            String texto,
+            boolean encabezado
+    ) {
+        celda.removeParagraph(0);
+
+        org.apache.poi.xwpf.usermodel.XWPFParagraph parrafo =
+                celda.addParagraph();
+
+        org.apache.poi.xwpf.usermodel.XWPFRun run =
+                parrafo.createRun();
+
+        run.setText(valor(texto));
+        run.setFontSize(8);
+
+        if (encabezado) {
+            run.setBold(true);
+        }
+    }
+
+    private static String valor(String texto) {
+        return texto == null ? "" : texto;
     }
 }

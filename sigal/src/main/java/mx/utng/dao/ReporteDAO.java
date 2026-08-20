@@ -7,12 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mx.utng.database.Conexion;
+import mx.utng.model.Consultas;
 import mx.utng.model.Reporte;
 import mx.utng.model.ResultadoReporte;
 
@@ -143,4 +145,94 @@ public class ReporteDAO {
         }
         return Math.max(dias, 1);
     }
+    
+public ObservableList<Reporte> listarDetalle(
+        LocalDate desde,
+        LocalDate hasta,
+        Integer idEspacio
+) {
+    ObservableList<Reporte> lista =
+            FXCollections.observableArrayList();
+
+    StringBuilder sql = new StringBuilder("""
+            SELECT
+                a.Fecha,
+                a.HoraInicio,
+                a.HoraTermino,
+                e.NombreEspacio AS Espacio,
+                a.NombreSolicitante AS Solicitante,
+                g.NombreGrupo AS Grupo,
+                a.Estado,
+                a.Actividad AS Motivo,
+                c.NombreCarrera AS Carrera,
+                m.Nombre AS Materia
+            FROM tb_asignacion a
+            LEFT JOIN tb_carrera c
+                ON c.ID_Carrera = a.ID_Carrera
+            LEFT JOIN tb_grupo g
+                ON g.ID_Grupo = a.ID_Grupo
+            LEFT JOIN tb_materia m
+                ON m.ID_Materia = a.ID_Materia
+            INNER JOIN tb_espacio e
+                ON e.ID_Espacio = a.ID_Espacio
+            WHERE a.Fecha BETWEEN ? AND ?
+            """);
+
+    if (idEspacio != null) {
+        sql.append(" AND a.ID_Espacio = ?");
+    }
+
+    sql.append("""
+            ORDER BY a.Fecha ASC, a.HoraInicio ASC
+            """);
+
+    try (
+            Connection con = Conexion.conectar();
+            PreparedStatement ps =
+                    con.prepareStatement(sql.toString())
+    ) {
+        ps.setDate(1, Date.valueOf(desde));
+        ps.setDate(2, Date.valueOf(hasta));
+
+        if (idEspacio != null) {
+            ps.setInt(3, idEspacio);
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+
+            DateTimeFormatter formatoFecha =
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            while (rs.next()) {
+
+                String fecha = rs.getDate("Fecha")
+                        .toLocalDate()
+                        .format(formatoFecha);
+
+                String horario =
+                        rs.getTime("HoraInicio")
+                        + " - "
+                        + rs.getTime("HoraTermino");
+
+                lista.add(new Reporte(
+                        fecha,
+                        horario,
+                        rs.getString("Espacio"),
+                        rs.getString("Solicitante"),
+                        rs.getString("Grupo"),
+                        rs.getString("Estado"),
+                        rs.getString("Motivo"),
+                        rs.getString("Carrera"),
+                        rs.getString("Materia")
+                ));
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return lista;
+}
+
 }

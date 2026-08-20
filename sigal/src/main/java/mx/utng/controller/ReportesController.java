@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Map;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,14 +20,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-
 import mx.utng.dao.ReporteDAO;
+import mx.utng.model.Consultas;
 import mx.utng.model.Reporte;
 import mx.utng.model.ResultadoReporte;
 import mx.utng.util.ReporteExportador;
@@ -56,6 +59,7 @@ public class ReportesController {
     @FXML private Label lblPromedioAsignaciones;
     @FXML private Label lblEspacioMasAsignado;
     @FXML private Label lblRangoPeriodo;
+        @FXML private Label lblFechaGeneracion;
 
     // ---- Tabla ----
     @FXML private TableView<Reporte> tablaReporte;
@@ -70,10 +74,19 @@ public class ReportesController {
     @FXML private Button btnExportarPDF;
     @FXML private Button btnExportarExcel;
     @FXML private Button btnExportarWord;
+    @FXML
+    private TableView<Reporte> tablaDetalle;
+
+
+ 
+
 
     /** Lo último que se generó, para poder exportarlo sin volver a consultar la BD. */
     private ResultadoReporte resultadoActual;
     private String rangoTextoActual = "";
+    private ObservableList<Reporte> detalleActual =
+        FXCollections.observableArrayList();
+
 
     private static final String[] MESES = {
             "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -82,6 +95,9 @@ public class ReportesController {
 
     /** Texto del combo "Espacio" (nombre) -> ID_Espacio real en la BD. */
     private Map<String, Integer> mapaEspacios;
+
+    @FXML
+    private DatePicker dtDia;
 
     @FXML
     public void initialize() {
@@ -117,51 +133,128 @@ public class ReportesController {
 
     @FXML
     private void onGenerarReporte(ActionEvent event) {
-        Integer idEspacio = "Todos".equals(cmbEspacio.getValue()) ? null : mapaEspacios.get(cmbEspacio.getValue());
-        generarReporte(idEspacio);
+    String espacioSeleccionado = cmbEspacio.getValue();
+
+    Integer idEspacio = null;
+
+    if (espacioSeleccionado != null
+            && !"Todos".equals(espacioSeleccionado)) {
+
+        idEspacio = mapaEspacios.get(espacioSeleccionado);
     }
 
-    private void generarReporte(Integer idEspacioFiltro) {
+    generarReporte(idEspacio);
+}
 
-        LocalDate[] rango = calcularRango();
-        LocalDate desde = rango[0];
-        LocalDate hasta = rango[1];
+ private void generarReporte(Integer idEspacioFiltro) {
+    LocalDate[] rango = calcularRango();
 
-        ResultadoReporte resultado = reporteDAO.generar(desde, hasta, idEspacioFiltro);
-        this.resultadoActual = resultado;
+    LocalDate desde = rango[0];
+    LocalDate hasta = rango[1];
 
-        lblTotalEspacios.setText(String.valueOf(resultado.getTotalEspacios()));
-        lblEspaciosConAsignaciones.setText(String.valueOf(resultado.getEspaciosConAsignaciones()));
-        lblPromedioAsignaciones.setText(String.format("%.1f", resultado.getPromedioAsignacionesPorEspacio()));
-        lblEspacioMasAsignado.setText(resultado.getEspacioMasAsignado());
+    ResultadoReporte resultado =
+            reporteDAO.generar(
+                    desde,
+                    hasta,
+                    idEspacioFiltro
+            );
 
-        tablaReporte.setItems(resultado.getFilas());
-        actualizarGrafica(resultado);
+    lblTotalEspacios.setText(
+            String.valueOf(resultado.getTotalEspacios())
+    );;
 
-        if (lblRangoPeriodo != null) {
-            rangoTextoActual = "Del " + formatoCorto(desde) + " al " + formatoCorto(hasta);
-            lblRangoPeriodo.setText(rangoTextoActual);
-        }
+    lblEspaciosConAsignaciones.setText(
+            String.valueOf(
+                    resultado.getEspaciosConAsignaciones()
+            )
+    );
+
+    lblPromedioAsignaciones.setText(
+            String.format(
+                    "%.1f",
+                    resultado.getPromedioAsignacionesPorEspacio()
+            )
+    );
+
+    lblEspacioMasAsignado.setText(
+            resultado.getEspacioMasAsignado()
+    );
+
+    tablaReporte.setItems(resultado.getFilas());
+
+    /*
+     * Fecha en la que se generó el reporte
+     */
+    DateTimeFormatter formatoFechaHora =
+            DateTimeFormatter.ofPattern(
+                    "dd/MM/yyyy HH:mm"
+            );
+
+    actualizarGrafica(resultado);
+
+    if (lblRangoPeriodo != null) {
+        rangoTextoActual =
+                "Del "
+                        + formatoCorto(desde)
+                        + " al "
+                        + formatoCorto(hasta);
+
+        lblRangoPeriodo.setText(rangoTextoActual);
+    }
+    this.resultadoActual = resultado;
+    detalleActual = reporteDAO.listarDetalle(
+        desde,
+        hasta,
+        idEspacioFiltro
+    );
+
+    tablaDetalle.setItems(detalleActual);
+}
+
+private LocalDate[] calcularRango() {
+    String periodo = cmbPeriodo.getValue();
+
+    if (periodo == null || periodo.isBlank()) {
+        periodo = "Mensual";
     }
 
-    private LocalDate[] calcularRango() {
-        String periodo = cmbPeriodo.getValue();
-        int anio = Integer.parseInt(cmbAnio.getValue());
+    if ("Diario".equals(periodo)) {
+        LocalDate diaSeleccionado = dtDia.getValue();
 
-        if ("Semanal".equals(periodo)) {
-            LocalDate hoy = LocalDate.now();
-            return new LocalDate[] { hoy.minusDays(6), hoy };
+        if (diaSeleccionado == null) {
+            diaSeleccionado = LocalDate.now();
         }
 
-        if ("Anual".equals(periodo)) {
-            return new LocalDate[] { LocalDate.of(anio, 1, 1), LocalDate.of(anio, 12, 31) };
-        }
-
-        // Mensual (valor por defecto)
-        int mesIndice = Arrays.asList(MESES).indexOf(cmbMes.getValue()) + 1;
-        YearMonth ym = YearMonth.of(anio, mesIndice);
-        return new LocalDate[] { ym.atDay(1), ym.atEndOfMonth() };
+        return new LocalDate[] {
+                diaSeleccionado,
+                diaSeleccionado
+        };
     }
+
+    if ("Semanal".equals(periodo)) {
+        LocalDate hoy = LocalDate.now();
+
+        return new LocalDate[] {
+                hoy.minusDays(6),
+                hoy
+        };
+    }
+
+    // Mensual
+    int anio = Integer.parseInt(cmbAnio.getValue());
+
+    int mesIndice =
+            Arrays.asList(MESES)
+                    .indexOf(cmbMes.getValue()) + 1;
+
+    YearMonth ym = YearMonth.of(anio, mesIndice);
+
+    return new LocalDate[] {
+            ym.atDay(1),
+            ym.atEndOfMonth()
+    };
+}
+
 
     private void actualizarGrafica(ResultadoReporte resultado) {
         graficaOcupacion.getData().clear();
@@ -189,23 +282,57 @@ public class ReportesController {
     //  EXPORTAR
     // ============================================================
 
-    @FXML
+ @FXML
     private void onExportarPDF(ActionEvent event) {
-        exportar("PDF (*.pdf)", "*.pdf", "reporte_sigal.pdf", (destino) ->
-                ReporteExportador.exportarPDF(resultadoActual, rangoTextoActual, destino), event);
+        exportar(
+                "PDF (*.pdf)",
+                "*.pdf",
+                "reporte_sigal.pdf",
+                destino -> ReporteExportador.exportarPDF(
+                        resultadoActual,
+                        detalleActual,
+                        rangoTextoActual,
+                        destino
+                ),
+                event
+        );
     }
+
 
     @FXML
     private void onExportarExcel(ActionEvent event) {
-        exportar("Excel (*.xlsx)", "*.xlsx", "reporte_sigal.xlsx", (destino) ->
-                ReporteExportador.exportarExcel(resultadoActual, rangoTextoActual, destino), event);
+        exportar(
+                "Excel (*.xlsx)",
+                "*.xlsx",
+                "reporte_sigal.xlsx",
+                destino -> ReporteExportador.exportarExcel(
+                        resultadoActual,
+                        detalleActual,
+                        rangoTextoActual,
+                        destino
+                ),
+                event
+        );
     }
 
+
     @FXML
-    private void onExportarWord(ActionEvent event) {
-        exportar("Word (*.docx)", "*.docx", "reporte_sigal.docx", (destino) ->
-                ReporteExportador.exportarWord(resultadoActual, rangoTextoActual, destino), event);
-    }
+private void onExportarWord(ActionEvent event) {
+    exportar(
+            "Word (*.docx)",
+            "*.docx",
+            "reporte_sigal.docx",
+            destino -> ReporteExportador.exportarWord(
+                    resultadoActual,
+                    detalleActual,
+                    rangoTextoActual,
+                    destino
+            ),
+            event
+    );
+}
+
+
 
     /** Pequeña interfaz para no repetir el mismo try/catch 3 veces (PDF/Excel/Word). */
     @FunctionalInterface
