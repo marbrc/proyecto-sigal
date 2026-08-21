@@ -214,8 +214,13 @@
                             </StackPane>
 
 
-                            <Button fx:id="btnToggleContrasena" onAction="#onToggleContrasena" styleClass="input-eye-btn" />
-                        <Region styleClass="icon-eye, icon-sm, icon-muted" />
+                            <Button fx:id="btnToggleContrasena" onAction="#onToggleContrasena" styleClass="input-eye-btn">
+
+                                <graphic>
+                                    <Region styleClass="icon-eye, icon-sm, icon-muted" />
+                                </graphic>
+
+                            </Button>
 
                         </HBox>
 
@@ -285,8 +290,8 @@
     </VBox>
 
     <!-- CONTENIDO: PASO 2, VERIFICACIÓN DE CORREO -->
-    <VBox fx:id="paneVerificacion" alignment="CENTER" managed="false" pickOnBounds="false" visible="false">
-        <StackPane style="-fx-background-color: white; -fx-background-radius: 18;" styleClass="login-card registro-card">
+    <VBox fx:id="paneVerificacion" alignment="CENTER" fillWidth="false" managed="false" pickOnBounds="false" visible="false">
+        <StackPane style="-fx-background-color: white; -fx-background-radius: 18;" styleClass="login-card verificacion-card">
             <VBox alignment="CENTER" maxWidth="440.0" minWidth="440.0" spacing="0.0">
                 <padding>
                     <Insets bottom="34.0" left="40.0" right="40.0" top="34.0" />

@@ -37,6 +37,105 @@
 }
  
 /* =========================================================
+   TARJETA DE VERIFICACIÓN DE CORREO (paso 2)
+   Rectángulo angosto, independiente del ancho de registro-card.
+   ========================================================= */
+ 
+.verificacion-card {
+    -fx-min-width: 460;
+    -fx-pref-width: 460;
+    -fx-max-width: 460;
+ 
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+ 
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.35),
+        40,
+        0.25,
+        0,
+        16
+    );
+}
+ 
+.verificacion-card .login-title {
+    -fx-text-fill: #14213d;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+ 
+.verificacion-card .login-subtitle {
+    -fx-text-fill: #6c7aa0;
+    -fx-font-size: 13px;
+}
+ 
+.verificacion-card .field-label {
+    -fx-text-fill: #14213d;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+ 
+.verificacion-card .input-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #c7cfe0;
+    -fx-border-width: 1.2;
+    -fx-border-radius: 10;
+    -fx-padding: 4 12 4 12;
+    -fx-min-height: 50;
+}
+ 
+.verificacion-card .input-box:hover {
+    -fx-border-color: #9fb3d9;
+}
+ 
+.verificacion-card .input-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #14213d;
+    -fx-font-size: 13.5px;
+    -fx-prompt-text-fill: #9aa5c4;
+    -fx-padding: 8 0 8 0;
+}
+ 
+.verificacion-card .input-field:focused {
+    -fx-background-color: transparent;
+}
+ 
+.verificacion-card .login-submit-btn {
+    -fx-background-color: #2f6bff;
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+ 
+.verificacion-card .login-submit-btn:hover {
+    -fx-background-color: #1c5ae0;
+}
+ 
+.verificacion-card .login-submit-btn:pressed {
+    -fx-background-color: #1747b8;
+}
+ 
+.verificacion-card .login-register-btn {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #2f6bff;
+    -fx-border-width: 1.4;
+    -fx-border-radius: 10;
+    -fx-text-fill: #2f6bff;
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+ 
+.verificacion-card .login-register-btn:hover {
+    -fx-background-color: #eaf1ff;
+}
+ 
+/* =========================================================
    TÍTULOS
    ========================================================= */
  
