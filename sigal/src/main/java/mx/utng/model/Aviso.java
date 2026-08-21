@@ -15,13 +15,15 @@ public class Aviso {
     private final SimpleStringProperty tipoAviso;        // Información | Advertencia | Error | Éxito
     private final SimpleStringProperty descripcion;
     private final SimpleStringProperty comentarios;
-    private final SimpleStringProperty estado;           // No leído | Leído
+    private final SimpleStringProperty estado;
+    private final SimpleStringProperty horaInicio;
+    private final SimpleStringProperty horaTermino;
 
     private Integer idEspacio;   // null = aviso general, no ligado a un espacio
     private int idUsuario;       // quien registro el aviso
 
     public Aviso(int idAviso, String fecha, String espacio, String tipoAviso,
-                 String descripcion, String comentarios, String estado) {
+                 String descripcion, String comentarios, String estado, String horaInicio, String horaTermino) {
         this.idAviso = new SimpleIntegerProperty(idAviso);
         this.fecha = new SimpleStringProperty(fecha);
         this.espacio = new SimpleStringProperty(espacio);
@@ -29,6 +31,8 @@ public class Aviso {
         this.descripcion = new SimpleStringProperty(descripcion);
         this.comentarios = new SimpleStringProperty(comentarios);
         this.estado = new SimpleStringProperty(estado);
+        this.horaInicio = new SimpleStringProperty(horaInicio);
+        this.horaTermino = new SimpleStringProperty(horaTermino);
     }
 
     public int getIdAviso() { return idAviso.get(); }
@@ -64,4 +68,12 @@ public class Aviso {
 
     public int getIdUsuario() { return idUsuario; }
     public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
+
+    public String getHoraInicio() { return horaInicio.get(); }
+    public void setHoraInicio(String v) { horaInicio.set(v); }
+    public SimpleStringProperty horaInicioProperty() { return horaInicio; }
+
+    public String getHoraTermino() { return horaTermino.get(); }
+    public void setHoraTermino(String v) { horaTermino.set(v); }
+    public SimpleStringProperty horaTerminoProperty() { return horaTermino; }
 }
