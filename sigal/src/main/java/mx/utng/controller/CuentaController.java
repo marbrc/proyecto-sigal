@@ -3,6 +3,19 @@ package mx.utng.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.collections.FXCollections;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import java.nio.file.Files;
 import java.util.ResourceBundle;
 
@@ -70,6 +83,21 @@ public class CuentaController implements Initializable {
     @FXML private PasswordField txtContrasenaNueva;
     @FXML private PasswordField txtConfirmarContrasena;
     @FXML private Button btnGuardarContrasena;
+    
+    @FXML private VBox panelAdminUsuarios;
+    @FXML private TableView<Usuario> tblUsuarios;
+    @FXML private TableColumn<Usuario, String> colUsuarioNombre;
+    @FXML private TableColumn<Usuario, String> colUsuarioNombreUsuario;
+    @FXML private TableColumn<Usuario, String> colUsuarioCorreo;
+    @FXML private TableColumn<Usuario, String> colUsuarioRol;
+    @FXML private TableColumn<Usuario, String> colUsuarioEstado;
+    @FXML private TableColumn<Usuario, Void> colUsuarioAcciones;
+    @FXML private Button btnToggleUsuarios;
+    @FXML private StackPane contenedorTablaUsuarios;
+
+    private boolean tablaUsuariosVisible = false;
+    private static final double ALTURA_TABLA_USUARIOS = 260.0;
+    private boolean tablaUsuariosConfigurada = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -109,6 +137,8 @@ public class CuentaController implements Initializable {
         lblCuentaRolBadge.setText(usuarioActual.getRol());
 
         AvatarUtil.aplicar(imgAvatarCuenta, lblCuentaIniciales, usuarioActual.getFotoPerfil());
+
+        configurarPanelAdmin();
     }
 
      /**
@@ -314,6 +344,101 @@ public class CuentaController implements Initializable {
                 fotoBytes == null ? "Foto eliminada" : "Foto actualizada",
                 fotoBytes == null ? "Tu foto de perfil se quitó correctamente."
                                    : "Tu foto de perfil se actualizó correctamente.");
+    }
+
+        // ============================================================
+    //  ADMINISTRACIÓN DE USUARIOS
+    // ============================================================
+
+    private void configurarPanelAdmin() {
+        panelAdminUsuarios.setVisible(true);
+        panelAdminUsuarios.setManaged(true);
+
+        if (!tablaUsuariosConfigurada) {
+            colUsuarioNombre.setCellValueFactory(data ->
+                    new javafx.beans.property.SimpleStringProperty(
+                            (data.getValue().getNombre() + " " + data.getValue().getApellidoPaterno()).trim()));
+            colUsuarioNombreUsuario.setCellValueFactory(new PropertyValueFactory<>("nombreUsuario"));
+            colUsuarioCorreo.setCellValueFactory(new PropertyValueFactory<>("correoElectronico"));
+            colUsuarioRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
+            colUsuarioEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+
+            colUsuarioAcciones.setCellFactory(col -> new TableCell<Usuario, Void>() {
+                private final Button btn = new Button();
+                {
+                    btn.setOnAction(e -> onCambiarEstadoUsuario(getTableView().getItems().get(getIndex())));
+                }
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                        return;
+                    }
+                    Usuario u = getTableView().getItems().get(getIndex());
+                    boolean activo = "Activo".equalsIgnoreCase(u.getEstado());
+                    btn.setText(activo ? "Desactivar" : "Reactivar");
+                    btn.getStyleClass().setAll(activo ? "btn-danger-compact" : "btn-primary-compact");
+                    setGraphic(btn);
+                }
+            });
+
+            Rectangle clip = new Rectangle();
+            clip.widthProperty().bind(contenedorTablaUsuarios.widthProperty());
+            clip.heightProperty().bind(contenedorTablaUsuarios.heightProperty());
+            contenedorTablaUsuarios.setClip(clip);
+
+            tablaUsuariosConfigurada = true;
+        }
+
+        cargarListaUsuarios();
+    }
+
+    private void cargarListaUsuarios() {
+        tblUsuarios.setItems(FXCollections.observableArrayList(
+                usuarioDAO.listarUsuarios(usuarioActual.getIdUsuario())));
+    }
+
+    private void onCambiarEstadoUsuario(Usuario u) {
+        boolean activo = "Activo".equalsIgnoreCase(u.getEstado());
+        String accion = activo ? "desactivar" : "reactivar";
+
+        Alert confirmacion = new Alert(AlertType.CONFIRMATION,
+                "¿Seguro que quieres " + accion + " la cuenta de "
+                        + u.getNombre() + " " + u.getApellidoPaterno() + "?");
+        confirmacion.setTitle(activo ? "Desactivar cuenta" : "Reactivar cuenta");
+        confirmacion.setHeaderText(null);
+        if (confirmacion.showAndWait().filter(b -> b == javafx.scene.control.ButtonType.OK).isEmpty()) {
+            return;
+        }
+
+        boolean ok = activo
+                ? usuarioDAO.desactivarUsuario(u.getIdUsuario())
+                : usuarioDAO.reactivarUsuario(u.getIdUsuario());
+
+        if (!ok) {
+            mostrarAlerta(AlertType.ERROR, "No se pudo " + accion,
+                    "Ocurrió un problema al actualizar el estado de esa cuenta.");
+            return;
+        }
+
+        cargarListaUsuarios();
+        mostrarAlerta(AlertType.INFORMATION, "Listo",
+                "La cuenta se " + (activo ? "desactivó" : "reactivó") + " correctamente.");
+    }
+
+    @FXML
+    private void onToggleTablaUsuarios(ActionEvent event) {
+        tablaUsuariosVisible = !tablaUsuariosVisible;
+        double destino = tablaUsuariosVisible ? ALTURA_TABLA_USUARIOS : 0.0;
+
+        Timeline animacion = new Timeline(
+                new KeyFrame(Duration.millis(260),
+                        new KeyValue(contenedorTablaUsuarios.prefHeightProperty(), destino, Interpolator.EASE_BOTH))
+        );
+        animacion.play();
+
+        btnToggleUsuarios.setText(tablaUsuariosVisible ? "Ocultar usuarios ▴" : "Ver usuarios ▾");
     }
 
     private void mostrarAlerta(AlertType tipo, String titulo, String mensaje) {

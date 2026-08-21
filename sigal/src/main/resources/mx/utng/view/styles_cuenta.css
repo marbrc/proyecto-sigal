@@ -250,3 +250,89 @@
 .btn-danger-compact:hover {
     -fx-background-color: linear-gradient(to right, #e64d4d, #ff8080);
 }
+
+/* ---------------- TABLA DE USUARIOS (Admin) ---------------- */
+
+.tabla-usuarios {
+    -fx-background-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 0;
+}
+
+.tabla-usuarios .column-header-background {
+    -fx-background-color: #0a1120;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.tabla-usuarios .column-header,
+.tabla-usuarios .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(79,195,255,0.15) transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-size: 34;
+}
+
+.tabla-usuarios .column-header .label {
+    -fx-text-fill: #4fc3ff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: center;
+}
+
+.tabla-usuarios .table-row-cell {
+    -fx-background-color: #0d1526;
+    -fx-border-color: transparent transparent rgba(79,195,255,0.08) transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-table-cell-border-color: transparent;
+}
+
+.tabla-usuarios .table-row-cell:odd {
+    -fx-background-color: #0b111f;
+}
+
+.tabla-usuarios .table-row-cell:hover {
+    -fx-background-color: rgba(79,195,255,0.10);
+}
+
+.tabla-usuarios .table-row-cell:selected {
+    -fx-background-color: rgba(79,195,255,0.20);
+}
+
+.tabla-usuarios .table-cell {
+    -fx-text-fill: #e6eefc;
+    -fx-font-size: 11px;
+    -fx-padding: 8 10 8 10;
+    -fx-alignment: CENTER;
+}
+
+.tabla-usuarios .table-row-cell:empty {
+    -fx-background-color: #0d1526;
+}
+
+.tabla-usuarios .virtual-flow .scroll-bar:vertical,
+.tabla-usuarios .virtual-flow .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.tabla-usuarios .virtual-flow .scroll-bar .thumb {
+    -fx-background-color: rgba(79,195,255,0.35);
+    -fx-background-radius: 6;
+}
+
+.tabla-usuarios .virtual-flow .scroll-bar .increment-button,
+.tabla-usuarios .virtual-flow .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.tabla-usuarios .column-resize-line {
+    -fx-background-color: rgba(79,195,255,0.40);
+}
+
+.tabla-usuarios .table-column-header-arrow {
+    -fx-background-color: #4fc3ff;
+}
