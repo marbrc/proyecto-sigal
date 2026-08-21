@@ -77,6 +77,8 @@
                     <columns>
                         <TableColumn fx:id="colFecha" prefWidth="85.0" text="Fecha" />
                         <TableColumn fx:id="colEspacio" prefWidth="110.0" text="Espacio" />
+                        <TableColumn fx:id="colHoraInicio" prefWidth="105.0" text="Hora Inicio" />
+                        <TableColumn fx:id="colHoraTermino" prefWidth="170.0" text="Hora Termino" />                        
                         <TableColumn fx:id="colTipo" prefWidth="105.0" text="Tipo de aviso" />
                         <TableColumn fx:id="colDescripcion" prefWidth="170.0" text="Descripción" />
                         <TableColumn fx:id="colComentarios" prefWidth="150.0" text="Comentarios" />

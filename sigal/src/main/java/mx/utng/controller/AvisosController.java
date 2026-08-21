@@ -30,8 +30,10 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import mx.utng.dao.AvisoDAO;
@@ -67,6 +69,8 @@ public class AvisosController implements Initializable {
     @FXML private TableView<Aviso> tblAvisos;
     @FXML private TableColumn<Aviso, String> colFecha;
     @FXML private TableColumn<Aviso, String> colEspacio;
+    @FXML private TableColumn<Aviso, String> colHoraInicio;
+    @FXML private TableColumn<Aviso, String> colHoraTermino;
     @FXML private TableColumn<Aviso, String> colTipo;
     @FXML private TableColumn<Aviso, String> colDescripcion;
     @FXML private TableColumn<Aviso, String> colComentarios;
@@ -103,8 +107,8 @@ public class AvisosController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         cargarCatalogos();
-        configurarTabla();
-        cargarDatos();
+        configurarTabla();             // Aquí se crea 'avisosFiltrados'
+        cargarDatos();                 // Aquí se llena la lista 'avisos' con la BD
         configurarFiltrosIniciales();
     }
 
@@ -131,6 +135,8 @@ public class AvisosController implements Initializable {
     private void configurarTabla() {
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         colEspacio.setCellValueFactory(new PropertyValueFactory<>("espacio"));
+        colHoraInicio.setCellValueFactory(new PropertyValueFactory<>("horaInicio"));
+        colHoraTermino.setCellValueFactory(new PropertyValueFactory<>("horaTermino"));
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipoAviso"));
         colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         colComentarios.setCellValueFactory(new PropertyValueFactory<>("comentarios"));
@@ -141,6 +147,7 @@ public class AvisosController implements Initializable {
         colAcciones.setCellFactory(col -> new AccionesCell());
 
         avisosFiltrados = new FilteredList<>(avisos, a -> true);
+
         tblAvisos.setItems(avisosFiltrados);
     }
 
@@ -164,20 +171,24 @@ public class AvisosController implements Initializable {
     @FXML
     private void onBuscar() {
         buscar();
-        aplicarFiltros();
     }
 
     private void buscar() {
 
     Integer idEspacio = null;
-    if (cmbFiltroEspacio.getValue() != null) {
-        idEspacio = mapaEspacios.get(cmbFiltroEspacio.getValue());
+    String espacioSel = cmbFiltroEspacio.getValue();
+    if (espacioSel != null && !espacioSel.equals("Todos")) {
+        idEspacio = mapaEspacios.get(espacioSel);
     }
 
-    String tipo = (cmbFiltroTipo.getValue() != null) ? cmbFiltroTipo.getValue().toString() : null;
-    String descripcion = txtDescripcion.getText();
-    String comentarios = txtComentarios.getText();
-    String estado = (cmbFiltroEstado.getValue() != null) ? cmbFiltroEstado.getValue().toString() : null;
+    String tipoSel = cmbFiltroTipo.getValue();
+    String tipo = (tipoSel != null && !tipoSel.equals("Todos")) ? tipoSel : null;
+
+    String estadoSel = cmbFiltroEstado.getValue();
+    String estado = (estadoSel != null && !estadoSel.equals("Todos")) ? estadoSel : null;
+
+    String descripcion = (txtDescripcion != null) ? txtDescripcion.getText() : "";
+    String comentarios = (txtComentarios != null) ? txtComentarios.getText() : "";
 
     LocalDate fechaDesde = dpDesde.getValue();
     LocalDate fechaHasta = dpHasta.getValue();
@@ -187,12 +198,10 @@ public class AvisosController implements Initializable {
         tipo, descripcion, comentarios,
         estado,
         fechaDesde, fechaHasta
-);
+    );
 
-
-avisos.setAll(resultados);
-lblContador.setText(String.valueOf(resultados.size()));
-
+    avisos.setAll(resultados);
+    lblContador.setText(String.valueOf(resultados.size()));
 }
 
 
@@ -289,107 +298,164 @@ private void aplicarFiltros() {
      * Descripción, Comentarios) con la misma temática visual del
      * resto del sistema.
      */
-    private Dialog<Aviso> construirDialogoNuevoAviso() {
-        Dialog<Aviso> dialogo = new Dialog<>();
-        dialogo.setTitle("Nuevo aviso");
-        dialogo.setHeaderText("Registrar nuevo aviso");
+private Dialog<Aviso> construirDialogoNuevoAviso() {
+    Dialog<Aviso> dialogo = new Dialog<>();
+    dialogo.setTitle("Nuevo aviso");
+    dialogo.setHeaderText("Registrar nuevo aviso");
 
-        DialogPane panel = dialogo.getDialogPane();
-        panel.getStylesheets().add(getClass().getResource("/mx/utng/view/styles_avisos.css").toExternalForm());
-        panel.getStyleClass().add("themed-dialog");
-        panel.setMinWidth(440.0);
-        panel.setMaxWidth(900.0);
-        panel.setMaxHeight(620.0);
+    DialogPane panel = dialogo.getDialogPane();
+    panel.getStylesheets().add(getClass().getResource("/mx/utng/view/styles_avisos.css").toExternalForm());
+    panel.getStyleClass().add("themed-dialog");
+    panel.setMinWidth(440.0);
+    panel.setMaxWidth(900.0);
+    panel.setMaxHeight(700.0); // Aumentado para acomodar nuevos campos
 
-        Label icono = new Label("📢");
-        icono.getStyleClass().add("header-icon");
-        StackPane cajaIcono = new StackPane(icono);
-        cajaIcono.getStyleClass().add("header-icon-box");
-        panel.setGraphic(cajaIcono);
+    Label icono = new Label("📢");
+    icono.getStyleClass().add("header-icon");
+    StackPane cajaIcono = new StackPane(icono);
+    cajaIcono.getStyleClass().add("header-icon-box");
+    panel.setGraphic(cajaIcono);
 
-        ButtonType btnGuardarType = new ButtonType("Guardar", ButtonData.OK_DONE);
-        ButtonType btnCancelarType = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
-        panel.getButtonTypes().addAll(btnCancelarType, btnGuardarType);
+    ButtonType btnGuardarType = new ButtonType("Guardar", ButtonData.OK_DONE);
+    ButtonType btnCancelarType = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
+    panel.getButtonTypes().addAll(btnCancelarType, btnGuardarType);
 
-        ComboBox<String> cmbTipo = new ComboBox<>();
-        cmbTipo.getItems().addAll(TIPOS);
-        cmbTipo.setPromptText("Selecciona un tipo");
-        cmbTipo.getStyleClass().add("dialog-combo");
-        cmbTipo.setMaxWidth(Double.MAX_VALUE);
+    ComboBox<String> cmbTipo = new ComboBox<>();
+    cmbTipo.getItems().addAll(TIPOS);
+    cmbTipo.setPromptText("Selecciona un tipo");
+    cmbTipo.getStyleClass().add("dialog-combo");
+    cmbTipo.setMaxWidth(Double.MAX_VALUE);
 
-        ComboBox<String> cmbEspacio = new ComboBox<>();
-        cmbEspacio.getItems().add("General (ningún espacio en particular)");
-        cmbEspacio.getItems().addAll(mapaEspacios.keySet());
-        cmbEspacio.setValue("General (ningún espacio en particular)");
-        cmbEspacio.getStyleClass().add("dialog-combo");
-        cmbEspacio.setMaxWidth(Double.MAX_VALUE);
+    ComboBox<String> cmbEspacio = new ComboBox<>();
+    cmbEspacio.getItems().add("General (ningún espacio en particular)");
+    cmbEspacio.getItems().addAll(mapaEspacios.keySet());
+    cmbEspacio.setValue("General (ningún espacio en particular)");
+    cmbEspacio.getStyleClass().add("dialog-combo");
+    cmbEspacio.setMaxWidth(Double.MAX_VALUE);
 
-        TextArea txtDescripcion = new TextArea();
-        txtDescripcion.setPromptText("Describe el aviso o la incidencia...");
-        txtDescripcion.setPrefRowCount(3);
-        txtDescripcion.setWrapText(true);
-        txtDescripcion.getStyleClass().add("dialog-textarea");
+    txtDescripcion = new TextArea();
+    txtDescripcion.setPromptText("Describe el aviso o la incidencia...");
+    txtDescripcion.setPrefRowCount(3);
+    txtDescripcion.setWrapText(true);
+    txtDescripcion.getStyleClass().add("dialog-textarea");
 
-        TextArea txtComentarios = new TextArea();
-        txtComentarios.setPromptText("Comentarios adicionales (opcional)...");
-        txtComentarios.setPrefRowCount(2);
-        txtComentarios.setWrapText(true);
-        txtComentarios.getStyleClass().add("dialog-textarea");
+    txtComentarios = new TextArea();
+    txtComentarios.setPromptText("Comentarios adicionales (opcional)...");
+    txtComentarios.setPrefRowCount(2);
+    txtComentarios.setWrapText(true);
+    txtComentarios.getStyleClass().add("dialog-textarea");
 
-        VBox contenido = new VBox(12,
-                campoDialogo("Tipo de aviso *", cmbTipo),
-                campoDialogo("Espacio relacionado", cmbEspacio),
-                campoDialogo("Descripción *", txtDescripcion),
-                campoDialogo("Comentarios", txtComentarios)
+    // NUEVOS CAMPOS: Date Picker y Text Fields para horas
+    DatePicker fechaPicker = new DatePicker(LocalDate.now());
+    fechaPicker.getStyleClass().add("dialog-combo");
+    fechaPicker.setMaxWidth(Double.MAX_VALUE);
+
+    TextField txtHoraInicio = new TextField();
+    txtHoraInicio.setPromptText("HH:mm (ej: 08:30)");
+    txtHoraInicio.getStyleClass().add("dialog-textfield");
+    txtHoraInicio.setMaxWidth(Double.MAX_VALUE);
+
+    TextField txtHoraTermino = new TextField();
+    txtHoraTermino.setPromptText("HH:mm (ej: 17:00)");
+    txtHoraTermino.getStyleClass().add("dialog-textfield");
+    txtHoraTermino.setMaxWidth(Double.MAX_VALUE);
+
+    // Contenedor para las horas (lado a lado)
+    HBox cajasHoras = new HBox(10,
+            campoDialogo("Hora de inicio *", txtHoraInicio),
+            campoDialogo("Hora de término *", txtHoraTermino)
+    );
+    cajasHoras.setHgrow(txtHoraInicio, Priority.ALWAYS);
+    cajasHoras.setHgrow(txtHoraTermino, Priority.ALWAYS);
+
+    VBox contenido = new VBox(12,
+            campoDialogo("Tipo de aviso *", cmbTipo),
+            campoDialogo("Espacio relacionado", cmbEspacio),
+            campoDialogo("Fecha *", fechaPicker),
+            cajasHoras,
+            campoDialogo("Descripción *", txtDescripcion),
+            campoDialogo("Comentarios", txtComentarios)
+    );
+    contenido.setPadding(new Insets(6, 0, 0, 0));
+    panel.setContent(contenido);
+
+    // Validar antes de cerrar
+    Button btnGuardarNode = (Button) panel.lookupButton(btnGuardarType);
+    btnGuardarNode.addEventFilter(javafx.event.ActionEvent.ACTION, evento -> {
+        String errorMensaje = "";
+
+        if (cmbTipo.getValue() == null) {
+            errorMensaje += "- Selecciona el tipo de aviso\n";
+        }
+        if (txtDescripcion.getText() == null || txtDescripcion.getText().trim().isEmpty()) {
+            errorMensaje += "- Escribe una descripción\n";
+        }
+        if (fechaPicker.getValue() == null) {
+            errorMensaje += "- Selecciona una fecha\n";
+        }
+        if (!esFormatoHoraValido(txtHoraInicio.getText())) {
+            errorMensaje += "- Hora de inicio inválida (formato: HH:mm)\n";
+        }
+        if (!esFormatoHoraValido(txtHoraTermino.getText())) {
+            errorMensaje += "- Hora de término inválida (formato: HH:mm)\n";
+        }
+
+        if (!errorMensaje.isEmpty()) {
+            mostrarAlerta(AlertType.WARNING, "Campos incompletos o inválidos",
+                    "Completa los siguientes campos:\n" + errorMensaje);
+            evento.consume();
+        }
+    });
+
+    dialogo.setResultConverter(boton -> {
+        if (boton != btnGuardarType) {
+            return null;
+        }
+
+        Aviso nuevo = new Aviso(
+                0,
+                fechaPicker.getValue().format(FORMATO_FECHA_UI),
+                "General",
+                cmbTipo.getValue(),
+                txtDescripcion.getText().trim(),
+                txtComentarios.getText() == null ? "" : txtComentarios.getText().trim(),
+                "No leído",
+                txtHoraInicio.getText().trim(),
+                txtHoraTermino.getText().trim()
         );
-        contenido.setPadding(new Insets(6, 0, 0, 0));
-        panel.setContent(contenido);
 
-        // Validar antes de cerrar: si faltan campos obligatorios, no dejamos avanzar.
-        Button btnGuardarNode = (Button) panel.lookupButton(btnGuardarType);
-        btnGuardarNode.addEventFilter(javafx.event.ActionEvent.ACTION, evento -> {
-            if (cmbTipo.getValue() == null || txtDescripcion.getText() == null || txtDescripcion.getText().trim().isEmpty()) {
-                mostrarAlerta(AlertType.WARNING, "Campos incompletos",
-                        "Selecciona el tipo de aviso y escribe una descripción antes de guardar.");
-                evento.consume();
-            }
-        });
+        // Guardar horas (ajusta según tu clase Aviso)
+        nuevo.setHoraInicio(txtHoraInicio.getText().trim());
+        nuevo.setHoraTermino(txtHoraTermino.getText().trim());
 
-        dialogo.setResultConverter(boton -> {
-            if (boton != btnGuardarType) {
-                return null;
-            }
+        String espacioElegido = cmbEspacio.getValue();
+        if (espacioElegido != null && mapaEspacios.containsKey(espacioElegido)) {
+            nuevo.setIdEspacio(mapaEspacios.get(espacioElegido));
+            nuevo.setEspacio(espacioElegido);
+        } else {
+            nuevo.setIdEspacio(null);
+        }
 
-            Aviso nuevo = new Aviso(
-                    0,
-                    LocalDate.now().format(FORMATO_FECHA_UI),
-                    "General",
-                    cmbTipo.getValue(),
-                    txtDescripcion.getText().trim(),
-                    txtComentarios.getText() == null ? "" : txtComentarios.getText().trim(),
-                    "No leído"
-            );
+        return nuevo;
+    });
 
-            String espacioElegido = cmbEspacio.getValue();
-            if (espacioElegido != null && mapaEspacios.containsKey(espacioElegido)) {
-                nuevo.setIdEspacio(mapaEspacios.get(espacioElegido));
-                nuevo.setEspacio(espacioElegido);
-            } else {
-                nuevo.setIdEspacio(null);
-            }
+    return dialogo;
+}
 
-            return nuevo;
-        });
-
-        return dialogo;
+// Método auxiliar para validar formato HH:mm
+private boolean esFormatoHoraValido(String hora) {
+    if (hora == null || hora.trim().isEmpty()) {
+        return false;
     }
+    return hora.trim().matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$");
+}
 
-    private VBox campoDialogo(String etiqueta, javafx.scene.Node campo) {
-        Label lbl = new Label(etiqueta);
-        lbl.getStyleClass().add("dialog-field-label");
-        VBox contenedor = new VBox(5, lbl, campo);
-        return contenedor;
-    }
+private VBox campoDialogo(String etiqueta, javafx.scene.Node campo) {
+    Label lbl = new Label(etiqueta);
+    lbl.getStyleClass().add("dialog-field-label");
+    VBox contenedor = new VBox(5, lbl, campo);
+    return contenedor;
+}
 
     // ============================================================
     //  MARCAR COMO LEIDO

@@ -1,12 +1,10 @@
 package mx.utng.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -64,91 +62,89 @@ public class AvisoDAO {
      * @param idUsuario  ID_Usuario en sesion (quien registra el aviso)
      * @return true si se guardo correctamente
      */
-    public boolean insertar(Aviso a, Integer idEspacio, int idUsuario) {
-        String sql = """
-                INSERT INTO tb_aviso
-                    (TipoAviso, Descripcion, Comentarios, FechaHora, Estado, ID_Espacio, ID_Usuario)
-                VALUES (?, ?, ?, ?, 'No leído', ?, ?)
-                """;
+public boolean insertar(Aviso nuevo, Integer idEspacio, int idUsuario) {
+    String sql = "INSERT INTO tb_aviso (FechaHora, HoraInicio, HoraTermino, ID_Espacio, ID_Usuario, TipoAviso, Descripcion, Comentarios, Estado) "
+               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection con = Conexion.conectar();
+         PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-            ps.setString(1, a.getTipoAviso());
-            ps.setString(2, a.getDescripcion());
-            ps.setString(3, (a.getComentarios() == null || a.getComentarios().isBlank()) ? null : a.getComentarios());
-            ps.setDate(4, Date.valueOf(LocalDate.now()));
-            if (idEspacio != null) ps.setInt(5, idEspacio); else ps.setNull(5, Types.INTEGER);
-            ps.setInt(6, idUsuario);
+        String fechaOriginal = nuevo.getFecha();
+        LocalDate fecha = LocalDate.parse(fechaOriginal, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        pstmt.setString(1, fecha.toString());
+        pstmt.setString(2, nuevo.getHoraInicio());
+        pstmt.setString(3, nuevo.getHoraTermino());
 
-            int filasAfectadas = ps.executeUpdate();
-            if (filasAfectadas == 0) {
-                return false;
-            }
-
-            try (ResultSet llaves = ps.getGeneratedKeys()) {
-                if (llaves.next()) {
-                    a.setIdAviso(llaves.getInt(1));
-                }
-            }
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+        if (idEspacio != null) {
+            pstmt.setInt(4, idEspacio);
+        } else {
+            pstmt.setNull(4, java.sql.Types.INTEGER);
         }
+
+        pstmt.setInt(5, idUsuario);
+        pstmt.setString(6, nuevo.getTipoAviso());
+        pstmt.setString(7, nuevo.getDescripcion());
+        pstmt.setString(8, nuevo.getComentarios());
+        pstmt.setString(9, nuevo.getEstado());
+
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
+
 
     // ============================================================
     //  LISTAR (tabla "Historial de avisos")
     // ============================================================
 
-    public ObservableList<Aviso> listarTodos() {
-        ObservableList<Aviso> lista = FXCollections.observableArrayList();
+public List<Aviso> listarTodos() {
+    List<Aviso> lista = new ArrayList<>();
+    String sql = "SELECT a.ID_Aviso, a.FechaHora, a.HoraInicio, a.HoraTermino, "
+               + "e.NombreEspacio, a.TipoAviso, a.Descripcion, a.Comentarios, a.Estado "
+               + "FROM tb_aviso a "
+               + "LEFT JOIN tb_espacio e ON a.ID_Espacio = e.ID_Espacio "
+               + "ORDER BY a.ID_Aviso DESC";
 
-        String sql = """
-                SELECT av.ID_Aviso, av.TipoAviso, av.Descripcion, av.Comentarios,
-                       av.FechaHora, av.Estado, av.ID_Espacio,
-                       e.NombreEspacio
-                FROM tb_aviso av
-                LEFT JOIN tb_espacio e ON e.ID_Espacio = av.ID_Espacio
-                ORDER BY av.FechaHora DESC, av.ID_Aviso DESC
-                """;
+    try (Connection con = Conexion.conectar();
+         Statement stmt = con.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                String nombreEspacio = rs.getString("NombreEspacio");
-                if (nombreEspacio == null || nombreEspacio.isBlank()) {
-                    nombreEspacio = "General";
-                }
-                String comentarios = rs.getString("Comentarios");
-
-                Aviso aviso = new Aviso(
-                        rs.getInt("ID_Aviso"),
-                        rs.getTimestamp("FechaHora").toLocalDateTime().format(FORMATO_FECHA_UI),
-                        nombreEspacio,
-                        rs.getString("TipoAviso"),
-                        rs.getString("Descripcion"),
-                        comentarios == null ? "" : comentarios,
-                        rs.getString("Estado")
-                );
-
-                int idEspacio = rs.getInt("ID_Espacio");
-                aviso.setIdEspacio(rs.wasNull() ? null : idEspacio);
-
-                lista.add(aviso);
+        while (rs.next()) {
+            String fechaCruda = rs.getString("FechaHora");
+            String fechaFormateada;
+            try {
+                LocalDate f = LocalDate.parse(fechaCruda.substring(0, 10));
+                fechaFormateada = f.format(FORMATO_FECHA_UI);
+            } catch (Exception ex) {
+                fechaFormateada = fechaCruda;
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            String nombreEspacio = rs.getString("NombreEspacio");
+            if (nombreEspacio == null || nombreEspacio.isBlank()) {
+                nombreEspacio = "General";
+            }
 
-        return lista;
+            Aviso aviso = new Aviso(
+                    rs.getInt("ID_Aviso"),
+                    fechaFormateada,
+                    nombreEspacio,
+                    rs.getString("TipoAviso"),
+                    rs.getString("Descripcion"),
+                    rs.getString("Comentarios"),
+                    rs.getString("Estado"),
+                    rs.getString("HoraInicio"),
+                    rs.getString("HoraTermino")
+            );
+            lista.add(aviso);
+        }   
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
-
+    return lista;
+}
     // ============================================================
     //  RESUMEN (conteo por tipo de aviso, para el panel lateral)
     // ============================================================
@@ -245,7 +241,7 @@ public class AvisoDAO {
 
         String sql = """
                 SELECT av.ID_Aviso, av.TipoAviso, av.Descripcion, av.Comentarios,
-                       av.FechaHora, av.Estado, av.ID_Espacio,
+                       av.FechaHora,av.HoraInicio, av.HoraTermino, av.Estado, av.ID_Espacio,
                        e.NombreEspacio
                 FROM tb_aviso av
                 LEFT JOIN tb_espacio e ON e.ID_Espacio = av.ID_Espacio
@@ -271,7 +267,9 @@ public class AvisoDAO {
                         rs.getString("TipoAviso"),
                         rs.getString("Descripcion"),
                         comentarios == null ? "" : comentarios,
-                        rs.getString("Estado")
+                        rs.getString("Estado"),
+                        rs.getString("HoraInicio"),
+                        rs.getString("HoraTermino")
                 );
 
                 int idEspacio = rs.getInt("ID_Espacio");
@@ -324,6 +322,8 @@ public class AvisoDAO {
         SELECT
             a.ID_Aviso,
             a.FechaHora,
+            a.HoraInicio,
+            a.HoraTermino,
             a.TipoAviso,
             a.Descripcion,
             a.Comentarios,
@@ -388,10 +388,13 @@ public class AvisoDAO {
 
                 // Convertir DATETIME a String compatible con tu columna colFecha (String)
                 var fechaHora = rs.getTimestamp("FechaHora").toLocalDateTime();
-                String fecha = fechaHora.toString().replace("T", " ").substring(0, 16); // "yyyy-MM-dd HH:mm"
+                String fecha = fechaHora.toLocalDate().format(FORMATO_FECHA_UI); // "dd/MM/yyyy"; // "yyyy-MM-dd HH:mm"
 
                 String espacio = rs.getString("NombreEspacio");
                 if (espacio == null || espacio.isBlank()) espacio = "—";
+
+                String horaInicio = rs.getString("HoraInicio");
+                String horaTermino = rs.getString("HoraTermino");
 
                 String tipo = rs.getString("TipoAviso");
                 String desc = rs.getString("Descripcion");
@@ -409,7 +412,9 @@ public class AvisoDAO {
                         tipo,
                         desc,
                         com,
-                        est
+                        est,
+                        horaInicio,
+                        horaTermino
                 );
 
                 lista.add(fila);
