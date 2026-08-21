@@ -134,29 +134,23 @@
 
         </HBox>
 
-        <!-- Administración de usuarios -->
-        <VBox fx:id="panelAdminUsuarios" managed="false" spacing="12.0" styleClass="panel-card-compact-sm, panel-glow-blue" visible="false">
+        <!-- Opciones de la cuenta (solo aplican a la propia cuenta) -->
+        <VBox fx:id="panelOpcionesCuenta" spacing="12.0" styleClass="panel-card-compact-sm, panel-glow-blue">
             <HBox alignment="CENTER_LEFT" spacing="10.0">
-                <Label styleClass="panel-title" text="Administración de usuarios" HBox.hgrow="ALWAYS" />
-                <Button fx:id="btnToggleUsuarios" onAction="#onToggleTablaUsuarios" styleClass="btn-secondary-compact" text="Ver usuarios ▾" />
+                <Label styleClass="panel-title" text="Opciones de la cuenta" />
             </HBox>
-            <Label styleClass="field-hint" text="Desactiva cuentas de usuarios que ya se hayan registrado en el sistema." wrapText="true" />
+            <Label fx:id="lblEstadoCuentaActual" styleClass="field-hint" text="Estado actual: Activo" wrapText="true" />
 
-            <StackPane fx:id="contenedorTablaUsuarios" alignment="TOP_LEFT" minHeight="0.0" prefHeight="0.0">
-                <TableView fx:id="tblUsuarios" prefHeight="260.0" styleClass="tabla-usuarios">
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                    </columnResizePolicy>
-                    <columns>
-                        <TableColumn fx:id="colUsuarioNombre" prefWidth="200.0" text="Nombre" />
-                        <TableColumn fx:id="colUsuarioNombreUsuario" prefWidth="140.0" text="Usuario" />
-                        <TableColumn fx:id="colUsuarioCorreo" prefWidth="220.0" text="Correo" />
-                        <TableColumn fx:id="colUsuarioRol" prefWidth="110.0" text="Rol" />
-                        <TableColumn fx:id="colUsuarioEstado" prefWidth="90.0" text="Estado" />
-                        <TableColumn fx:id="colUsuarioAcciones" prefWidth="130.0" text="Acciones" />
-                    </columns>
-                </TableView>
-            </StackPane>
+            <HBox spacing="16.0">
+                <VBox spacing="6.0" HBox.hgrow="ALWAYS">
+                    <Label styleClass="field-hint" text="La desactivación es temporal: no podrás iniciar sesión hasta que se reactive." wrapText="true" />
+                    <Button fx:id="btnDesactivarMiCuenta" onAction="#onDesactivarMiCuenta" maxWidth="Infinity" styleClass="btn-secondary-compact" text="Desactivar mi cuenta temporalmente" />
+                </VBox>
+                <VBox spacing="6.0" HBox.hgrow="ALWAYS">
+                    <Label styleClass="field-hint" text="Eliminar tu cuenta es permanente y no se puede deshacer." wrapText="true" />
+                    <Button fx:id="btnEliminarMiCuenta" onAction="#onEliminarMiCuenta" maxWidth="Infinity" styleClass="btn-danger-compact" text="Eliminar mi cuenta" />
+                </VBox>
+            </HBox>
         </VBox>
 
     </VBox>

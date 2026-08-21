@@ -1,0 +1,133 @@
+/*
+ * Estilo blanco/claro para la ventana emergente "Importar horario desde Excel"
+ * Coincide con la paleta del sistema SIGAL: fondo blanco, acentos en azul.
+ */
+
+.modal-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-border-color: #E3E3E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-effect: none;
+}
+
+.modal-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A18;
+}
+
+.modal-subtitle {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: #6B6B66;
+}
+
+.btn-close {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6B6B66;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-padding: 2 6 2 6;
+}
+.btn-close:hover {
+    -fx-text-fill: #1A1A18;
+}
+
+.step-badge {
+    -fx-min-width: 22px;
+    -fx-min-height: 22px;
+    -fx-max-width: 22px;
+    -fx-max-height: 22px;
+    -fx-background-color: #185FA5;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-background-radius: 50%;
+}
+
+.info-box {
+    -fx-background-color: #E6F1FB;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12 10 42;
+    -fx-alignment: center-left;
+}
+
+.info-box-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #0C447C;
+}
+
+.drop-area {
+    -fx-background-color: #FAFAF8;
+    -fx-background-radius: 8;
+    -fx-border-color: #B4B2A9;
+    -fx-border-style: segments(6, 4);
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-padding: 24 16 24 16;
+    -fx-min-height: 130px;
+}
+
+.drop-area:hover {
+    -fx-border-color: #185FA5;
+}
+
+.drop-icon {
+    -fx-font-size: 20px;
+    -fx-text-fill: #888780;
+}
+
+.drop-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B6B66;
+}
+
+.drop-text-muted {
+    -fx-font-size: 12px;
+    -fx-text-fill: #B4B2A9;
+}
+
+.drop-file-name {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: #0F6E56;
+    -fx-font-weight: bold;
+}
+
+.error-text {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: #A32D2D;
+}
+
+.btn-secondary {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #B4B2A9;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-text-fill: #1A1A18;
+    -fx-font-size: 13px;
+    -fx-padding: 7 14 7 14;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover {
+    -fx-background-color: #F1EFE8;
+}
+
+.btn-primary {
+    -fx-background-color: #185FA5;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+}
+.btn-primary:hover {
+    -fx-background-color: #0C447C;
+}
+.btn-primary:disabled {
+    -fx-background-color: #D3D1C7;
+    -fx-text-fill: #888780;
+    -fx-cursor: default;
+}

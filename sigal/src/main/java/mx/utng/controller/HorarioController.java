@@ -1076,22 +1076,33 @@ public class HorarioController implements javafx.fxml.Initializable {
                         .plusMinutes(minutos)
                         .format(FORMATO_HORA);
     }
-    private boolean horarioValido(
-            String horario) {
-        try {
-            String[] partes =
-                    horario.split("-");
-            if (partes.length != 2) {
-                return false;
-            }
-            return parseHora(partes[0])
-                    .isBefore(
-                            parseHora(partes[1])
-                    );
-        } catch (Exception e) {
+    private boolean horarioValido(String horario) {
+    try {
+        String[] partes = horario.split("-");
+
+        if (partes.length != 2) {
             return false;
         }
+
+        LocalTime inicio = parseHora(partes[0]);
+        LocalTime fin = parseHora(partes[1]);
+
+        // La hora final debe ser después de la hora inicial
+        if (!inicio.isBefore(fin)) {
+            return false;
+        }
+
+        // La duración máxima permitida es de 50 minutos
+        long minutos = java.time.Duration
+                .between(inicio, fin)
+                .toMinutes();
+
+        return minutos <= 50;
+
+    } catch (Exception e) {
+        return false;
     }
+}
     private void validarMovimiento(
             String horario,
             int minutos) {

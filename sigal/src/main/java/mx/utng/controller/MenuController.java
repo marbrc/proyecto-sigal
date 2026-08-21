@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
-
+ 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.RotateTransition;
@@ -30,7 +30,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import mx.utng.util.AvatarUtil;
 import mx.utng.util.CerrarSesionDialog;
-
+ 
 /**
  * =================================================================
  * MenuController
@@ -43,19 +43,19 @@ import mx.utng.util.CerrarSesionDialog;
  * =================================================================
  */
 public class MenuController {
-
+ 
     //====================================================
     // COMPONENTES FXML
     //====================================================
-
+ 
     // ---- Layout general ----
     @FXML private javafx.scene.layout.BorderPane mainLayout;
-
+ 
     // ---- Panel central para cargar modulos (ver nota de la clase y td eso) ----
     // Si FXML todavia no tiene este AnchorPane en este campo
     //  queda en null y cargarModulo() lo detecta y avisa
     @FXML private StackPane contentPane;
-
+ 
     // ---- Sidebar: navegacion ----
     @FXML private VBox sidebarRoot;
     @FXML private Button btnToggleSidebar;
@@ -74,14 +74,14 @@ public class MenuController {
     @FXML private Button navCuenta;
     @FXML private Button navAcerca;
     @FXML private Button btnCerrarSesion;
-
+ 
     // ---- Topbar ----
     @FXML private Label lblBienvenida;
     @FXML private Label lblRol;
     @FXML private Label lblFechaLarga;
     @FXML private Label lblDiaSemana;
     @FXML private Label lblHora;
-
+ 
     // ---- Menu desplegable de cuenta ----
     @FXML private HBox chipCuenta;
     @FXML private StackPane scrimCuenta;
@@ -92,74 +92,74 @@ public class MenuController {
     @FXML private ImageView imgAvatarChip;
     @FXML private Node iconoAvatarPanel;
     @FXML private ImageView imgAvatarPanel;
-
-
+ 
+ 
     //====================================================
     // VARIABLES GLOBALES
     //====================================================
-
+ 
     /** Localizacion usada para formatear fecha/hora en español */
     private static final Locale LOCALE_ES = new Locale("es", "MX");
-
+ 
     /** Formato de hora tipo "20:45" (24 horas) */
     private static final DateTimeFormatter FORMATO_HORA =
             DateTimeFormatter.ofPattern("HH:mm", LOCALE_ES);
-
+ 
     /** Ruta base donde viven todas las vistas FXML */
     private static final String RUTA_VISTAS = "/mx/utng/view/";
-
-
+ 
+ 
     /** Timeline del reloj en vivo time reeeal */
     private Timeline timelineReloj;
-
+ 
     /** Nombre de usuario actualmente en sesion (simulado por ahora) */
     private String usuarioActual = "Usuario";
-
+ 
     /** Rol del usuario actualmente en sesion (simulado por ahora) */
     private String rolActual = "Usuario";
-
+ 
     /** ID_Usuario real (de tb_usuario) del usuario en sesion, para guardar asignaciones/avisos */
     private int idUsuarioActual = 0;
-
+ 
     /** Correo electrónico del usuario en sesion (para la tarjeta de Ajustes) */
     private String correoActual = "";
-
+ 
     /** Momento en el que inició esta sesión (para mostrar "último acceso" en Ajustes) */
     private java.time.LocalDateTime horaInicioSesion;
-
+ 
     /** Foto de perfil del usuario en sesión (bytes tal cual vienen de tb_usuario.FotoPerfil). Puede ser null. */
     private byte[] fotoPerfilActual;
-
+ 
     /** true cuando el sidebar esta colapsado (solo iconos) */
     private boolean sidebarColapsado = false;
-
+ 
     /** Ancho del sidebar expandido (con etiquetas de texto) */
     private static final double SIDEBAR_ANCHO_EXPANDIDO = 252.0;
-
+ 
     /** Ancho del sidebar colapsado (solo iconos) */
     private static final double SIDEBAR_ANCHO_COLAPSADO = 76.0;
-
+ 
     /** Tamaño del logo con el sidebar expandido / colapsado */
     private static final double LOGO_TAMANO_EXPANDIDO = 96.0;
     private static final double LOGO_TAMANO_COLAPSADO = 40.0;
-
-
-
+ 
+ 
+ 
 //====================================================
 // INITIALIZE
 //====================================================
-
+ 
     @FXML
     public void initialize() {
-
+ 
         iniciarReloj();
         cargarUsuario();
         configurarEfectosSidebar();
         cargarModulo("fx_inicio");
-
+ 
     }
-
-
+ 
+ 
       /**
      * Carga los datos del usuario en sesion (nombre y rol) en el topbar
      *
@@ -174,7 +174,7 @@ public class MenuController {
         if (lblCuentaNombre != null) lblCuentaNombre.setText(usuarioActual);
         if (lblCuentaRol != null) lblCuentaRol.setText("Rol: " + rolActual);
     }
-
+ 
     /**
      * Actualiza el encabezado del topbar (lblBienvenida / lblRol) segun
      * el modulo que se acaba de cargar en el contentPane.
@@ -189,10 +189,10 @@ public class MenuController {
             cargarUsuario();
             return;
         }
-
+ 
         String titulo;
         String descripcion;
-
+ 
         switch (nombreFxml) {
             case "fx_asignaciones":
                 titulo = "Asignaciones";
@@ -258,11 +258,11 @@ public class MenuController {
                 titulo = "";
                 descripcion = "";
         }
-
+ 
         lblBienvenida.setText(titulo);
         lblRol.setText(descripcion);
     }
-
+ 
     /**
      * Recibe los datos del usuario autenticado desde LoginController
      * y actualiza la información mostrada en la barra superior.
@@ -274,7 +274,7 @@ public class MenuController {
         this.horaInicioSesion = LocalDateTime.now();
         cargarUsuario();
     }
-
+ 
     /**
      * Momento en el que inició esta sesión. SIGAL todavía no guarda un
      * "último acceso" histórico en la base de datos, así que esto
@@ -283,7 +283,7 @@ public class MenuController {
     public java.time.LocalDateTime getHoraInicioSesion() {
         return horaInicioSesion;
     }
-
+ 
     /**
      * Datos adicionales de la sesión que setUsuarioActual(...) no carga
      * (correo y hora de acceso). LoginController la llama justo después
@@ -293,7 +293,7 @@ public class MenuController {
         this.correoActual = correo;
         this.horaInicioSesion = horaAcceso;
     }
-
+ 
     /**
      * Guarda la foto de perfil (bytes) de la sesión actual y la refleja
      * de inmediato en el chip de la topbar y en el panel desplegable de
@@ -306,27 +306,27 @@ public class MenuController {
         AvatarUtil.aplicar(imgAvatarChip, iconoAvatarChip, fotoBytes);
         AvatarUtil.aplicar(imgAvatarPanel, iconoAvatarPanel, fotoBytes);
     }
-
+ 
     /** Foto de perfil de la sesión actual (para precargarla en Ajustes/Cuenta sin volver a consultar la BD). */
     public byte[] getFotoPerfilActual() {
         return fotoPerfilActual;
     }
-
+ 
     /** Nombre del usuario en sesión (para la tarjeta "Perfil de usuario" de Ajustes). */
     public String getUsuarioActual() {
         return usuarioActual;
     }
-
+ 
     /** Rol del usuario en sesión (para la tarjeta "Perfil de usuario" de Ajustes). */
     public String getRolActual() {
         return rolActual;
     }
-
+ 
     /** Correo del usuario en sesión (para la tarjeta "Perfil de usuario" de Ajustes). */
     public String getCorreoActual() {
         return correoActual;
     }
-
+ 
     /**
      * Hora de acceso ya formateada como texto, lista para mostrarse en
      * la tarjeta "Perfil de usuario" de Ajustes.
@@ -338,7 +338,7 @@ public class MenuController {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
         return horaInicioSesion.format(formato);
     }
-
+ 
     /**
      * ID_Usuario real de tb_usuario para el usuario en sesion. Lo usan
      * los módulos hijos (por ejemplo AsignacionesController) para saber
@@ -347,7 +347,7 @@ public class MenuController {
     public int getIdUsuarioActual() {
         return idUsuarioActual;
     }
-
+ 
     /**
      * Refresca el nombre mostrado en el topbar y en el menú de cuenta
      * cuando el usuario lo cambia desde la pantalla "Mi cuenta", sin
@@ -357,55 +357,55 @@ public class MenuController {
         this.usuarioActual = nuevoNombre;
         cargarUsuario();
     }
-
-
-
-
+ 
+ 
+ 
+ 
     //====================================================
     // FECHA Y HORA
     //====================================================
-
+ 
     /**
      * Arranca el Timeline que mantiene la hora y la fecha del topbar
      * siempre tiene que estar actualizadas, sin congelar la interfaz
      */
     private void iniciarReloj() {
         actualizarFechaHora();
-
+ 
         timelineReloj = new Timeline(
                 new KeyFrame(Duration.seconds(1), evento -> actualizarFechaHora())
         );
         timelineReloj.setCycleCount(Timeline.INDEFINITE);
         timelineReloj.play();
     }
-
+ 
     /**
      * Refresca los labels de hora, fecha larga y dia de la semana
      * Se llama una vez por segundo desde el Timeline del reloj
      */
     private void actualizarFechaHora() {
         LocalDateTime ahora = LocalDateTime.now();
-
+ 
         lblHora.setText(ahora.format(FORMATO_HORA));
-
+ 
         String diaSemana = capitalizar(
                 ahora.getDayOfWeek().getDisplayName(TextStyle.FULL, LOCALE_ES));
         String mes = capitalizar(
                 ahora.getMonth().getDisplayName(TextStyle.FULL, LOCALE_ES));
         String fechaLarga = String.format("%d de %s de %d",
                 ahora.getDayOfMonth(), mes, ahora.getYear());
-
+ 
         lblFechaLarga.setText(fechaLarga);
         lblDiaSemana.setText(diaSemana);
     }
-
-
-
-
+ 
+ 
+ 
+ 
     //====================================================
     // NAVEGACION
     //====================================================
-
+ 
     /**
      * Accion del boton "Inicio". Como el Dashboard ya es la pantalla
      * de Inicio, aqui solo refrescamos los datos y marcamos el boton
@@ -413,13 +413,13 @@ public class MenuController {
      */
     @FXML
     private void onNavInicio(ActionEvent event) {
-
+ 
         marcarNavActivo(navInicio);
-
+ 
         cargarModulo("fx_inicio");
-
+ 
     }
-
+ 
     /**
      * Manejador unico para el resto de los botones del sidebar
      * (Asignaciones, Registro de Espacios, Profesores, Horarios,
@@ -434,13 +434,13 @@ public class MenuController {
     private void onNavGenerico(ActionEvent event) {
         Button origen = (Button) event.getSource();
         marcarNavActivo(origen);
-
+ 
         String idBoton = origen.getId();
         if (idBoton == null) {
             System.out.println("Boton de navegacion sin id: " + origen.getText());
             return;
         }
-
+ 
         switch (idBoton) {
             case "navAsignaciones":
                 cargarModulo("fx_asignaciones");
@@ -477,11 +477,11 @@ public class MenuController {
                 break;
             default:
                 System.out.println("Navegacion no reconocida: " + idBoton);
-
+ 
                  
         }
     }
-
+ 
     /**
      * Quitaré la clase "nav-item-active" de todos los botones del
      * sidebar y se la asigna unicamente al boton que se acaba de
@@ -490,7 +490,7 @@ public class MenuController {
      */
     private void marcarNavActivo(Button botonActivo) {
         Button[] botonesNav = obtenerBotonesNav();
-
+ 
         for (Button boton : botonesNav) {
             if (boton == null) continue;
             boton.getStyleClass().remove("nav-item-active");
@@ -498,13 +498,13 @@ public class MenuController {
                 boton.getStyleClass().add("nav-item");
             }
         }
-
+ 
         botonActivo.getStyleClass().remove("nav-item");
         if (!botonActivo.getStyleClass().contains("nav-item-active")) {
             botonActivo.getStyleClass().add("nav-item-active");
         }
     }
-
+ 
     /** Lista de los botones de navegacion del sidebar (sin Cerrar Sesion). */
     private Button[] obtenerBotonesNav() {
         return new Button[]{
@@ -512,12 +512,12 @@ public class MenuController {
                 navHorarios, navConsultas, navReportes, navAvisos, navAjustes, navCuenta, navAcerca
         };
     }
-
+ 
     //====================================================
     // METODOS AUXILIARES
     //====================================================
-
-
+ 
+ 
     /**
      * Muestra una notificacion simple al usuario mediante un Alert
      * nativo de JavaFX
@@ -535,12 +535,12 @@ public class MenuController {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
-
-
+ 
+ 
     //====================================================
     // CARGA DE MODULOS
     //====================================================
-
+ 
     /**
      * Carga un modulo (FXML) dentro del panel central de la
      * aplicacion, sin recargar ni el sidebar ni el topbar
@@ -563,7 +563,7 @@ public class MenuController {
         marcarNavActivo(botonParaModulo(nombreFxml));
         cargarModulo(nombreFxml);
     }
-
+ 
     /**
      * Traduce el nombre de un modulo (por ejemplo "fx_asignaciones") al
      * boton del sidebar que le corresponde, para que abrirModulo() -llamado
@@ -573,7 +573,7 @@ public class MenuController {
      */
     private Button botonParaModulo(String nombreFxml) {
         if (nombreFxml == null) return navInicio;
-
+ 
         switch (nombreFxml) {
             case "fx_inicio": return navInicio;
             case "fx_asignaciones": return navAsignaciones;
@@ -595,7 +595,7 @@ public class MenuController {
             default: return navInicio;
         }
     }
-
+ 
     private void cargarModulo(String nombreFxml) {
         if (contentPane == null) {            System.out.println(
                     "[SIGAL] No se pudo cargar el modulo '" + nombreFxml + "': "
@@ -603,13 +603,13 @@ public class MenuController {
                             + "fx:id=\"contentPane\".");
             return;
         }
-
+ 
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(RUTA_VISTAS + nombreFxml + ".fxml"));
-
+ 
             Parent vista = loader.load();
-
+ 
             // Si el controlador de la pantalla que se acaba de cargar necesita
             // regresar a este menú (por ejemplo para abrir otro módulo desde
             // un link interno), le pasamos la referencia.
@@ -639,12 +639,12 @@ public class MenuController {
             } else if (controlador instanceof PlaceholderController placeholderController) {
                 placeholderController.configurar(nombreFxml, this);
             }
-
+ 
             contentPane.getChildren().clear();
             contentPane.getChildren().add(vista);
-
+ 
             actualizarEncabezado(nombreFxml);
-
+ 
         } catch (IOException e) {
             System.err.println("[SIGAL] Error al cargar el modulo '" + nombreFxml + "':");
             e.printStackTrace();
@@ -655,14 +655,14 @@ public class MenuController {
                     Alert.AlertType.ERROR);
         }
     }
-
+ 
     private void abrirVentana(String nombreFxml) {
     try {
             FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(RUTA_VISTAS + nombreFxml + ".fxml"));
-
+ 
          Parent root = loader.load();
-
+ 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
@@ -670,20 +670,20 @@ public class MenuController {
         e.printStackTrace();
     }
 }
-
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
     
-
+ 
         //====================================================
         // EFECTOS
         //====================================================
-
+ 
         /**
          * Le da un pequeño realce de sombra a los botones del sidebar
          * cuando el usuario pasa el mouse encima, y les instala un
@@ -695,28 +695,28 @@ public class MenuController {
         Button[] botonesNav = obtenerBotonesNav();
         Button[] botonesConLogout = java.util.Arrays.copyOf(botonesNav, botonesNav.length + 1);
         botonesConLogout[botonesNav.length] = btnCerrarSesion;
-
+ 
         for (Button boton : botonesConLogout) {
             if (boton == null) continue;
-
+ 
                 boton.setOnMouseEntered(evento -> {
                     DropShadow sombra = new DropShadow(10, javafx.scene.paint.Color.rgb(79, 163, 255, 0.35));
                     boton.setEffect(sombra);
             });
-
+ 
             boton.setOnMouseExited(evento -> boton.setEffect(null));
-
+ 
             Tooltip tooltip = new Tooltip(boton.getText());
             tooltip.setShowDelay(Duration.seconds(2));
             tooltip.setHideDelay(Duration.millis(80));
             Tooltip.install(boton, tooltip);
         }
     }
-
+ 
     //====================================================
     // SIDEBAR COLAPSABLE
     //====================================================
-
+ 
     /**
      * Boton "barrita" del sidebar: alterna entre el modo expandido
      * (icono + texto) y el modo colapsado (solo iconos). En ambos
@@ -733,11 +733,11 @@ public class MenuController {
         aplicarTamanoLogo(sidebarColapsado);
         aplicarRotacionToggle(sidebarColapsado);
     }
-
+ 
     /** Anima el ancho del sidebar hacia el ancho expandido o colapsado. */
     private void aplicarAnchoSidebar(boolean colapsado) {
         double anchoDestino = colapsado ? SIDEBAR_ANCHO_COLAPSADO : SIDEBAR_ANCHO_EXPANDIDO;
-
+ 
         Timeline animacion = new Timeline(
                 new KeyFrame(Duration.millis(180),
                         new KeyValue(sidebarRoot.prefWidthProperty(), anchoDestino),
@@ -746,7 +746,7 @@ public class MenuController {
         );
         animacion.play();
     }
-
+ 
     /**
      * Muestra u oculta las etiquetas de texto del sidebar (tagline del
      * logo, nombre de cada modulo y "Cerrar Sesion"), dejando solo los
@@ -767,7 +767,7 @@ public class MenuController {
             nodo.setManaged(visible);
         }
     }
-
+ 
     /**
      * Centra el icono dentro de cada boton del sidebar cuando esta
      * colapsado (si no, el icono queda pegado a la izquierda porque
@@ -777,14 +777,14 @@ public class MenuController {
      */
     private void aplicarAlineacionBotonesSidebar(boolean colapsado) {
         Pos alineacion = colapsado ? Pos.CENTER : Pos.CENTER_LEFT;
-
+ 
         Button[] botonesNav = obtenerBotonesNav();
         for (Button boton : botonesNav) {
             if (boton != null) boton.setAlignment(alineacion);
         }
         if (btnCerrarSesion != null) btnCerrarSesion.setAlignment(alineacion);
     }
-
+ 
     /**
      * Encoge el logo del sidebar cuando esta colapsado para que quepa
      * dentro de los 76px de ancho sin desbordarse hacia el contenido;
@@ -796,7 +796,7 @@ public class MenuController {
         imgLogoSidebar.setFitWidth(tamano);
         imgLogoSidebar.setFitHeight(tamano);
     }
-
+ 
     /**
      * Gira la flechita del boton de colapsar 180° para que apunte
      * hacia el lado en el que se puede volver a abrir el sidebar
@@ -809,11 +809,11 @@ public class MenuController {
         giro.setToAngle(colapsado ? 180 : 0);
         giro.play();
     }
-
+ 
     //====================================================
     // MENU DESPLEGABLE DE CUENTA
     //====================================================
-
+ 
     /**
      * Abre/cierra el menú de cuenta (nombre, rol, ajustes, cerrar sesión)
      * que cuelga del chip del avatar en el topbar. Vive aquí, en el
@@ -827,38 +827,38 @@ public class MenuController {
             abrirMenuCuenta();
         }
     }
-
+ 
     private void abrirMenuCuenta() {
         panelCuenta.setVisible(true);
         panelCuenta.setMouseTransparent(false);
         panelCuenta.setOpacity(1.0);
-
+ 
         scrimCuenta.setVisible(true);
         scrimCuenta.setMouseTransparent(false);
     }
-
+ 
     private void cerrarMenuCuenta() {
         panelCuenta.setVisible(false);
         panelCuenta.setMouseTransparent(true);
         panelCuenta.setOpacity(0.0);
-
+ 
         scrimCuenta.setVisible(false);
         scrimCuenta.setMouseTransparent(true);
     }
-
+ 
     /** Clic fuera del menú de cuenta (en el overlay invisible): lo cierra. */
     @FXML
     private void onCerrarMenuCuenta(MouseEvent event) {
         cerrarMenuCuenta();
     }
-
+ 
     @FXML
     private void onIrCuenta(ActionEvent event) {
         cerrarMenuCuenta();
         marcarNavActivo(navCuenta);
         abrirModulo("fx_cuenta");
     }
-
+ 
     /**
      * "Cambiar de cuenta" desde el menú desplegable: cierra la sesión
      * actual y regresa a la pantalla de login para que otro usuario
@@ -870,32 +870,32 @@ public class MenuController {
         cerrarMenuCuenta();
         onCerrarSesion(event);
     }
-
+ 
     @FXML
     private void onIrAjustes(ActionEvent event) {
         cerrarMenuCuenta();
         marcarNavActivo(navAjustes);
         abrirModulo("fx_ajustes");
     }
-
+ 
     @FXML
     private void onIrAcerca(ActionEvent event) {
         cerrarMenuCuenta();
         marcarNavActivo(navAcerca);
         abrirModulo("fx_acerca");
     }
-
+ 
     /** "Cerrar sesión" desde el menú de cuenta: reusa la misma lógica del botón del sidebar. */
     @FXML
     private void onCerrarSesionDesdeMenu(ActionEvent event) {
         cerrarMenuCuenta();
         onCerrarSesion(event);
     }
-
+ 
     //====================================================
     // CERRAR SESION
     //====================================================
-
+ 
     /**
      * Cierra la sesion actual y regresa a la pantalla de login
      * reemplazando por completo la escena de la ventana (no solo el
@@ -904,18 +904,49 @@ public class MenuController {
      * TODO: cuando tengamos el  DAO de sesion, aqui tambien deberia
      * invalidar el token/sesion activa antes de cambiar de pantalla
      */
+    /**
+     * Igual que onCerrarSesion, pero sin el diálogo de confirmación:
+     * se usa cuando la cuenta ya se desactivó o eliminó desde la pantalla
+     * de Cuenta y ya no tiene caso volver a preguntar "¿seguro?".
+     */
+    public void cerrarSesionSinConfirmar() {
+        javafx.stage.Stage stage =
+                (javafx.stage.Stage) btnCerrarSesion.getScene().getWindow();
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(RUTA_VISTAS + "fx_login.fxml"));
+ 
+            Parent raizLogin = loader.load();
+ 
+            stage.setScene(new javafx.scene.Scene(raizLogin));
+            stage.setTitle("SIGAL - Iniciar sesion");
+            javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+            stage.setX(bounds.getMinX());
+            stage.setY(bounds.getMinY());
+            stage.setWidth(bounds.getWidth());
+            stage.setHeight(bounds.getHeight());
+            stage.show();
+ 
+            detenerReloj();
+ 
+        } catch (IOException e) {
+            System.err.println("[SIGAL] Error al cerrar sesion / cargar fx_login.fxml:");
+            e.printStackTrace();
+        }
+    }
+ 
     @FXML
     private void onCerrarSesion(ActionEvent event) {
         javafx.stage.Stage stage =
                 (javafx.stage.Stage) btnCerrarSesion.getScene().getWindow();
-
+ 
         CerrarSesionDialog.mostrar(stage, () -> {
             try {
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource(RUTA_VISTAS + "fx_login.fxml"));
-
+ 
                 Parent raizLogin = loader.load();
-
+ 
                 stage.setScene(new javafx.scene.Scene(raizLogin));
                 stage.setTitle("SIGAL - Iniciar sesion");
                 javafx.geometry.Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
@@ -924,9 +955,9 @@ public class MenuController {
                 stage.setWidth(bounds.getWidth());
                 stage.setHeight(bounds.getHeight());
                 stage.show();
-
+ 
                 detenerReloj();
-
+ 
             } catch (IOException e) {
                 System.err.println("[SIGAL] Error al cerrar sesion / cargar fx_login.fxml:");
                 e.printStackTrace();
@@ -937,7 +968,7 @@ public class MenuController {
             }
         });
     }
-
+ 
     /**
      * Detiene el Timeline del reloj para no dejarlo corriendo en
      * segundo plano despues de salir del Dashboard
@@ -947,12 +978,12 @@ public class MenuController {
             timelineReloj.stop();
         }
     }
-
-
+ 
+ 
     //====================================================
     // METODOS AUXILIARES
     //====================================================
-
+ 
     /**
      * Pone en mayuscula la primera letra de un texto (los nombres de
      * dia/mes en español que da java.time vienen en minusculas)
@@ -961,8 +992,8 @@ public class MenuController {
         if (texto == null || texto.isEmpty()) return texto;
         return texto.substring(0, 1).toUpperCase(LOCALE_ES) + texto.substring(1);
     }
-
+ 
     
-
+ 
     
 }
