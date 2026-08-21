@@ -14,7 +14,6 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mx.utng.database.Conexion;
-import mx.utng.model.Consultas;
 import mx.utng.model.Reporte;
 import mx.utng.model.ResultadoReporte;
 

@@ -13,8 +13,7 @@
             <VBox styleClass="menu-content-bg">
 
                 <!-- NUEVA ASIGNACIÓN -->
-                    <VBox maxWidth="Infinity" prefHeight="300.0" spacing="10.0" styleClass="panel-card-compact, panel-glow-blue">
-                        <padding>
+                <VBox maxWidth="Infinity" minHeight="290.0" spacing="10.0" styleClass="panel-card-compact, panel-glow-blue">                            <padding>
                         <Insets bottom="4.0" left="34.0" right="34.0" top="8.0" />
                     </padding>
 
@@ -31,80 +30,81 @@
                     </HBox>
 
                     <GridPane hgap="12.0" vgap="5.0">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
-                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints />
-                            <RowConstraints />
-                            <RowConstraints />
-                            <RowConstraints />
-                        </rowConstraints>
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" percentWidth="20.0" />
+        <ColumnConstraints hgrow="ALWAYS" percentWidth="20.0" />
+        <ColumnConstraints hgrow="ALWAYS" percentWidth="20.0" />
+        <ColumnConstraints hgrow="ALWAYS" percentWidth="20.0" />
+        <ColumnConstraints hgrow="ALWAYS" percentWidth="20.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+    </rowConstraints>
 
-                        <!-- Fila 1 -->
-                        <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label styleClass="field-label" text="Solicitante *" />
-                            <ComboBox fx:id="cmbSolicitante" maxWidth="Infinity" promptText="Seleccionar tipo" styleClass="field-combo" />
-                        </VBox>
-                        <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label styleClass="field-label" text="Nombre del solicitante *" />
-                            <ComboBox fx:id="cmbNombreSolicitante" editable="true" maxWidth="Infinity" promptText="Escriba o elija un nombre" styleClass="field-combo" />
-                        </VBox>
-                        <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                            <Label styleClass="field-label" text="Tipo de espacio *" />
-                            <ComboBox fx:id="cmbTipoEspacio" maxWidth="Infinity" promptText="Laboratorio / Aula / Sala" styleClass="field-combo" />
-                        </VBox>
-                        <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                            <Label styleClass="field-label" text="Espacio *" />
-                            <ComboBox fx:id="cmbEspacio" disable="true" maxWidth="Infinity" promptText="Elige un tipo primero" styleClass="field-combo" />
-                        </VBox>
+    <!-- Fila 1: Solicitante y Espacio -->
+    <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <Label styleClass="field-label" text="Solicitante *" />
+        <ComboBox fx:id="cmbSolicitante" maxWidth="Infinity" promptText="Seleccionar tipo" styleClass="field-combo" />
+    </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="2">
+        <Label styleClass="field-label" text="Nombre del solicitante *" />
+        <ComboBox fx:id="cmbNombreSolicitante" editable="true" maxWidth="Infinity" promptText="Escriba o elija un nombre" styleClass="field-combo" />
+    </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="0">
+        <Label styleClass="field-label" text="Tipo de espacio *" />
+        <ComboBox fx:id="cmbTipoEspacio" maxWidth="Infinity" promptText="Laboratorio / Aula / Sala" styleClass="field-combo" />
+    </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="4" GridPane.rowIndex="0">
+        <Label styleClass="field-label" text="Espacio *" />
+        <ComboBox fx:id="cmbEspacio" disable="true" maxWidth="Infinity" promptText="Elige un tipo primero" styleClass="field-combo" />
+    </VBox>
 
-                        <!-- Fila 2 -->
-                        <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                            <Label styleClass="field-label" text="Carrera *" />
-                            <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Seleccionar carrera" styleClass="field-combo" />
-                        </VBox>
-                        <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <Label styleClass="field-label" text="Materia *" />
-                     <ComboBox fx:id="cmbMateria" maxWidth="Infinity" promptText="Seleccionar Materia" styleClass="field-combo" />
-                        </VBox>
-                        <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                            <Label styleClass="field-label" text="Grupo *" />
-                     <ComboBox fx:id="cmbGrupo" maxWidth="Infinity" promptText="Seleccionar grupo" styleClass="field-combo" />
-                        </VBox>
-                        <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                            <Label styleClass="field-label" text="Número de alumnos *" />
-                            <TextField fx:id="txtNumAlumnos" promptText="Ingrese cantidad" styleClass="field-input" />
-                        </VBox>
+    <!-- Fila 2: Carrera, Cuatrimestre, Materia, Grupo, Alumnos -->
+    <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+        <Label styleClass="field-label" text="Carrera *" />
+        <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Seleccionar carrera" styleClass="field-combo" />
+    </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Label styleClass="field-label" text="Cuatrimestre *" />
+        <ComboBox fx:id="cmbCuatrimestre" maxWidth="Infinity" promptText="Cuatri" styleClass="field-combo" />
+    </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+    <Label styleClass="field-label" text="Materia *" />
+    <ComboBox fx:id="cmbMateria" maxWidth="Infinity" promptText="Elige carrera y cuatrimestre" styleClass="field-combo" />
+</VBox>
 
-                        <!-- Fila 3 -->
-                        <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                            <Label styleClass="field-label" text="Fecha *" />
-                            <DatePicker fx:id="dpFecha" maxWidth="Infinity" promptText="Seleccionar fecha" styleClass="field-date" />
-                        </VBox>
-                        <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                            <Label styleClass="field-label" text="Hora inicio *" />
-                            <ComboBox fx:id="cmbHoraInicio" maxWidth="Infinity" promptText="Seleccionar hora" styleClass="field-combo" />
-                        </VBox>
-                        <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                            <Label styleClass="field-label" text="Hora término *" />
-                            <ComboBox fx:id="cmbHoraTermino" maxWidth="Infinity" promptText="Seleccionar hora" styleClass="field-combo" />
-                        </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+        <Label styleClass="field-label" text="Grupo *" />
+        <ComboBox fx:id="cmbGrupo" maxWidth="Infinity" promptText="Seleccionar grupo" styleClass="field-combo" />
+    </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+        <Label styleClass="field-label" text="Número de alumnos *" />
+        <TextField fx:id="txtNumAlumnos" promptText="Cantidad" styleClass="field-input" />
+    </VBox>
 
-                        <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                            <Label styleClass="field-label" text="Cuatrimestre" />
-                            <ComboBox fx:id="cmbCuatrimestre" maxWidth="Infinity" promptText="Seleccionar cuatrimestre" styleClass="field-combo" />
-                        </VBox>
+    <!-- Fila 3: Fecha y Horarios -->
+    <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
+        <Label styleClass="field-label" text="Fecha *" />
+        <DatePicker fx:id="dpFecha" maxWidth="Infinity" promptText="Seleccionar fecha" styleClass="field-date" />
+    </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.columnSpan="1">
+        <Label styleClass="field-label" text="Hora inicio *" />
+        <ComboBox fx:id="cmbHoraInicio" maxWidth="Infinity" promptText="Seleccionar hora" styleClass="field-combo" />
+    </VBox>
+    <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.columnSpan="2">
+        <Label styleClass="field-label" text="Hora término *" />
+        <ComboBox fx:id="cmbHoraTermino" maxWidth="Infinity" promptText="Seleccionar hora" styleClass="field-combo" />
+    </VBox>
 
-                        <!-- Fila 4: actividad -->
-                        <VBox spacing="3.0" GridPane.columnSpan="4" GridPane.rowIndex="3">
-                            <Label styleClass="field-label" text="Actividad o motivo *" />
-                            <TextArea fx:id="txtActividad" prefHeight="40.0" promptText="Describa la actividad o motivo de la asignación" styleClass="field-textarea" wrapText="true" />
-                        </VBox>
-                    </GridPane>
+    <!-- Fila 4: Actividad -->
+    <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="5">
+        <Label styleClass="field-label" text="Actividad o motivo *" />
+        <TextArea fx:id="txtActividad" prefHeight="26.0" promptText="Describa la actividad o motivo de la asignación" styleClass="field-textarea" wrapText="true" />
+    </VBox>
+</GridPane>
 
                     <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="1270.0" spacing="10.0">
                         <Button fx:id="btnLimpiar" onAction="#onLimpiar" styleClass="btn-secondary-compact" text="↻  Limpiar" />

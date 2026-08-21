@@ -28,7 +28,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import mx.utng.dao.ReporteDAO;
-import mx.utng.model.Consultas;
 import mx.utng.model.Reporte;
 import mx.utng.model.ResultadoReporte;
 import mx.utng.util.ReporteExportador;
