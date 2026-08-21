@@ -31,12 +31,12 @@ public class ProfesorDAO {
 
     /** SELECT base reutilizado por listarProfesores/buscarProfesorPorId/buscarPorNombre/filtros. */
     private static final String SELECT_BASE = """
-            SELECT p.ID_Profesor, p.Nombre, p.ApellidoPaterno, p.ApellidoMaterno,
-                   p.CorreoElectronico, p.ID_Usuario,
-                   u.NombreUsuario, u.Rol
-            FROM tb_profesor p
-            INNER JOIN tb_usuario u ON u.ID_Usuario = p.ID_Usuario
-            """;
+        SELECT p.ID_Profesor, p.Nombre, p.ApellidoPaterno, p.ApellidoMaterno,
+               p.CorreoElectronico, p.ID_Usuario, p.TipoPersonal,
+               u.NombreUsuario, u.Rol
+        FROM tb_profesor p
+        INNER JOIN tb_usuario u ON u.ID_Usuario = p.ID_Usuario
+        """;
 
     // ============================================================
     //  LISTAR (tabla "Profesores registrados")
@@ -197,69 +197,67 @@ public class ProfesorDAO {
      * @param idUsuario ID_Usuario al que se vincula (obligatorio, llave foránea)
      * @return true si se guardó correctamente
      */
-    public boolean insertarProfesor(Profesor p, int idUsuario) {
-        String sql = """
-                INSERT INTO tb_profesor (Nombre, ApellidoPaterno, ApellidoMaterno, CorreoElectronico, ID_Usuario)
-                VALUES (?, ?, ?, ?, ?)
-                """;
+public boolean insertarProfesor(Profesor p, int idUsuario, String tipoPersonal) {
+    String sql = """
+            INSERT INTO tb_profesor (Nombre, ApellidoPaterno, ApellidoMaterno, CorreoElectronico, ID_Usuario, TipoPersonal)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """;
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, p.getNombre());
-            ps.setString(2, p.getApellidoPaterno());
-            ps.setString(3, blankToNull(p.getApellidoMaterno()));
-            ps.setString(4, blankToNull(p.getCorreoElectronico()));
-            ps.setInt(5, idUsuario);
+        ps.setString(1, p.getNombre());
+        ps.setString(2, p.getApellidoPaterno());
+        ps.setString(3, blankToNull(p.getApellidoMaterno()));
+        ps.setString(4, blankToNull(p.getCorreoElectronico()));
+        ps.setInt(5, idUsuario);
+        ps.setString(6, tipoPersonal);
 
-            int filasAfectadas = ps.executeUpdate();
-            if (filasAfectadas == 0) {
-                return false;
-            }
-
-            try (ResultSet llaves = ps.getGeneratedKeys()) {
-                if (llaves.next()) {
-                    p.setIdProfesor(llaves.getInt(1));
-                }
-            }
-            p.setIdUsuario(idUsuario);
-            return true;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        int filasAfectadas = ps.executeUpdate();
+        if (filasAfectadas == 0) {
             return false;
         }
-    }
 
-    // ============================================================
-    //  ACTUALIZAR (botón "Editar" -> "Guardar cambios")
-    // ============================================================
-
-    public boolean actualizarProfesor(int idProfesor, Profesor p, int idUsuario) {
-        String sql = """
-                UPDATE tb_profesor SET
-                    Nombre = ?, ApellidoPaterno = ?, ApellidoMaterno = ?,
-                    CorreoElectronico = ?, ID_Usuario = ?
-                WHERE ID_Profesor = ?
-                """;
-
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, p.getNombre());
-            ps.setString(2, p.getApellidoPaterno());
-            ps.setString(3, blankToNull(p.getApellidoMaterno()));
-            ps.setString(4, blankToNull(p.getCorreoElectronico()));
-            ps.setInt(5, idUsuario);
-            ps.setInt(6, idProfesor);
-
-            return ps.executeUpdate() > 0;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
+        try (ResultSet llaves = ps.getGeneratedKeys()) {
+            if (llaves.next()) {
+                p.setIdProfesor(llaves.getInt(1));
+            }
         }
+        p.setIdUsuario(idUsuario);
+        return true;
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        return false;
     }
+}
+
+public boolean actualizarProfesor(int idProfesor, Profesor p, int idUsuario, String tipoPersonal) {
+    String sql = """
+            UPDATE tb_profesor SET
+                Nombre = ?, ApellidoPaterno = ?, ApellidoMaterno = ?,
+                CorreoElectronico = ?, ID_Usuario = ?, TipoPersonal = ?
+            WHERE ID_Profesor = ?
+            """;
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, p.getNombre());
+        ps.setString(2, p.getApellidoPaterno());
+        ps.setString(3, blankToNull(p.getApellidoMaterno()));
+        ps.setString(4, blankToNull(p.getCorreoElectronico()));
+        ps.setInt(5, idUsuario);
+        ps.setString(6, tipoPersonal);
+        ps.setInt(7, idProfesor);
+
+        return ps.executeUpdate() > 0;
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        return false;
+    }
+}
 
     // ============================================================
     //  ELIMINAR
@@ -367,22 +365,23 @@ public class ProfesorDAO {
     // ============================================================
     //  Utilidades privadas
     // ============================================================
-
-    private Profesor mapearFila(ResultSet rs) throws SQLException {
-        Profesor p = new Profesor(
-                rs.getString("Nombre"),
-                rs.getString("ApellidoPaterno"),
-                rs.getString("ApellidoMaterno"),
-                rs.getString("CorreoElectronico"),
-                rs.getString("NombreUsuario"),
-                rs.getString("Rol")
-        );
-        p.setIdProfesor(rs.getInt("ID_Profesor"));
-        p.setIdUsuario(rs.getInt("ID_Usuario"));
-        return p;
-    }
-
     private String blankToNull(String valor) {
-        return (valor == null || valor.isBlank()) ? null : valor.trim();
-    }
+    return (valor == null || valor.isBlank()) ? null : valor.trim();
 }
+
+private Profesor mapearFila(ResultSet rs) throws SQLException {
+    Profesor p = new Profesor(
+            rs.getString("Nombre"),
+            rs.getString("ApellidoPaterno"),
+            rs.getString("ApellidoMaterno"),
+            rs.getString("CorreoElectronico"),
+            rs.getString("TipoPersonal"),
+            rs.getString("NombreUsuario"),
+            rs.getString("Rol")
+    );
+    p.setIdProfesor(rs.getInt("ID_Profesor"));
+    p.setIdUsuario(rs.getInt("ID_Usuario"));
+    return p;
+}
+}
+

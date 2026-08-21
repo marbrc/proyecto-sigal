@@ -22,13 +22,18 @@
         <!-- ============ CONTENIDO: FORMULARIO + TABLA ============ -->
         <HBox spacing="18.0" VBox.vgrow="ALWAYS">
 
-            <!-- ==== PANEL IZQUIERDO: DATOS DEL PROFESOR ==== -->
+            <!-- ==== PANEL IZQUIERDO: DATOS DEL PERSONAL ==== -->
             <VBox prefWidth="400.0" spacing="14.0" styleClass="card">
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
-                    <Label styleClass="card-title" text="Datos del profesor" />
+                    <Label styleClass="card-title" text="Datos del personal" />
                     <Region HBox.hgrow="ALWAYS" />
                     <Button fx:id="btnNuevoProfesor" onAction="#onNuevoProfesor" styleClass="btn-nuevo" text="+  Nuevo" />
                 </HBox>
+
+                <VBox spacing="6.0">
+                    <Label styleClass="field-label" text="Tipo de personal *" />
+                    <ComboBox fx:id="cmbTipoPersonal" maxWidth="Infinity" promptText="Seleccione el tipo" styleClass="input-combo" />
+                </VBox>
 
                 <VBox spacing="6.0">
                     <Label styleClass="field-label" text="Nombre *" />
@@ -74,15 +79,16 @@
                 </HBox>
             </VBox>
 
-            <!-- ==== PANEL DERECHO: PROFESORES REGISTRADOS ==== -->
+            <!-- ==== PANEL DERECHO: PERSONAL REGISTRADO ==== -->
             <VBox spacing="12.0" styleClass="card" HBox.hgrow="ALWAYS">
-                <Label styleClass="card-title" text="Profesores registrados" />
+                <Label styleClass="card-title" text="Personal registrado" />
 
                 <HBox spacing="8.0">
                     <HBox alignment="CENTER_LEFT" spacing="6.0" styleClass="input-box" HBox.hgrow="ALWAYS">
                         <Label styleClass="input-icon" text="🔍" />
                         <TextField fx:id="txtBuscar" promptText="Buscar por nombre, apellido o correo..." styleClass="input-field" HBox.hgrow="ALWAYS" />
                     </HBox>
+                    <ComboBox fx:id="cmbFiltroTipo" prefWidth="170.0" styleClass="input-combo" />
                     <ComboBox fx:id="cmbFiltroUsuario" prefWidth="180.0" styleClass="input-combo" />
                     <ComboBox fx:id="cmbFiltroRol" prefWidth="160.0" styleClass="input-combo" />
                     <Button fx:id="btnRefrescar" onAction="#onRefrescar" styleClass="icon-btn" text="↻" />
@@ -90,11 +96,12 @@
 
                 <TableView fx:id="tblProfesores" styleClass="data-table" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colNo" prefWidth="50.0" sortable="false" text="No." />
-                        <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre completo" />
-                        <TableColumn fx:id="colCorreo" prefWidth="210.0" text="Correo electrónico" />
-                        <TableColumn fx:id="colUsuario" prefWidth="150.0" text="Usuario vinculado" />
-                        <TableColumn fx:id="colRol" prefWidth="110.0" text="Rol" />
+                        <TableColumn fx:id="colNo" prefWidth="45.0" sortable="false" text="No." />
+                        <TableColumn fx:id="colTipo" prefWidth="110.0" text="Tipo" />
+                        <TableColumn fx:id="colNombre" prefWidth="190.0" text="Nombre completo" />
+                        <TableColumn fx:id="colCorreo" prefWidth="200.0" text="Correo electrónico" />
+                        <TableColumn fx:id="colUsuario" prefWidth="140.0" text="Usuario vinculado" />
+                        <TableColumn fx:id="colRol" prefWidth="100.0" text="Rol" />
                         <TableColumn fx:id="colAcciones" prefWidth="100.0" sortable="false" text="Acciones" />
                     </columns>
                     <columnResizePolicy>
@@ -102,7 +109,7 @@
                     </columnResizePolicy>
                 </TableView>
 
-                <Label fx:id="lblResultados" styleClass="results-label" text="Mostrando 0 de 0 profesores" />
+                <Label fx:id="lblResultados" styleClass="results-label" text="Mostrando 0 de 0 registros" />
             </VBox>
 
         </HBox>

@@ -107,7 +107,7 @@
                                     <Circle centerX="0" centerY="-4" radius="3" styleClass="nav-icon" />
                                     <Rectangle arcHeight="6" arcWidth="6" height="7" styleClass="nav-icon" width="10" x="-5" y="0" />
                                 </Group>
-                                <Label styleClass="nav-item-label" text="Profesores" />
+                                <Label styleClass="nav-item-label" text="Personal" />
                             </HBox>
                         </graphic>
                     </Button>

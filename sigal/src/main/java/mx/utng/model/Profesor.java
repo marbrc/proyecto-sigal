@@ -8,15 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * Mapea EXACTAMENTE las columnas reales de tb_profesor:
  * ID_Profesor, Nombre, ApellidoPaterno, ApellidoMaterno,
- * CorreoElectronico, ID_Usuario.
- *
- * tb_profesor.ID_Usuario es NOT NULL con llave foránea hacia
- * tb_usuario (FK_Profesor_Usuario), por lo que todo profesor debe
- * estar vinculado a una cuenta de tb_usuario ya existente. Los campos
- * nombreUsuarioVinculado / rolUsuarioVinculado son datos de solo
- * lectura que vienen de un JOIN con tb_usuario (columnas NombreUsuario
- * y Rol) y se usan únicamente para mostrarlos en la tabla; no se
- * guardan como columnas propias de tb_profesor.
+ * CorreoElectronico, ID_Usuario, TipoPersonal.
  */
 public class Profesor {
 
@@ -30,6 +22,7 @@ public class Profesor {
     private final SimpleStringProperty apellidoPaterno;
     private final SimpleStringProperty apellidoMaterno;
     private final SimpleStringProperty correoElectronico;
+    private final SimpleStringProperty tipoPersonal;
 
     /** Solo lectura: viene del JOIN con tb_usuario (NombreUsuario). */
     private final SimpleStringProperty nombreUsuarioVinculado;
@@ -38,16 +31,24 @@ public class Profesor {
 
     /** Constructor vacío. */
     public Profesor() {
-        this("", "", "", "", "", "");
+        this("", "", "", "", "Profesor", "", "");
     }
 
-    /** Constructor completo. */
+    /** Constructor básico (sin tipoPersonal). */
     public Profesor(String nombre, String apellidoPaterno, String apellidoMaterno,
-                     String correoElectronico, String nombreUsuarioVinculado, String rolUsuarioVinculado) {
+                    String correoElectronico, String nombreUsuarioVinculado, String rolUsuarioVinculado) {
+        this(nombre, apellidoPaterno, apellidoMaterno, correoElectronico, "Profesor", nombreUsuarioVinculado, rolUsuarioVinculado);
+    }
+
+    /** Constructor completo con TipoPersonal. */
+    public Profesor(String nombre, String apellidoPaterno, String apellidoMaterno,
+                    String correoElectronico, String tipoPersonal,
+                    String nombreUsuarioVinculado, String rolUsuarioVinculado) {
         this.nombre = new SimpleStringProperty(nombre == null ? "" : nombre);
         this.apellidoPaterno = new SimpleStringProperty(apellidoPaterno == null ? "" : apellidoPaterno);
         this.apellidoMaterno = new SimpleStringProperty(apellidoMaterno == null ? "" : apellidoMaterno);
         this.correoElectronico = new SimpleStringProperty(correoElectronico == null ? "" : correoElectronico);
+        this.tipoPersonal = new SimpleStringProperty(tipoPersonal == null || tipoPersonal.isBlank() ? "Profesor" : tipoPersonal);
         this.nombreUsuarioVinculado = new SimpleStringProperty(nombreUsuarioVinculado == null ? "" : nombreUsuarioVinculado);
         this.rolUsuarioVinculado = new SimpleStringProperty(rolUsuarioVinculado == null ? "" : rolUsuarioVinculado);
     }
@@ -75,6 +76,10 @@ public class Profesor {
     public String getCorreoElectronico() { return correoElectronico.get(); }
     public void setCorreoElectronico(String v) { correoElectronico.set(v == null ? "" : v); }
     public SimpleStringProperty correoElectronicoProperty() { return correoElectronico; }
+
+    public String getTipoPersonal() { return tipoPersonal.get(); }
+    public void setTipoPersonal(String v) { tipoPersonal.set(v == null || v.isBlank() ? "Profesor" : v); }
+    public SimpleStringProperty tipoPersonalProperty() { return tipoPersonal; }
 
     public String getNombreUsuarioVinculado() { return nombreUsuarioVinculado.get(); }
     public void setNombreUsuarioVinculado(String v) { nombreUsuarioVinculado.set(v == null ? "" : v); }
