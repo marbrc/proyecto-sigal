@@ -1,165 +1,149 @@
-/* =========================================================
-   SIGAL - Estilos compartidos por las 4 pantallas CRUD del
-   Catálogo Académico: Materias, Grupos, Carreras y Área
-   Académica (fx_materias.fxml, fx_grupos.fxml, fx_carreras.fxml,
-   fx_area_academica.fxml).
-
-   Calcado 1:1 de styles_profesores.css para que estas pantallas
-   tengan exactamente el mismo estilo, colores, bordes,
-   distribución, botones, tabla y efectos visuales que el resto
-   del sistema SIGAL. Paleta azul, con el mismo detalle morado a
-   propósito en título del formulario / botón Guardar / título de
-   la tabla.
-
-   Estas vistas NO incluyen menú lateral ni barra superior: se
-   insertan dentro del panel de contenido (contentPane) del menú
-   principal.
-   ========================================================= */
 
 .page-root {
-    -fx-background-color: #060b22;
+    -fx-background-color: #eef2f9;
     -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
-
+ 
 /* ===================== ENCABEZADO DE LA PANTALLA ===================== */
 /* Fila superior con "← Volver al Catálogo Académico" antes del contenido. */
 .btn-volver-inline {
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-background-radius: 7;
-    -fx-border-color: rgba(157,180,209,0.30);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 11.5px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-padding: 7 14 7 14;
 }
-
+ 
 .btn-volver-inline:hover {
-    -fx-background-color: rgba(79,195,255,0.12);
-    -fx-text-fill: #e6eefc;
+    -fx-background-color: #f5f7fb;
+    -fx-text-fill: #1b2340;
 }
-
+ 
 /* ===================== TARJETAS ===================== */
 .card {
-    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-background-color: white;
     -fx-background-radius: 14;
-    -fx-border-color: rgba(79,195,255,0.14);
+    -fx-border-color: #e7ebf3;
     -fx-border-radius: 14;
     -fx-border-width: 1;
     -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(30,41,82,0.06), 14, 0.15, 0, 3);
 }
-
+ 
 /* Morado a propósito: título del formulario y de la tabla */
 .card-title {
     -fx-text-fill: #a855f7;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
-
+ 
 /* ===================== CAMPOS DE FORMULARIO ===================== */
 .field-label {
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 10.5px;
     -fx-font-weight: bold;
 }
-
+ 
 .input-box {
-    -fx-background-color: #0d1526;
+    -fx-background-color: #f5f7fb;
     -fx-background-radius: 7;
-    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 7;
     -fx-border-width: 1;
     -fx-padding: 3 10 3 10;
     -fx-min-height: 34;
 }
-
+ 
 .input-box:focused-within {
     -fx-border-color: #4fc3ff;
 }
-
+ 
 .input-icon {
     -fx-font-size: 11.5px;
     -fx-opacity: 0.85;
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
 }
-
+ 
 .input-field {
     -fx-background-color: transparent;
-    -fx-text-fill: #e6eefc;
-    -fx-prompt-text-fill: #57708f;
+    -fx-text-fill: #1b2340;
+    -fx-prompt-text-fill: #9aa4c2;
     -fx-font-size: 11.5px;
 }
-
+ 
 .input-field:focused {
     -fx-background-color: transparent;
 }
-
+ 
 /* TextArea (descripción de Materias) dentro de un .input-box */
 .input-textarea,
 .input-textarea .content {
     -fx-background-color: transparent;
 }
-
+ 
 .input-textarea .text-area {
     -fx-background-color: transparent;
 }
-
+ 
 .input-textarea {
-    -fx-text-fill: #e6eefc;
+    -fx-text-fill: #1b2340;
     -fx-font-size: 11.5px;
-    -fx-prompt-text-fill: #57708f;
+    -fx-prompt-text-fill: #9aa4c2;
 }
-
+ 
 /* ComboBox genérico (área, carrera, cuatrimestre, turno, filtros) */
 .input-combo {
-    -fx-background-color: #0d1526;
+    -fx-background-color: #f5f7fb;
     -fx-background-radius: 7;
-    -fx-border-color: rgba(56, 26, 138, 0.2);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-mark-color: #4fc3ff;
+    -fx-mark-color: #2f6bff;
     -fx-min-height: 34;
 }
-
+ 
 .input-combo:focused,
 .input-combo:showing {
     -fx-border-color: #4fc3ff;
 }
-
+ 
 .input-combo .list-cell {
     -fx-background-color: transparent;
-    -fx-text-fill: #e6eefc;
+    -fx-text-fill: #1b2340;
     -fx-font-size: 11.5px;
     -fx-padding: 5 8 5 8;
 }
-
+ 
 .input-combo .arrow-button {
     -fx-background-color: transparent;
 }
-
+ 
 .input-combo .arrow {
-    -fx-background-color: #9db4d1;
+    -fx-background-color: #56618a;
 }
-
+ 
 .input-combo .list-view {
-    -fx-background-color: #0d1526;
-    -fx-border-color: rgba(56, 26, 138, 0.2);
+    -fx-background-color: white;
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 7;
     -fx-background-radius: 7;
 }
-
+ 
 .input-combo .list-cell:filled:hover {
-    -fx-background-color: rgba(56, 26, 138, 0.2);
+    -fx-background-color: rgba(47,107,255,0.08);
 }
-
+ 
 .input-combo .list-cell:filled:selected {
-    -fx-background-color: rgba(56, 26, 138, 0.2);
+    -fx-background-color: rgba(47,107,255,0.14);
 }
-
+ 
 /* ===================== BOTONES ===================== */
-
+ 
 /* Morado a propósito: botón "Guardar" */
 .primary-btn {
     -fx-background-color: linear-gradient(to right, #7b2ff7 0%, #a855f7 100%);
@@ -171,16 +155,16 @@
     -fx-padding: 8 16 8 16;
     -fx-effect: dropshadow(gaussian, rgba(168,85,247,0.4), 14, 0.2, 0, 3);
 }
-
+ 
 .primary-btn:hover {
     -fx-background-color: linear-gradient(to right, #8b3ffc, #b968ff);
 }
-
+ 
 .primary-btn:pressed {
     -fx-background-color: linear-gradient(to right, #6a1fe0, #9333ea);
 }
-
-/* Botón "+ Nuevo" junto al título del formulario: azul, compacto */
+ 
+/* Botón "+ Nueva/Nuevo" junto al título del formulario: azul, compacto */
 .btn-nuevo {
     -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
     -fx-background-radius: 7;
@@ -190,62 +174,62 @@
     -fx-cursor: hand;
     -fx-padding: 6 12 6 12;
 }
-
+ 
 .btn-nuevo:hover {
     -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
 }
-
+ 
 .secondary-btn {
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-background-radius: 7;
-    -fx-border-color: rgba(157,180,209,0.35);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 11.5px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-padding: 8 14 8 14;
 }
-
+ 
 .secondary-btn:hover {
-    -fx-background-color: rgba(157,180,209,0.08);
+    -fx-background-color: #f5f7fb;
 }
-
+ 
 .cancel-btn {
     -fx-background-color: rgba(239, 68, 68, 0.12);
     -fx-background-radius: 7;
     -fx-border-color: rgba(239, 68, 68, 0.4);
     -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-text-fill: #f87171;
+    -fx-text-fill: #dc2626;
     -fx-font-size: 11.5px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-padding: 8 14 8 14;
 }
-
+ 
 .cancel-btn:hover {
-    -fx-background-color: rgba(239, 68, 68, 0.22);
+    -fx-background-color: rgba(239, 68, 68, 0.20);
 }
-
+ 
 .icon-btn {
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-background-radius: 7;
-    -fx-border-color: rgba(157,180,209,0.30);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 12px;
     -fx-cursor: hand;
     -fx-min-width: 34;
     -fx-min-height: 34;
 }
-
+ 
 .icon-btn:hover {
-    -fx-background-color: rgba(79,195,255,0.12);
+    -fx-background-color: #f5f7fb;
 }
-
+ 
 /* Botones dentro de la columna "Acciones" */
 .accion-editar-btn,
 .accion-eliminar-btn {
@@ -259,32 +243,32 @@
     -fx-text-fill: white;
     -fx-padding: 0;
 }
-
+ 
 .accion-editar-btn {
     -fx-background-color: #1f6fd6;
 }
-
+ 
 .accion-editar-btn:hover {
     -fx-background-color: #4fc3ff;
 }
-
+ 
 .accion-eliminar-btn {
     -fx-background-color: #dc2626;
 }
-
+ 
 .accion-eliminar-btn:hover {
     -fx-background-color: #ef4444;
 }
-
+ 
 /* Botones mini "+" / "✎" junto al ComboBox de materia, para crear o
    editar el catálogo base (tb_materia) sin salir de esta pantalla. */
 .btn-mini {
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-background-radius: 7;
-    -fx-border-color: rgba(157,180,209,0.30);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
@@ -294,83 +278,83 @@
     -fx-max-height: 34;
     -fx-padding: 0;
 }
-
+ 
 .btn-mini:hover {
-    -fx-background-color: rgba(79,195,255,0.12);
-    -fx-text-fill: #e6eefc;
+    -fx-background-color: #f5f7fb;
+    -fx-text-fill: #1b2340;
 }
-
+ 
 /* Icono de encabezado de las ventanas flotantes (Alert / Dialog). */
 .header-icon-box {
-    -fx-background-color: rgba(79,195,255,0.14);
+    -fx-background-color: rgba(47,107,255,0.10);
     -fx-background-radius: 14;
-    -fx-border-color: rgba(79,195,255,0.35);
+    -fx-border-color: rgba(47,107,255,0.30);
     -fx-border-radius: 14;
     -fx-min-width: 52;
     -fx-min-height: 52;
     -fx-max-width: 52;
     -fx-max-height: 52;
 }
-
+ 
 .header-icon {
     -fx-font-size: 22px;
 }
-
+ 
 /* ===================== TABLA ===================== */
 .data-table {
     -fx-background-color: transparent;
-    -fx-border-color: rgba(79,195,255,0.12);
+    -fx-border-color: #e7ebf3;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
 }
-
+ 
 .data-table .column-header-background {
-    -fx-background-color: #0d1526;
+    -fx-background-color: #f5f7fb;
     -fx-background-radius: 10 10 0 0;
 }
-
+ 
 .data-table .column-header,
 .data-table .filler {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-size: 36;
 }
-
+ 
 .data-table .column-header .label {
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #6b7690;
     -fx-font-size: 11px;
     -fx-font-weight: bold;
 }
-
+ 
 .data-table .table-row-cell {
-    -fx-background-color: rgba(15,22,50,0.75);
-    -fx-border-color: transparent transparent rgba(79,195,255,0.08) transparent;
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #eef1f8 transparent;
     -fx-table-cell-border-color: transparent;
 }
-
+ 
 .data-table .table-row-cell:odd {
-    -fx-background-color: rgba(20,28,60,0.75);
+    -fx-background-color: #f8faff;
 }
-
+ 
 .data-table .table-row-cell:selected {
-    -fx-background-color: rgba(79,195,255,0.20);
+    -fx-background-color: rgba(47,107,255,0.10);
 }
-
+ 
 .data-table .table-cell {
-    -fx-text-fill: #d7e2f5;
+    -fx-text-fill: #1b2340;
     -fx-font-size: 11.5px;
     -fx-alignment: CENTER-LEFT;
     -fx-padding: 7 10 7 10;
 }
-
+ 
 .data-table .scroll-bar {
     -fx-background-color: transparent;
 }
-
+ 
 .data-table .placeholder .label {
-    -fx-text-fill: #5a6690;
+    -fx-text-fill: #9aa4c2;
 }
-
+ 
 /* Pastillas genéricas usadas en varias columnas (turno, conteo, etc.) */
 .estado-badge {
     -fx-background-radius: 20;
@@ -378,93 +362,94 @@
     -fx-font-size: 10.5px;
     -fx-font-weight: bold;
 }
-
+ 
 .estado-administrador {
-    -fx-background-color: rgba(168, 85, 247, 0.18);
-    -fx-text-fill: #c084fc;
+    -fx-background-color: rgba(168, 85, 247, 0.14);
+    -fx-text-fill: #9333ea;
 }
-
+ 
 .estado-usuario {
-    -fx-background-color: rgba(59, 130, 246, 0.18);
-    -fx-text-fill: #60a5fa;
+    -fx-background-color: rgba(59, 130, 246, 0.14);
+    -fx-text-fill: #2563eb;
 }
-
-/* Turno: Matutino (naranja) / Vespertino (morado) — mismos acentos de las tarjetas del Catálogo Académico */
+ 
+/* Turno: Matutino (naranja) / Vespertino (morado) — mismos acentos de las
+   tarjetas del Catálogo Académico, conservados a propósito */
 .estado-matutino {
-    -fx-background-color: rgba(255, 138, 91, 0.18);
-    -fx-text-fill: #ff9d70;
+    -fx-background-color: rgba(255, 138, 91, 0.16);
+    -fx-text-fill: #e2622f;
 }
-
+ 
 .estado-vespertino {
-    -fx-background-color: rgba(148, 87, 255, 0.18);
-    -fx-text-fill: #b98bff;
+    -fx-background-color: rgba(148, 87, 255, 0.14);
+    -fx-text-fill: #8b5cf6;
 }
-
+ 
 .results-label {
-    -fx-text-fill: #5a6690;
+    -fx-text-fill: #6b7690;
     -fx-font-size: 11px;
 }
-
+ 
 /* ===================== VENTANAS FLOTANTES (Alert) ===================== */
-/* Misma temática oscura/azul de la pantalla, aplicada a las ventanas
+/* Misma temática clara/azul de la pantalla, aplicada a las ventanas
    de confirmación y advertencia (eliminar registro, campos incompletos,
    nombre duplicado, etc.). */
 .themed-dialog {
-    -fx-background-color: #0d1526;
+    -fx-background-color: white;
 }
-
+ 
 .themed-dialog > *.header-panel {
-    -fx-background-color: #0d1526;
+    -fx-background-color: white;
     -fx-padding: 22 26 12 26;
 }
-
+ 
 .themed-dialog > *.header-panel .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #1b2340;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-wrap-text: true;
 }
-
+ 
 .themed-dialog > *.content.label {
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 12px;
     -fx-wrap-text: true;
 }
-
+ 
 .themed-dialog > *.content {
-    -fx-background-color: #0d1526;
+    -fx-background-color: white;
     -fx-padding: 4 26 20 26;
 }
-
+ 
 .themed-dialog .button-bar {
-    -fx-background-color: #0d1526;
+    -fx-background-color: white;
     -fx-padding: 0 22 22 22;
 }
-
+ 
 .themed-dialog .button-bar .button {
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-background-radius: 7;
-    -fx-border-color: rgba(157,180,209,0.30);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-padding: 8 16 8 16;
 }
-
+ 
 .themed-dialog .button-bar .button:hover {
-    -fx-background-color: rgba(79,195,255,0.12);
+    -fx-background-color: #f5f7fb;
 }
-
+ 
 .themed-dialog .button-bar .button:default {
     -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
     -fx-border-width: 0;
     -fx-text-fill: white;
     -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.4), 12, 0.2, 0, 3);
 }
-
+ 
 .themed-dialog .button-bar .button:default:hover {
     -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
 }

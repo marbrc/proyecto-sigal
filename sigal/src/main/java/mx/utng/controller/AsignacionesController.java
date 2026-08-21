@@ -57,6 +57,8 @@ public class AsignacionesController implements Initializable {
     @FXML private Button btnLimpiar;
     @FXML private Button btnGuardar;
 
+    @FXML private ComboBox<Integer> cmbCuatrimestre;
+
     // ----------------------------- Tabla -----------------------------
     @FXML private TextField txtBuscar;
     @FXML private TableView<Asignaciones> tablaAsignaciones;
@@ -89,6 +91,7 @@ public class AsignacionesController implements Initializable {
     private final AsignacionDAO asignacionDAO = new AsignacionDAO();
     private Map<String, Integer> mapaEspacios = new LinkedHashMap<>();
     private Asignaciones asignacionEnEdicion = null;
+    private Map<String, Integer> mapaCarreras = new LinkedHashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -120,6 +123,26 @@ public class AsignacionesController implements Initializable {
         )
     );
 
+
+    private void actualizarMateriasFiltradas() {
+    cmbMateria.getSelectionModel().clearSelection();
+    cmbMateria.setValue(null);
+
+    Integer cuatrimestre = cmbCuatrimestre.getValue();
+    Integer idCarrera = mapaCarreras.get(cmbCarrera.getValue());
+
+    if (cuatrimestre == null || idCarrera == null) {
+        cmbMateria.getItems().clear();
+        cmbMateria.setDisable(true);
+        return;
+    }
+
+    cmbMateria.setItems(FXCollections.observableArrayList(
+        asignacionDAO.listarMateriasPorCuatrimestreYCarrera(cuatrimestre, idCarrera)
+    ));
+    cmbMateria.setDisable(cmbMateria.getItems().isEmpty());
+}
+
     cmbSolicitante.valueProperty().addListener((obs, valorAnterior, tipo) -> {
 
         // Limpiar selección y texto escrito
@@ -146,11 +169,16 @@ public class AsignacionesController implements Initializable {
     });
 
     // Otros combos
-   cmbCarrera.setItems(FXCollections.observableArrayList(
-    asignacionDAO.listarCarreras().keySet()
-    ));
-    cmbMateria.setItems(FXCollections.observableArrayList(
-        asignacionDAO.listarMaterias()
+    mapaCarreras = asignacionDAO.listarCarreras();
+    cmbCarrera.setItems(FXCollections.observableArrayList(mapaCarreras.keySet()));
+
+    cmbCuatrimestre.setItems(FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+
+    // Cuando cambian cuatrimestre o carrera, se refiltra Materia
+    cmbCuatrimestre.valueProperty().addListener((obs, v1, v2) -> actualizarMateriasFiltradas());
+    cmbCarrera.valueProperty().addListener((obs, v1, v2) -> actualizarMateriasFiltradas());
+        cmbMateria.setItems(FXCollections.observableArrayList(
+            asignacionDAO.listarMaterias()
     ));
 
     cmbGrupo.setItems(
@@ -533,6 +561,7 @@ if (hayConflicto) {
         cmbHoraInicio.setValue(null);
         cmbHoraTermino.setValue(null);
         txtActividad.clear();
+        cmbCuatrimestre.setValue(null);
 
         asignacionEnEdicion = null;
         btnGuardar.setText("✓  Guardar asignación");

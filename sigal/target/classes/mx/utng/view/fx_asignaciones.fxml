@@ -94,6 +94,11 @@
                             <ComboBox fx:id="cmbHoraTermino" maxWidth="Infinity" promptText="Seleccionar hora" styleClass="field-combo" />
                         </VBox>
 
+                        <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                            <Label styleClass="field-label" text="Cuatrimestre" />
+                            <ComboBox fx:id="cmbCuatrimestre" maxWidth="Infinity" promptText="Seleccionar cuatrimestre" styleClass="field-combo" />
+                        </VBox>
+
                         <!-- Fila 4: actividad -->
                         <VBox spacing="3.0" GridPane.columnSpan="4" GridPane.rowIndex="3">
                             <Label styleClass="field-label" text="Actividad o motivo *" />
