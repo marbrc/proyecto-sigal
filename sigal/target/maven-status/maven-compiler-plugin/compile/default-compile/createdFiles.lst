@@ -9,7 +9,6 @@ mx\utng\controller\RegistroController.class
 mx\utng\controller\ProfesoresController$NumeroFilaCell.class
 mx\utng\model\DetalleItem.class
 mx\utng\dao\AsignacionDAO.class
-mx\utng\controller\CuentaController$1.class
 mx\utng\util\ThemeManager.class
 mx\utng\dao\ProfesorDAO.class
 mx\utng\controller\AvisosController$AccionesCell.class
@@ -17,12 +16,15 @@ mx\utng\controller\InicioController$DetalleCardCell.class
 mx\utng\controller\RecuperarContrasenaController$1.class
 mx\utng\dao\MateriaDAO.class
 mx\utng\controller\ProfesoresController$TipoBadgeCell.class
+mx\utng\service\HorarioImportService$FilaHorario.class
 mx\utng\controller\InicioController.class
 mx\utng\controller\AvisosController$TipoBadgeCell.class
 mx\utng\controller\CerrarSesionController.class
 mx\utng\dao\AvisoDAO.class
 mx\utng\model\AsignacionHorario.class
 mx\utng\controller\MenuController.class
+mx\utng\service\HorarioImportService$ResultadoImportacion.class
+mx\utng\controller\ImportarHorarioController.class
 mx\utng\controller\AvisosController$EstadoBadgeCell.class
 mx\utng\model\Asignaciones.class
 mx\utng\controller\ProfesoresController$RolBadgeCell.class
@@ -33,6 +35,7 @@ mx\utng\controller\LoginController.class
 mx\utng\model\EstadoCelda.class
 mx\utng\dao\MateriaCarreraDAO.class
 mx\utng\controller\AjustesController.class
+mx\utng\service\HorarioImportService$FilaConError.class
 mx\utng\PrimaryController.class
 mx\utng\util\AvatarUtil.class
 mx\utng\model\Usuario.class
@@ -46,6 +49,7 @@ mx\utng\controller\CarrerasController.class
 mx\utng\controller\ConsultaController.class
 mx\utng\controller\GruposController$AccionesCell.class
 mx\utng\util\EmailUtil.class
+mx\utng\controller\ResultadoImportacionController.class
 mx\utng\dao\CarreraDAO.class
 mx\utng\controller\MateriasController$CuatrimestreBadgeCell.class
 mx\utng\controller\AcercaController.class
@@ -72,8 +76,10 @@ mx\utng\controller\GruposController$TurnoBadgeCell.class
 mx\utng\model\Reporte.class
 mx\utng\model\CeldaHorario.class
 mx\utng\controller\DisponibilidadController.class
+mx\utng\service\HorarioImportService.class
 mx\utng\controller\PlaceholderController.class
 mx\utng\controller\AdminController.class
+mx\utng\service\HorarioImportService$ResultadoValidacion.class
 mx\utng\controller\ProfesoresController.class
 mx\utng\dao\UsuarioDAO.class
 mx\utng\model\Espacio.class

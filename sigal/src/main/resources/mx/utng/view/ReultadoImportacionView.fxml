@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+    Pantalla emergente: Resultado de la importación de horario
+    Se abre desde ImportarHorarioController tras validar el Excel.
+    Muestra las filas que se importarán tal cual y las filas con conflicto/error,
+    que quedan fuera de la importación.
+-->
+<VBox fx:id="rootResultado"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="mx.utng.controller.ResultadoImportacionController"
+      styleClass="modal-card"
+      spacing="4"
+      prefWidth="640">
+    <padding>
+        <Insets top="20" right="24" bottom="20" left="24"/>
+    </padding>
+
+    <!-- Encabezado -->
+    <HBox alignment="CENTER_LEFT" spacing="8">
+        <Label text="Resultado de la importación" styleClass="modal-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnCerrar" text="✕" styleClass="btn-close" onAction="#onCerrar"/>
+    </HBox>
+
+    <Label fx:id="lblResumen" styleClass="modal-subtitle" wrapText="true"/>
+
+    <Region minHeight="12"/>
+
+    <!-- Filas válidas -->
+    <Label text="Filas que se importarán" styleClass="resultado-section-title"/>
+    <TableView fx:id="tablaValidas" prefHeight="160">
+        <columns>
+            <TableColumn fx:id="colValTipo" text="Tipo" prefWidth="90"/>
+            <TableColumn fx:id="colValEspacio" text="Espacio" prefWidth="110"/>
+            <TableColumn fx:id="colValDia" text="Día" prefWidth="80"/>
+            <TableColumn fx:id="colValInicio" text="Inicio" prefWidth="60"/>
+            <TableColumn fx:id="colValFin" text="Fin" prefWidth="60"/>
+            <TableColumn fx:id="colValGrupo" text="Grupo" prefWidth="90"/>
+        </columns>
+    </TableView>
+
+    <Region minHeight="14"/>
+
+    <!-- Filas con error / conflicto -->
+    <Label text="Filas con error o conflicto (no se importarán)" styleClass="resultado-section-title"/>
+    <TableView fx:id="tablaErrores" prefHeight="140">
+        <columns>
+            <TableColumn fx:id="colErrFila" text="Fila" prefWidth="50"/>
+            <TableColumn fx:id="colErrEspacio" text="Espacio" prefWidth="110"/>
+            <TableColumn fx:id="colErrDia" text="Día" prefWidth="80"/>
+            <TableColumn fx:id="colErrHorario" text="Horario" prefWidth="100"/>
+            <TableColumn fx:id="colErrMotivo" text="Motivo" prefWidth="200"/>
+        </columns>
+    </TableView>
+
+    <Region minHeight="16"/>
+    <Separator/>
+    <Region minHeight="12"/>
+
+    <!-- Acciones -->
+    <HBox spacing="8" alignment="CENTER_RIGHT">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="btn-secondary" onAction="#onCancelar"/>
+        <Button fx:id="btnConfirmarImportacion" text="Confirmar importación" styleClass="btn-primary"
+                onAction="#onConfirmarImportacion"/>
+    </HBox>
+</VBox>

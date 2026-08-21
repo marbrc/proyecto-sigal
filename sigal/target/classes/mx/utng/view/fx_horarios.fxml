@@ -70,8 +70,9 @@
             <Label styleClass="legend-text" text="Ocupado" />
         </HBox>
         <Region HBox.hgrow="ALWAYS" />
-        <Button fx:id="btnNuevaAsignacion" onAction="#onNuevaAsignacion" styleClass="btn-primary" text="[+]  Nueva Asignación" />
-    </HBox>
+            <Button fx:id="btnImportarHorario" onAction="#onImportarHorario" styleClass="btn-secondary" text="⬆  Importar horario" />
+            <Button fx:id="btnNuevaAsignacion" onAction="#onNuevaAsignacion" styleClass="btn-primary" text="[+]  Nueva Asignación" />
+        </HBox>
 
     <Region minHeight="16.0" prefHeight="16.0" />
 

@@ -15,6 +15,7 @@ C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\contr
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\EspaciosController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\GruposController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\HorarioController.java
+C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\ImportarHorarioController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\InicioController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\LoginController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\MateriasController.java
@@ -24,6 +25,7 @@ C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\contr
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\RecuperarContrasenaController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\RegistroController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\ReportesController.java
+C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\ResultadoImportacionController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\controller\UsuarioController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\dao\AreaAcademicaDAO.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\dao\AsignacionDAO.java
@@ -58,6 +60,7 @@ C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\model
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\model\Usuario.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\PrimaryController.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\SecondaryController.java
+C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\service\HorarioImportService.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\util\AvatarUtil.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\util\CerrarSesionDialog.java
 C:\Users\Laura\Documents\GitHub\proyecto-sigal\sigal\src\main\java\mx\utng\util\EmailUtil.java

@@ -131,3 +131,24 @@
     -fx-text-fill: #888780;
     -fx-cursor: default;
 }
+
+.step-badge-text {
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F6E56;
+}
+
+.import-list {
+    -fx-border-color: #E3E3E0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 12px;
+}
+
+.import-list-error {
+    -fx-border-color: #E9C7C7;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 12px;
+    -fx-text-fill: #A32D2D;
+}

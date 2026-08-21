@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.List;
 
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -26,10 +28,6 @@ import javafx.stage.Window;
 import mx.utng.service.HorarioImportService;
 import mx.utng.service.HorarioImportService.ResultadoValidacion;
 
-/**
- * Controller de la ventana emergente "Importar horario desde Excel".
- * Se abre como Stage modal desde la pantalla de Horarios (botón "Importar horario").
- */
 public class ImportarHorarioController {
 
     @FXML private Button btnCerrar;
@@ -38,26 +36,24 @@ public class ImportarHorarioController {
     @FXML private Button btnCancelar;
     @FXML private Button btnValidarImportar;
     @FXML private StackPane dropArea;
+    @FXML private DatePicker dpInicioCuatrimestre;
+    @FXML private DatePicker dpFinCuatrimestre;
     @FXML private Label lblArchivoSeleccionado;
     @FXML private Label lblError;
 
-    /** Ruta de la plantilla vacía empaquetada con la app (dentro de resources). */
     private static final String RUTA_PLANTILLA_RECURSO = "/plantillas/plantilla_importar_horario.xlsx";
 
     private final HorarioImportService importService = new HorarioImportService();
 
     private File archivoSeleccionado;
     private Stage stage;
+    private int idUsuarioActual;
+    private Runnable alTerminarConExito;
 
-    // ------------------------------------------------------------------
-    // Apertura de la ventana modal
-    // ------------------------------------------------------------------
-
-    /** Abre esta pantalla como modal sobre la ventana dueña indicada. */
-    public static void abrir(Window owner) {
+    public static void abrir(Window owner, int idUsuarioActual, Runnable alTerminarConExito) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    ImportarHorarioController.class.getResource("/fxml/ImportarHorarioView.fxml"));
+                    ImportarHorarioController.class.getResource("/mx/utng/view/ImportarHorarioView.fxml"));
             Parent root = loader.load();
 
             ImportarHorarioController controller = loader.getController();
@@ -67,11 +63,13 @@ public class ImportarHorarioController {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initStyle(StageStyle.TRANSPARENT);
             controller.stage = stage;
+            controller.idUsuarioActual = idUsuarioActual;
+            controller.alTerminarConExito = alTerminarConExito;
 
             Scene scene = new Scene(root);
             scene.setFill(null);
             scene.getStylesheets().add(
-                    ImportarHorarioController.class.getResource("/css/importar-horario.css").toExternalForm());
+                    ImportarHorarioController.class.getResource("/mx/utng/view/importar-horario.css").toExternalForm());
 
             stage.setScene(scene);
             stage.setResizable(false);
@@ -85,24 +83,22 @@ public class ImportarHorarioController {
     private void initialize() {
         dropArea.setOnDragOver(this::onDragOver);
         dropArea.setOnDragDropped(this::onDragDropped);
-    }
 
-    // ------------------------------------------------------------------
-    // Paso 1: descargar plantilla
-    // ------------------------------------------------------------------
+        LocalDate hoy = LocalDate.now();
+        LocalDate lunesDeEstaSemana = hoy.minusDays(hoy.getDayOfWeek().getValue() - 1L);
+        dpInicioCuatrimestre.setValue(lunesDeEstaSemana);
+        dpFinCuatrimestre.setValue(lunesDeEstaSemana.plusWeeks(16).minusDays(2));
+    }
 
     @FXML
     private void onDescargarPlantilla(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Guardar plantilla de horario");
         chooser.setInitialFileName("plantilla_importar_horario.xlsx");
-        chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
 
         File destino = chooser.showSaveDialog(stage);
-        if (destino == null) {
-            return; // el usuario canceló el diálogo
-        }
+        if (destino == null) return;
 
         try (var in = getClass().getResourceAsStream(RUTA_PLANTILLA_RECURSO)) {
             if (in == null) {
@@ -116,21 +112,14 @@ public class ImportarHorarioController {
         }
     }
 
-    // ------------------------------------------------------------------
-    // Paso 2: seleccionar / arrastrar archivo
-    // ------------------------------------------------------------------
-
     @FXML
     private void onSeleccionarArchivo(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Seleccionar horario a importar");
-        chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
 
         File archivo = chooser.showOpenDialog(stage);
-        if (archivo != null) {
-            establecerArchivoSeleccionado(archivo);
-        }
+        if (archivo != null) establecerArchivoSeleccionado(archivo);
     }
 
     private void onDragOver(DragEvent event) {
@@ -146,10 +135,7 @@ public class ImportarHorarioController {
         boolean exito = false;
         if (db.hasFiles()) {
             List<File> archivos = db.getFiles();
-            File xlsx = archivos.stream()
-                    .filter(f -> f.getName().toLowerCase().endsWith(".xlsx"))
-                    .findFirst()
-                    .orElse(null);
+            File xlsx = archivos.stream().filter(f -> f.getName().toLowerCase().endsWith(".xlsx")).findFirst().orElse(null);
             if (xlsx != null) {
                 establecerArchivoSeleccionado(xlsx);
                 exito = true;
@@ -170,40 +156,37 @@ public class ImportarHorarioController {
         ocultarError();
     }
 
-    // ------------------------------------------------------------------
-    // Validar e importar
-    // ------------------------------------------------------------------
-
     @FXML
     private void onValidarEImportar(ActionEvent event) {
         if (archivoSeleccionado == null) {
             mostrarError("Selecciona un archivo antes de continuar.");
             return;
         }
+        LocalDate inicio = dpInicioCuatrimestre.getValue();
+        LocalDate fin = dpFinCuatrimestre.getValue();
+        if (inicio == null || fin == null) {
+            mostrarError("Indica el inicio y el fin del cuatrimestre.");
+            return;
+        }
 
         try {
-            ResultadoValidacion resultado = importService.validar(archivoSeleccionado);
-            // Abre la pantalla de resultado (filas válidas / con conflicto).
-            // Al estar en el mismo paquete (mx.utng.controller) no requiere import aparte.
-            ResultadoImportacionController.abrir(stage, resultado);
+            ResultadoValidacion resultado = importService.validar(archivoSeleccionado, inicio, fin);
+            ResultadoImportacionController.abrir(stage, resultado, idUsuarioActual, () -> {
+                if (alTerminarConExito != null) alTerminarConExito.run();
+                stage.close();
+            });
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            mostrarError(e.getMessage());
         } catch (Exception e) {
             mostrarError("No se pudo leer el archivo: " + e.getMessage());
         }
     }
 
     @FXML
-    private void onCancelar(ActionEvent event) {
-        stage.close();
-    }
+    private void onCancelar(ActionEvent event) { stage.close(); }
 
     @FXML
-    private void onCerrar(ActionEvent event) {
-        stage.close();
-    }
-
-    // ------------------------------------------------------------------
-    // Utilidades
-    // ------------------------------------------------------------------
+    private void onCerrar(ActionEvent event) { stage.close(); }
 
     private void mostrarError(String mensaje) {
         lblError.setText(mensaje);
