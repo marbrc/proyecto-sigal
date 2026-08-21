@@ -669,6 +669,65 @@ public class AsignacionDAO {
         return dias;
     }
 
+    
+    ///672 CAMBIAR AQUIII MAAAR MAR MAR PONER La parte esaa de ls logica asi bn padre aqui empiezaaaaa
+
+        /**
+     * Proximas asignaciones activas a partir de este momento (incluye las
+     * que siguen en curso hoy), ordenadas por fecha y hora. Usado en el
+     * panel lateral de la pantalla de Bienvenida.
+     */
+    public ObservableList<Asignaciones> listarProximas(int limite) {
+
+        ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
+
+        String sql = """
+                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante,
+                       m.Nombre AS Materia, g.NombreGrupo AS Grupo,
+                       a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
+                       c.NombreCarrera AS Carrera, e.NombreEspacio
+                FROM tb_asignacion a
+                LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
+                LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
+                LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
+                INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
+                WHERE (a.Fecha > CURDATE() OR (a.Fecha = CURDATE() AND a.HoraTermino >= CURTIME()))
+                  AND a.Estado <> 'Cancelado'
+                ORDER BY a.Fecha ASC, a.HoraInicio ASC
+                LIMIT ?
+                """;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, limite);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(mapearFila(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+
+// Y AQUI TERMINA SISISISIISI 718 OKISIIISS
+
+
+
+
+
+
+
+
+
+
+
     private Asignaciones mapearFila(ResultSet rs) throws SQLException {
  
         Date fechaBD = rs.getDate("Fecha");
