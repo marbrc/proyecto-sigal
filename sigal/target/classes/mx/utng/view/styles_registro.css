@@ -1,272 +1,130 @@
 /* =========================================================
-   SIGAL - Estilos ventana de registro (Crear cuenta)
-   Paleta acorde a fx_login.fxml
+   SIGAL - Registro
+   Mismo diseño visual que la pantalla de inicio de sesión.
+   (Los estilos del ojito viven en styles_login.css, que también
+   se carga aquí — no se redefinen para evitar que se pisen entre sí.)
    ========================================================= */
-
-.login-root {
-    -fx-background-color: #05070f;
+ 
+.registro-root {
     -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
+    -fx-background-color: linear-gradient(
+        to bottom right,
+        #16264a 0%,
+        #0e1c3a 100%
+    );
 }
-
-/* Tarjeta principal */
-.login-card {
-    -fx-background-color: #0b0f24;
-    -fx-background-radius: 22;
-    -fx-border-radius: 22;
-    -fx-border-color: rgba(79, 195, 255, 0.25);
-    -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(79,140,255,0.35), 60, 0.15, 0, 0);
+ 
+/* =========================================================
+   TARJETA DE REGISTRO
+   ========================================================= */
+ 
+.registro-card {
+    -fx-min-width: 680;
+    -fx-pref-width: 680;
+    -fx-max-width: 700;
+ 
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+ 
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.35),
+        40,
+        0.25,
+        0,
+        16
+    );
 }
-
-/* ===================== PANEL IZQUIERDO ===================== */
-.login-left {
-    -fx-background-color: black;
-    -fx-background-image: url('assets/fondo_registro.jpg');
-    -fx-background-size: cover;
-    -fx-background-position: center center;
-    -fx-background-radius: 22 0 0 22;
-    -fx-border-radius: 22 0 0 22;
-}
-
-.login-left-overlay {
-    -fx-background-color: linear-gradient(to bottom, rgba(5,7,20,0.75), rgba(6,10,30,0.94));
-    -fx-background-radius: 22 0 0 22;
-}
-
-.login-tagline {
-    -fx-text-fill: #e7f1ff;
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-letter-spacing: 1px;
-}
-
-.login-divider {
-    -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
-    -fx-background-radius: 4;
-}
-
-.login-info-chip {
-    -fx-background-color: rgba(20, 28, 58, 0.75);
-    -fx-background-radius: 14;
-    -fx-border-color: rgba(79, 140, 255, 0.35);
-    -fx-border-radius: 14;
-    -fx-border-width: 1;
-    -fx-padding: 14 16 14 14;
-}
-
-.login-info-icon-box {
-    -fx-background-color: linear-gradient(to bottom right, #3b82f6, #7c3aed);
-    -fx-background-radius: 10;
-    -fx-min-width: 34;
-    -fx-min-height: 34;
-    -fx-max-width: 34;
-    -fx-max-height: 34;
-    -fx-alignment: center;
-}
-
-.login-info-text {
-    -fx-text-fill: #cfe0ff;
-    -fx-font-size: 12.5px;
-}
-
-.login-utng-sep {
-    -fx-background-color: rgba(255,255,255,0.35);
-}
-
-.login-utng-text {
-    -fx-text-fill: rgba(255,255,255,0.55);
-    -fx-font-size: 10.5px;
-    -fx-font-weight: bold;
-    -fx-letter-spacing: 0.5px;
-}
-
-/* ===================== PANEL DERECHO ===================== */
-.login-right {
-    -fx-background-color: #0b0f24;
-    -fx-background-radius: 0 22 22 0;
-}
-
-.login-avatar-box {
-    -fx-background-color: rgba(59, 130, 246, 0.15);
-    -fx-background-radius: 50%;
-    -fx-border-color: #3b82f6;
-    -fx-border-radius: 50%;
-    -fx-border-width: 1.5;
-    -fx-min-width: 52;
-    -fx-min-height: 52;
-    -fx-max-width: 52;
-    -fx-max-height: 52;
-    -fx-alignment: center;
-}
-
-.login-title {
-    -fx-text-fill: white;
+ 
+/* =========================================================
+   TÍTULOS
+   ========================================================= */
+ 
+.registro-card .login-title {
+    -fx-text-fill: #14213d;
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
-
-.login-subtitle {
-    -fx-text-fill: rgba(255,255,255,0.55);
-    -fx-font-size: 12.5px;
+ 
+.registro-card .login-subtitle {
+    -fx-text-fill: #6c7aa0;
+    -fx-font-size: 13px;
 }
-
-.field-label {
-    -fx-text-fill: rgba(255,255,255,0.8);
-    -fx-font-size: 12.5px;
+ 
+.registro-card .field-label {
+    -fx-text-fill: #14213d;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
-
-/* Cajas de texto */
-.input-box {
-    -fx-background-color: rgba(255,255,255,0.04);
-    -fx-background-radius: 12;
-    -fx-border-color: rgba(255,255,255,0.14);
-    -fx-border-radius: 12;
-    -fx-border-width: 1;
-    -fx-padding: 4 14 4 14;
-    -fx-min-height: 46;
+ 
+/* =========================================================
+   CAMPOS
+   ========================================================= */
+ 
+.registro-card .input-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #c7cfe0;
+    -fx-border-width: 1.2;
+    -fx-border-radius: 10;
+    -fx-padding: 4 12 4 12;
+    -fx-min-height: 50;
 }
-
-.input-box:focused-within {
-    -fx-border-color: #3b82f6;
+ 
+.registro-card .input-box:hover {
+    -fx-border-color: #9fb3d9;
 }
-
-.input-icon {
-    -fx-font-size: 13px;
-    -fx-opacity: 0.85;
-}
-
-.input-field {
+ 
+.registro-card .input-field {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-prompt-text-fill: rgba(255,255,255,0.35);
-    -fx-font-size: 13px;
+    -fx-text-fill: #14213d;
+    -fx-font-size: 13.5px;
+    -fx-prompt-text-fill: #9aa5c4;
     -fx-padding: 8 0 8 0;
 }
-
-.input-field:focused {
+ 
+.registro-card .input-field:focused {
     -fx-background-color: transparent;
 }
-
-.input-eye-btn {
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
-    -fx-padding: 4;
-}
-
-
-
-
-
-.icon-tiny {
-    -fx-min-width: 12;
-    -fx-min-height: 12;
-    -fx-max-width: 12;
-    -fx-max-height: 12;
-}
-
-
-
-.icon-eye-slash-line {
-    -fx-stroke: rgba(255,255,255,0.7);
-    -fx-stroke-width: 1.4;
-}
-
-.icon-lock {
-    -fx-background-color: rgba(255,255,255,0.5);
-    -fx-shape: "M6 10V7a6 6 0 1112 0v3h1a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-9a1 1 0 011-1h1zm2 0h8V7a4 4 0 00-8 0v3z";
-}
-
-/* ComboBox Rol */
-.input-combo,
-.input-combo .list-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-font-size: 13px;
-}
-
-.input-combo {
-    -fx-mark-color: rgba(255,255,255,0.6);
-}
-
-.input-combo .arrow-button {
-    -fx-background-color: transparent;
-}
-
-.input-combo .arrow {
-    -fx-background-color: rgba(255,255,255,0.6);
-}
-
-.input-combo:focused,
-.input-combo:showing {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.input-combo .list-view {
-    -fx-background-color: #101632;
-    -fx-border-color: rgba(79,140,255,0.35);
-    -fx-border-radius: 10;
+ 
+/* =========================================================
+   BOTÓN REGISTRARSE
+   ========================================================= */
+ 
+.registro-card .login-submit-btn {
+    -fx-background-color: #2f6bff;
     -fx-background-radius: 10;
-}
-
-.input-combo .list-cell:filled:hover {
-    -fx-background-color: rgba(59,130,246,0.25);
-}
-
-/* Botón principal (degradado) */
-.login-submit-btn {
-    -fx-background-color: linear-gradient(to right, #2563eb, #7c3aed);
-    -fx-background-radius: 12;
     -fx-text-fill: white;
-    -fx-font-size: 14.5px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.55), 22, 0.25, 0, 6);
 }
-
-.login-submit-btn:hover {
-    -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+ 
+.registro-card .login-submit-btn:hover {
+    -fx-background-color: #1c5ae0;
 }
-
-.login-submit-btn:pressed {
-    -fx-background-color: linear-gradient(to right, #1d4ed8, #6d28d9);
+ 
+.registro-card .login-submit-btn:pressed {
+    -fx-background-color: #1747b8;
 }
-
-/* Botón secundario (Volver al inicio de sesión) */
-.login-secondary-btn {
-    -fx-background-color: rgba(255,255,255,0.04);
-    -fx-background-radius: 12;
-    -fx-border-color: rgba(255,255,255,0.18);
-    -fx-border-radius: 12;
-    -fx-border-width: 1;
-    -fx-text-fill: rgba(255,255,255,0.85);
+ 
+/* =========================================================
+   BOTÓN VOLVER AL LOGIN
+   ========================================================= */
+ 
+.registro-card .login-register-btn {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #2f6bff;
+    -fx-border-width: 1.4;
+    -fx-border-radius: 10;
+    -fx-text-fill: #2f6bff;
     -fx-font-size: 13.5px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
 }
-
-.login-secondary-btn:hover {
-    -fx-background-color: rgba(255,255,255,0.09);
-    -fx-border-color: rgba(255,255,255,0.32);
+ 
+.registro-card .login-register-btn:hover {
+    -fx-background-color: #eaf1ff;
 }
-
-.login-hr {
-    -fx-stroke: rgba(255,255,255,0.12);
-    -fx-stroke-width: 1;
-}
-
-.login-exclusive-text {
-    -fx-text-fill: rgba(255,255,255,0.4);
-    -fx-font-size: 10.5px;
-}
-
-.login-footer-text {
-    -fx-text-fill: rgba(255,255,255,0.4);
-    -fx-font-size: 10.5px;
-}
-
-.login-version-text {
-    -fx-text-fill: rgba(255,255,255,0.28);
-    -fx-font-size: 9.5px;
-}
+ 

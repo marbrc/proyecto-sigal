@@ -232,18 +232,43 @@ private void buscar() {
         return;
     }
 
-    ObservableList<Consultas> resultados =
-            asignacionDAO.buscarConFiltros(
-                    solicitante,
-                    tipoEspacio,
-                    espacio,
-                    estado,
-                    carrera,
-                    materia,
-                    grupo,
-                    fechaDesde,
-                    fechaHasta
-            );
+    //ObservableList<Consultas> resultados =
+            //consultaDAO.buscarConFiltros(
+                  //  solicitante,
+                  //  tipoEspacio,
+                  //  espacio,
+                  ////  estado,
+                  //  carrera,
+                  //  materia,
+                  //  grupo,
+                  //  fechaDesde,
+                  //  fechaHasta
+           // );
+
+           //marcaba error, es temp para q me deje correr 
+        Integer idCarrera = null;
+        Integer idEspacio = null;
+
+        if (carrera != null && !carrera.isBlank()) {
+            idCarrera = asignacionDAO.listarCarreras().get(carrera);
+        }
+
+        if (espacio != null && mapaEspacios != null) {
+        idEspacio = mapaEspacios.get(espacio);
+        }
+
+        ObservableList<Consultas> resultados =
+         consultaDAO.buscar(
+                null,
+                idCarrera,
+                idEspacio,
+                solicitante,
+                materia,
+                grupo,
+                estado,
+                fechaDesde,
+                fechaHasta
+        );
 
     tblResultados.setItems(resultados);
 

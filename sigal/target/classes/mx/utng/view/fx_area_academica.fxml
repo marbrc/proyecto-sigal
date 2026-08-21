@@ -51,32 +51,6 @@
                 </HBox>
             </VBox>
 
-            <!-- ==== PANEL DERECHO: AREAS ACADEMICAS REGISTRADAS ==== -->
-            <VBox spacing="12.0" styleClass="card" HBox.hgrow="ALWAYS">
-                <Label styleClass="card-title" text="Áreas académicas registradas" />
-
-                <HBox spacing="8.0">
-                    <HBox alignment="CENTER_LEFT" spacing="6.0" styleClass="input-box" HBox.hgrow="ALWAYS">
-                        <Label styleClass="input-icon" text="🔍" />
-                        <TextField fx:id="txtBuscar" promptText="Buscar por nombre del área..." styleClass="input-field" HBox.hgrow="ALWAYS" />
-                    </HBox>
-                    <Button fx:id="btnRefrescar" onAction="#onRefrescar" styleClass="icon-btn" text="↻" />
-                </HBox>
-
-                <TableView fx:id="tblAreas" styleClass="data-table" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="colNo" prefWidth="50.0" sortable="false" text="No." />
-                        <TableColumn fx:id="colNombre" prefWidth="320.0" text="Área académica" />
-                        <TableColumn fx:id="colTotalCarreras" prefWidth="150.0" text="Carreras" />
-                        <TableColumn fx:id="colAcciones" prefWidth="100.0" sortable="false" text="Acciones" />
-                    </columns>
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                    </columnResizePolicy>
-                </TableView>
-
-                <Label fx:id="lblResultados" styleClass="results-label" text="Mostrando 0 de 0 áreas académicas" />
-            </VBox>
 
         </HBox>
     </VBox>

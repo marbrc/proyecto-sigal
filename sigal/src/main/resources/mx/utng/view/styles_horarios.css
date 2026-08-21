@@ -1,381 +1,575 @@
 /* =========================================================
-   SIGAL - Estilos pantalla Horarios
-   Misma paleta azul-cian neon que fx_asignaciones (styles_asignaciones.css).
+   SIGAL - Estilos pantalla "Horarios"
+   Tema claro azul/blanco
+   Compatible con la estructura actual de Horarios.
    ========================================================= */
- 
+
 .page-root {
-    -fx-background-color: #060b22;
+    -fx-background-color: #eef2f9;
     -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
- 
-/* ===================== TARJETAS / FILTROS ===================== */
+
+/* =========================================================
+   TARJETA DE FILTROS
+   ========================================================= */
+
 .card {
-    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-background-color: white;
     -fx-background-radius: 14;
-    -fx-border-color: rgba(79,195,255,0.55);
-    -fx-border-width: 1;
+    -fx-border-color: #e7ebf3;
     -fx-border-radius: 14;
-    -fx-padding: 16;
-    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.35), 22, 0.25, 0, 0);
+    -fx-border-width: 1;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(30,41,82,0.06),
+        14,
+        0.15,
+        0,
+        3
+    );
 }
- 
+
+/* =========================================================
+   ETIQUETAS
+   ========================================================= */
+
 .field-label {
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 10.5px;
     -fx-font-weight: bold;
 }
- 
+
+/* =========================================================
+   COMBOBOX
+   ========================================================= */
+
 .input-combo {
-    -fx-background-color: #0d1526;
-    -fx-background-radius: 8;
-    -fx-border-color: rgba(79,195,255,0.20);
-    -fx-border-radius: 8;
+    -fx-background-color: #f5f7fb;
+    -fx-background-radius: 7;
+    -fx-border-color: #dfe4ef;
+    -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-mark-color: #4fc3ff;
-    -fx-min-height: 38;
+    -fx-mark-color: #2f6bff;
+    -fx-min-height: 34;
 }
- 
-.input-combo .list-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: #e6eefc;
-    -fx-font-size: 11.5px;
-    -fx-padding: 6 0 6 10;
-}
- 
-.input-combo .arrow-button {
-    -fx-background-color: transparent;
-}
- 
-.input-combo .arrow {
-    -fx-background-color: #4fc3ff;
-}
- 
+
 .input-combo:focused,
 .input-combo:showing {
     -fx-border-color: #4fc3ff;
 }
- 
+
+.input-combo .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1b2340;
+    -fx-font-size: 11.5px;
+    -fx-padding: 5 8 5 8;
+}
+
+.input-combo .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.input-combo .arrow {
+    -fx-background-color: #56618a;
+}
+
 .input-combo .list-view {
-    -fx-background-color: #0d1526;
-    -fx-border-color: rgba(79,195,255,0.25);
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
+    -fx-background-color: white;
+    -fx-border-color: #dfe4ef;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
 }
- 
+
 .input-combo .list-cell:filled:hover {
-    -fx-background-color: rgba(79,195,255,0.15);
+    -fx-background-color: rgba(47,107,255,0.08);
 }
- 
+
 .input-combo .list-cell:filled:selected {
-    -fx-background-color: rgba(79,195,255,0.25);
+    -fx-background-color: rgba(47,107,255,0.14);
 }
- 
+
+/* =========================================================
+   FECHA
+   ========================================================= */
+
 .input-date {
-    -fx-background-color: #0d1526;
-    -fx-background-radius: 8;
-    -fx-border-color: rgba(79,195,255,0.20);
-    -fx-border-radius: 8;
+    -fx-background-color: #f5f7fb;
+    -fx-background-radius: 7;
+    -fx-border-color: #dfe4ef;
+    -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-min-height: 38;
+    -fx-min-height: 34;
 }
- 
+
+.input-date:focused {
+    -fx-border-color: #4fc3ff;
+}
+
 .input-date .text-field {
     -fx-background-color: transparent;
-    -fx-text-fill: #e6eefc;
+    -fx-text-fill: #1b2340;
+    -fx-prompt-text-fill: #9aa4c2;
     -fx-font-size: 11.5px;
 }
- 
+
 .input-date .arrow-button {
     -fx-background-color: transparent;
 }
- 
+
 .input-date .arrow-button .arrow {
-    -fx-background-color: #4fc3ff;
+    -fx-background-color: #2f6bff;
 }
- 
-/* Toggle Vista: Diaria / Semanal / Mensual */
+
+/* =========================================================
+   VISTA DIARIA / SEMANAL / MENSUAL
+   ========================================================= */
+
 .view-toggle-group {
-    -fx-background-color: #0d1526;
+    -fx-background-color: #f5f7fb;
     -fx-background-radius: 8;
-    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 8;
     -fx-border-width: 1;
     -fx-padding: 3;
 }
- 
+
 .view-toggle-btn {
     -fx-background-color: transparent;
-    -fx-text-fill: #9db4d1;
+    -fx-text-fill: #56618a;
     -fx-font-size: 11.5px;
     -fx-font-weight: bold;
     -fx-background-radius: 6;
     -fx-padding: 7 13 7 13;
     -fx-cursor: hand;
 }
- 
+
+.view-toggle-btn:hover {
+    -fx-background-color: #eaf0fb;
+}
+
 .view-toggle-btn:selected {
-    -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
+    -fx-background-color: linear-gradient(
+        to right,
+        #1f6fd6,
+        #4fc3ff
+    );
     -fx-text-fill: white;
 }
- 
-/* ===================== BOTONES ===================== */
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+   ========================================================= */
+
 .btn-primary {
-    -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
-    -fx-background-radius: 8;
+    -fx-background-color: linear-gradient(
+        to right,
+        #1f6fd6,
+        #4fc3ff
+    );
+    -fx-background-radius: 7;
     -fx-text-fill: white;
-    -fx-font-size: 12.5px;
+    -fx-font-size: 11.5px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-padding: 10 18 10 18;
-    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.45), 18, 0.2, 0, 4);
+    -fx-padding: 8 16 8 16;
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(79,195,255,0.35),
+        14,
+        0.2,
+        0,
+        3
+    );
 }
- 
+
 .btn-primary:hover {
-    -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
+    -fx-background-color: linear-gradient(
+        to right,
+        #2a7ee6,
+        #66cdff
+    );
 }
- 
+
 .btn-primary:pressed {
-    -fx-background-color: linear-gradient(to right, #1a5cb8, #3aa8e6);
+    -fx-background-color: linear-gradient(
+        to right,
+        #1a5cb8,
+        #3aa8e6
+    );
 }
- 
+
+/* =========================================================
+   BOTÓN SECUNDARIO
+   ========================================================= */
+
 .btn-secondary {
-    -fx-background-color: transparent;
-    -fx-background-radius: 8;
-    -fx-border-color: rgba(157,180,209,0.35);
-    -fx-border-radius: 8;
+    -fx-background-color: white;
+    -fx-background-radius: 7;
+    -fx-border-color: #dfe4ef;
+    -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-text-fill: #9db4d1;
-    -fx-font-size: 12.5px;
+    -fx-text-fill: #56618a;
+    -fx-font-size: 11.5px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-padding: 10 16 10 16;
+    -fx-padding: 8 14 8 14;
 }
- 
+
 .btn-secondary:hover {
-    -fx-background-color: rgba(157,180,209,0.08);
+    -fx-background-color: #f5f7fb;
 }
- 
-/* ===================== LEYENDA ===================== */
+
+/* =========================================================
+   LEYENDA
+   ========================================================= */
+
 .legend-title {
-    -fx-text-fill: #9db4d1;
-    -fx-font-size: 12.5px;
+    -fx-text-fill: #56618a;
+    -fx-font-size: 11.5px;
     -fx-font-weight: bold;
 }
- 
+
 .legend-text {
-    -fx-text-fill: #9db4d1;
-    -fx-font-size: 12px;
+    -fx-text-fill: #6b7690;
+    -fx-font-size: 11px;
 }
- 
-/* ===================== CUADRÍCULA ===================== */
+
+/* =========================================================
+   SCROLL DE LA TABLA
+   ========================================================= */
+
 .grid-scroll {
     -fx-background-color: transparent;
     -fx-background: transparent;
 }
- 
+
 .grid-scroll > .viewport {
     -fx-background-color: transparent;
 }
- 
+
 .grid-scroll .scroll-bar:vertical,
 .grid-scroll .scroll-bar:horizontal {
     -fx-background-color: transparent;
 }
- 
+
+.grid-scroll .scroll-bar:vertical .thumb,
+.grid-scroll .scroll-bar:horizontal .thumb {
+    -fx-background-color: #c6d0e3;
+    -fx-background-radius: 8;
+}
+
+.grid-scroll .scroll-bar:vertical .thumb:hover,
+.grid-scroll .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #9eacc7;
+}
+
+/* =========================================================
+   CUADRÍCULA GENERAL
+   ========================================================= */
+
 .horario-grid {
-    -fx-background-color: transparent;
+    -fx-background-color: white;
 }
- 
+
+/* =========================================================
+   ENCABEZADOS: LUNES, MARTES, ETC.
+   ========================================================= */
+
 .grid-header-cell {
-    -fx-background-color: #0a1120;
-    -fx-text-fill: #4fc3ff;
-    -fx-font-size: 12px;
+    -fx-background-color: #2165ad;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
-    -fx-padding: 12 8 12 8;
-    -fx-border-color: transparent transparent rgba(79,195,255,0.12) transparent;
-    -fx-border-width: 0 0 1 0;
+    -fx-padding: 9 8 9 8;
+    -fx-alignment: CENTER;
+    -fx-border-color: #d2deef;
+    -fx-border-width: 0 1 1 0;
 }
- 
+
+/* =========================================================
+   COLUMNA DE HORAS
+   ========================================================= */
+
 .grid-hora-cell {
-    -fx-background-color: #0d1526;
-    -fx-text-fill: #9db4d1;
-    -fx-font-size: 11.5px;
-    -fx-font-weight: bold;
-    -fx-padding: 10 10 10 12;
-    -fx-border-color: transparent rgba(79,195,255,0.08) rgba(79,195,255,0.08) transparent;
-    -fx-border-width: 0 1 1 0;
-}
- 
-.grid-cell {
-    -fx-border-color: transparent rgba(79,195,255,0.08) rgba(79,195,255,0.08) transparent;
-    -fx-border-width: 0 1 1 0;
-    -fx-cursor: hand;
-}
- 
-.cell-estado-text {
-    -fx-font-size: 11.5px;
-    -fx-font-weight: bold;
-}
- 
-.cell-detalle-text {
+    -fx-background-color: #2165ad;
+    -fx-text-fill: white;
     -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 8 8 10;
+    -fx-alignment: CENTER_LEFT;
+
+    -fx-border-color:
+        transparent
+        #d2deef
+        #d2deef
+        transparent;
+
+    -fx-border-width: 0 1 1 0;
+}
+
+/* =========================================================
+   TODAS LAS CASILLAS
+   IMPORTANTE:
+   Todas tienen fondo.
+   Ya no quedan transparentes.
+   ========================================================= */
+
+.grid-cell {
+    -fx-background-color: white;
+
+    -fx-border-color:
+        transparent
+        #dce4f1
+        #dce4f1
+        transparent;
+
+    -fx-border-width: 0 1 1 0;
+
+    -fx-cursor: hand;
+    -fx-alignment: CENTER;
+}
+
+/* Efecto al pasar el mouse */
+
+.grid-cell:hover {
+    -fx-background-color: #eef5ff;
+}
+
+/* =========================================================
+   TEXTO DENTRO DE LAS CASILLAS
+   ========================================================= */
+
+.cell-estado-text {
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+.cell-detalle-text {
+    -fx-font-size: 9.5px;
     -fx-text-alignment: center;
+    -fx-wrap-text: true;
 }
- 
+
+/* =========================================================
+   LIBRE
+   Verde claro
+   ========================================================= */
+
 .cell-libre {
-    -fx-background-color: rgba(34,197,94,0.08);
+    -fx-background-color: #f0fbf5;
 }
+
 .cell-libre .cell-estado-text {
-    -fx-text-fill: #4ade80;
+    -fx-text-fill: #16a34a;
 }
- 
+
+.cell-libre .cell-detalle-text {
+    -fx-text-fill: #5f7a6a;
+}
+
 .cell-libre:hover {
-    -fx-background-color: rgba(34,197,94,0.18);
+    -fx-background-color: #dcf7e7;
 }
- 
+
+/* =========================================================
+   ASIGNADO
+   Azul claro
+   ========================================================= */
+
 .cell-asignado {
-    -fx-background-color: rgba(79,195,255,0.14);
+    -fx-background-color: #e7f1fc;
 }
+
 .cell-asignado .cell-estado-text {
-    -fx-text-fill: #4fc3ff;
+    -fx-text-fill: #1f6fd6;
 }
+
 .cell-asignado .cell-detalle-text {
-    -fx-text-fill: #cfe0f5;
+    -fx-text-fill: #536b89;
 }
- 
+
 .cell-asignado:hover {
-    -fx-background-color: rgba(79,195,255,0.24);
+    -fx-background-color: #d5e8fb;
 }
- 
+
+/* =========================================================
+   OCUPADO
+   Naranja claro
+   ========================================================= */
+
 .cell-ocupado {
-    -fx-background-color: rgba(245,158,11,0.14);
+    -fx-background-color: #fff5e6;
 }
+
 .cell-ocupado .cell-estado-text {
-    -fx-text-fill: #f59e0b;
+    -fx-text-fill: #ea8a16;
 }
+
 .cell-ocupado .cell-detalle-text {
-    -fx-text-fill: #cfe0f5;
+    -fx-text-fill: #806b4f;
 }
- 
+
 .cell-ocupado:hover {
-    -fx-background-color: rgba(245,158,11,0.24);
+    -fx-background-color: #ffebcc;
 }
- 
+
+/* =========================================================
+   DIVISOR HORARIO VESPERTINO
+   ========================================================= */
+
 .divisor-vespertino {
-    -fx-background-color: #0a1120;
-    -fx-text-fill: #4fc3ff;
-    -fx-font-size: 12.5px;
+    -fx-background-color: #e9eff8;
+    -fx-text-fill: #2165ad;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-alignment: center;
-    -fx-padding: 8;
-    -fx-border-color: transparent transparent rgba(79,195,255,0.12) transparent;
+    -fx-padding: 7;
+
+    -fx-border-color:
+        transparent
+        transparent
+        #d2deef
+        transparent;
+
     -fx-border-width: 0 0 1 0;
 }
- 
-.grid-cell:hover {
-    -fx-background-color: rgba(79,195,255,0.10);
-}
- 
-/* ===================== ESTADOS VACÍOS ===================== */
+
+/* =========================================================
+   ESTADOS VACÍOS
+   ========================================================= */
+
 .empty-icon {
-    -fx-font-size: 34px;
+    -fx-font-size: 30px;
 }
- 
+
 .empty-title {
-    -fx-text-fill: white;
+    -fx-text-fill: #1b2340;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
- 
+
 .empty-text {
-    -fx-text-fill: #7c8bb5;
-    -fx-font-size: 12.5px;
-}
- 
-/* ===================== FOOTER ===================== */
-.footer-icon {
-    -fx-text-fill: #4fc3ff;
+    -fx-text-fill: #8291bd;
     -fx-font-size: 12px;
 }
- 
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer-icon {
+    -fx-text-fill: #2362eb;
+    -fx-font-size: 12px;
+}
+
 .footer-text {
-    -fx-text-fill: #7c8bb5;
-    -fx-font-size: 11.5px;
+    -fx-text-fill: #6b7690;
+    -fx-font-size: 11px;
 }
- 
-/* ===================== DIÁLOGO DE ASIGNACIÓN ===================== */
+
+/* =========================================================
+   DIÁLOGO DE ASIGNACIÓN
+   ========================================================= */
+
 .dialog-asignacion {
-    -fx-background-color: #0a1120;
+    -fx-background-color: white;
 }
- 
+
 .dialog-asignacion .label {
-    -fx-text-fill: #cfe0f5;
+    -fx-text-fill: #56618a;
 }
- 
+
 .dialog-asignacion .header-panel {
-    -fx-background-color: #0a1120;
+    -fx-background-color: white;
 }
- 
+
 .dialog-asignacion .header-panel .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #1b2340;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }
- 
+
 .dialog-asignacion .text-field,
 .dialog-asignacion .combo-box {
-    -fx-background-color: #0d1526;
-    -fx-text-fill: #e6eefc;
+    -fx-background-color: #f5f7fb;
+    -fx-text-fill: #1b2340;
     -fx-background-radius: 7;
     -fx-border-radius: 7;
-    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-color: #dfe4ef;
 }
- 
+
+.dialog-asignacion .text-field:focused,
+.dialog-asignacion .combo-box:focused {
+    -fx-border-color: #4fc3ff;
+}
+
 .dialog-asignacion .content {
-    -fx-background-color: #0a1120;
+    -fx-background-color: white;
 }
- 
+
 .dialog-asignacion .button-bar {
-    -fx-background-color: #0a1120;
+    -fx-background-color: white;
 }
- 
+
 .dialog-asignacion .button-bar .button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 8;
-    -fx-border-color: rgba(157,180,209,0.35);
-    -fx-border-radius: 8;
+    -fx-background-color: white;
+    -fx-background-radius: 7;
+    -fx-border-color: #dfe4ef;
+    -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-text-fill: #9db4d1;
-    -fx-font-size: 12.5px;
+    -fx-text-fill: #56618a;
+    -fx-font-size: 11.5px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-padding: 8 16 8 16;
 }
- 
+
 .dialog-asignacion .button-bar .button:hover {
-    -fx-background-color: rgba(157,180,209,0.08);
+    -fx-background-color: #f5f7fb;
 }
- 
+
 .dialog-asignacion .button-bar .button:default {
-    -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
+    -fx-background-color: linear-gradient(
+        to right,
+        #1f6fd6,
+        #4fc3ff
+    );
     -fx-border-width: 0;
     -fx-text-fill: white;
-    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.45), 14, 0.2, 0, 3);
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(79,195,255,0.35),
+        12,
+        0.2,
+        0,
+        3
+    );
 }
- 
+
 .dialog-asignacion .button-bar .button:default:hover {
-    -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
+    -fx-background-color: linear-gradient(
+        to right,
+        #2a7ee6,
+        #66cdff
+    );
 }
- 
+
+/* =========================================================
+   LINK DEL DIÁLOGO
+   ========================================================= */
+
 .dialog-asignacion .dialog-link {
-    -fx-text-fill: #4fc3ff;
+    -fx-text-fill: #2362eb;
     -fx-font-size: 11.5px;
     -fx-font-weight: bold;
     -fx-underline: false;
     -fx-border-color: transparent;
     -fx-padding: 4 16 10 16;
 }
- 
+
 .dialog-asignacion .dialog-link:hover {
-    -fx-text-fill: #8fe0ff;
+    -fx-text-fill: #1f6fd6;
     -fx-underline: true;
 }
- 

@@ -1,14 +1,14 @@
 /* =========================================================
-   SIGAL - Estilos de la pantalla Consultas (fx_consultas.fxml)
-   Colores fijos (sin variables de CSS), mismo tono azul que el
-   resto del sistema.
+   SIGAL - Estilos pantalla "Consultas"
+   Tema claro azul/blanco
+   Mismo estilo visual que Profesores y Registro de Espacios
    ========================================================= */
 
 .consultas-scroll {
     -fx-background-color: transparent;
     -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
-
 }
+
 .consultas-scroll > .viewport {
     -fx-background-color: transparent;
 }
@@ -17,11 +17,12 @@
     -fx-background-color: transparent;
 }
 
-/* ---------------- ENCABEZADO ---------------- */
+/* ===================== ENCABEZADO ===================== */
+
 .header-icon-box {
-    -fx-background-color: rgba(79,195,255,0.14);
+    -fx-background-color: rgba(47,107,255,0.10);
     -fx-background-radius: 14;
-    -fx-border-color: rgba(79,195,255,0.35);
+    -fx-border-color: rgba(47,107,255,0.20);
     -fx-border-radius: 14;
     -fx-min-width: 52;
     -fx-min-height: 52;
@@ -31,110 +32,171 @@
 }
 
 .page-title {
-    -fx-text-fill: white;
+    -fx-text-fill: #1b2340;
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
+
 .page-subtitle {
-    -fx-text-fill: #7c8bb5;
+    -fx-text-fill: #6b7690;
     -fx-font-size: 12.5px;
 }
 
-/* ---------------- TARJETAS ---------------- */
+/* ===================== TARJETAS ===================== */
+
 .consultas-card {
-    -fx-background-color: rgba(15,22,50,0.75);
+    -fx-background-color: white;
     -fx-background-radius: 14;
-    -fx-border-color: rgba(79,195,255,0.20);
+    -fx-border-color: #e7ebf3;
     -fx-border-radius: 14;
     -fx-border-width: 1;
     -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(30,41,82,0.06), 14, 0.15, 0, 3);
 }
 
-/* ---------------- FILTROS ---------------- */
+/* ===================== FILTROS ===================== */
+
 .filter-label {
-    -fx-text-fill: #c7cfe8;
+    -fx-text-fill: #56618a;
     -fx-font-size: 11.5px;
     -fx-font-weight: bold;
 }
+
 .filter-inline-label {
-    -fx-text-fill: #7c8bb5;
+    -fx-text-fill: #7b86a3;
     -fx-font-size: 12px;
 }
 
-.combo-box, .text-field, .date-picker {
-    -fx-background-color: rgba(10,16,36,0.85);
-    -fx-text-fill: #e6eefc;
-    -fx-border-color: rgba(79,163,255,0.30);
+/* Campos generales */
+
+.combo-box,
+.text-field,
+.date-picker {
+    -fx-background-color: #f5f7fb;
+    -fx-text-fill: #1b2340;
+    -fx-border-color: #dfe4ef;
     -fx-border-width: 1;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
     -fx-padding: 4 8 4 8;
 }
-.combo-box:hover, .text-field:hover, .date-picker:hover {
-    -fx-border-color: rgba(79,163,255,0.55);
+
+.combo-box:hover,
+.text-field:hover,
+.date-picker:hover {
+    -fx-border-color: #b9c5db;
 }
-.combo-box:focused, .text-field:focused, .date-picker:focused {
-    -fx-border-color: #4fa3ff;
+
+.combo-box:focused,
+.text-field:focused,
+.date-picker:focused {
+    -fx-border-color: #4fc3ff;
 }
+
+/* Texto de ComboBox */
+
 .combo-box .list-cell {
-    -fx-text-fill: #e6eefc;
+    -fx-text-fill: #1b2340;
     -fx-background-color: transparent;
+    -fx-font-size: 11.5px;
 }
+
+/* Lista desplegable */
+
 .combo-box-popup .list-view {
-    -fx-background-color: #0c1b33;
-    -fx-border-color: rgba(79,163,255,0.35);
+    -fx-background-color: white;
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
 }
+
 .combo-box-popup .list-view .list-cell:hover {
-    -fx-background-color: rgba(79,163,255,0.20);
+    -fx-background-color: rgba(47,107,255,0.08);
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: rgba(47,107,255,0.14);
+}
+
+/* Flecha */
+
+.combo-box .arrow {
+    -fx-background-color: #56618a;
 }
 
 .date-picker .arrow-button {
     -fx-background-color: transparent;
 }
 
-/* El calendario emergente (date-picker-popup) es una ventana aparte,
-   NO vive dentro del ".date-picker" -- por eso todos sus selectores
-   van con el prefijo ".date-picker-popup", nunca ".date-picker X" */
-.field-combo, .field-date {
-    -fx-background-color: #0d1526;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-border-color: rgba(79,195,255,0.20);
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #56618a;
+}
+
+/* ===================== CALENDARIO ===================== */
+
+.date-picker-popup {
+    -fx-background-color: white;
+    -fx-border-color: #dfe4ef;
     -fx-border-width: 1;
-    -fx-mark-color: #4fc3ff;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
 }
 
-.field-combo .list-cell, .field-date .text-field {
-    -fx-text-fill: #e6eefc;
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: #f5f7fb;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.date-picker-popup .spinner .button,
+.date-picker-popup .spinner .label {
+    -fx-text-fill: #1b2340;
     -fx-background-color: transparent;
-    -fx-prompt-text-fill: #57708f;
-    -fx-font-size: 11.5px;
-    -fx-padding: 4 8 4 8;
 }
 
-.field-combo .arrow-button, .field-date .arrow-button {
+.date-picker-popup .spinner .button:hover {
+    -fx-background-color: rgba(47,107,255,0.08);
+}
+
+.date-picker-popup .day-name-cell {
+    -fx-text-fill: #6b7690;
+    -fx-font-weight: bold;
+}
+
+.date-picker-popup .day-cell {
     -fx-background-color: transparent;
+    -fx-text-fill: #1b2340;
+    -fx-alignment: center;
 }
 
-.field-combo .arrow, .field-date .arrow {
-    -fx-background-color: #4fc3ff;
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: rgba(47,107,255,0.08);
 }
 
-.field-combo .combo-box-popup .list-view,
-.field-date .date-picker-popup {
-    -fx-background-color: #0d1526;
-    -fx-border-color: rgba(79,195,255,0.25);
+.date-picker-popup .day-cell:selected {
+    -fx-background-color: #2f6bff;
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
 }
 
-.field-combo .combo-box-popup .list-cell:hover {
-    -fx-background-color: rgba(79,195,255,0.15);
+.date-picker-popup .day-cell.today {
+    -fx-border-color: rgba(47,107,255,0.45);
+    -fx-border-radius: 6;
 }
 
-/* ---------------- BOTONES ---------------- */
+.date-picker-popup .day-cell:disabled,
+.date-picker-popup .day-cell.next-month,
+.date-picker-popup .day-cell.previous-month {
+    -fx-text-fill: #b7bfd2;
+}
+
+.date-picker-popup .week-number-cell {
+    -fx-text-fill: #9aa4c2;
+}
+
+/* ===================== BOTONES ===================== */
+
 .btn-primario {
-    -fx-background-color: linear-gradient(to right, #2f6bff 0%, #7b2ff7 100%);
+    -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 12.5px;
@@ -143,83 +205,132 @@
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.35), 14, 0.2, 0, 3);
 }
+
 .btn-primario:hover {
-    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.55), 18, 0.25, 0, 4);
+    -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
+}
+
+.btn-primario:pressed {
+    -fx-background-color: linear-gradient(to right, #1a5cb8, #3aa8e6);
 }
 
 .btn-secundario {
-    -fx-background-color: rgba(120,150,255,0.12);
-    -fx-text-fill: #c7cfe8;
+    -fx-background-color: white;
+    -fx-text-fill: #56618a;
     -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
     -fx-background-radius: 10;
-    -fx-border-color: rgba(120,150,255,0.25);
+    -fx-border-color: #dfe4ef;
     -fx-border-radius: 10;
     -fx-padding: 10 16 10 16;
     -fx-cursor: hand;
 }
+
 .btn-secundario:hover {
-    -fx-background-color: rgba(120,150,255,0.22);
+    -fx-background-color: #f5f7fb;
 }
 
-/* ---------------- RESULTADOS ---------------- */
+/* ===================== RESULTADOS ===================== */
+
 .resultados-titulo {
-    -fx-text-fill: white;
+    -fx-text-fill: #1b2340;
     -fx-font-size: 14.5px;
     -fx-font-weight: bold;
 }
+
 .resultados-texto {
-    -fx-text-fill: #7c8bb5;
+    -fx-text-fill: #7b86a3;
     -fx-font-size: 12px;
 }
+
 .resultados-numero {
-    -fx-text-fill: #4fa3ff;
+    -fx-text-fill: #2f6bff;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
 
-/* ---------------- TABLA ---------------- */
+/* ===================== TABLA ===================== */
+
 .consultas-tabla {
     -fx-background-color: transparent;
+    -fx-border-color: #e7ebf3;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
     -fx-table-cell-border-color: transparent;
 }
+
+/* Encabezado */
+
 .consultas-tabla > .column-header-background,
 .consultas-tabla .column-header-background {
-    -fx-background-color: #0c1b33;
+    -fx-background-color: #f5f7fb;
     -fx-background-radius: 10 10 0 0;
 }
+
 .consultas-tabla .filler {
-    -fx-background-color: #0c1b33;
+    -fx-background-color: #f5f7fb;
 }
-.consultas-tabla .column-header,
+
+.consultas-tabla .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 36;
+}
+
 .consultas-tabla .column-header .label,
 .consultas-tabla .column-header-background .label {
     -fx-background-color: transparent;
-    -fx-text-fill: #c7cfe8;
+    -fx-text-fill: #6b7690;
     -fx-font-weight: bold;
-    -fx-font-size: 11.5px;
+    -fx-font-size: 11px;
 }
+
+/* Filas */
+
 .consultas-tabla .table-row-cell {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent transparent rgba(120,150,255,0.10) transparent;
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #eef1f8 transparent;
 }
+
 .consultas-tabla .table-row-cell:odd {
-    -fx-background-color: rgba(255,255,255,0.02);
+    -fx-background-color: #f8faff;
 }
+
 .consultas-tabla .table-row-cell:hover {
-    -fx-background-color: rgba(79,163,255,0.10);
+    -fx-background-color: rgba(47,107,255,0.06);
 }
+
 .consultas-tabla .table-row-cell:selected {
-    -fx-background-color: rgba(79,163,255,0.22);
+    -fx-background-color: rgba(47,107,255,0.10);
 }
+
+/* Celdas */
+
 .consultas-tabla .table-cell {
-    -fx-text-fill: #dbe2f5;
+    -fx-text-fill: #1b2340;
     -fx-font-size: 12px;
     -fx-padding: 8 10 8 10;
     -fx-alignment: CENTER_LEFT;
 }
 
-/* Evita el fondo blanco del viewport del ScrollPane */
-.scroll-pane, .scroll-pane .viewport, .scroll-pane > .viewport {
+/* ===================== SCROLL ===================== */
+
+.scroll-pane,
+.scroll-pane .viewport,
+.scroll-pane > .viewport {
     -fx-background-color: transparent;
     -fx-background: transparent;
+}
+
+.consultas-tabla .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.consultas-tabla .scroll-bar .thumb {
+    -fx-background-color: #cbd5e7;
+    -fx-background-radius: 5;
+}
+
+.consultas-tabla .scroll-bar .thumb:hover {
+    -fx-background-color: #aebbd2;
 }

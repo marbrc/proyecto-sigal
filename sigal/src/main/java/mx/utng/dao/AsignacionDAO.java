@@ -797,8 +797,8 @@ public ObservableList<Asignaciones> listarPorFecha(LocalDate fecha) {
         return dias;
     }
 
-<<<<<<< HEAD
-    
+
+
     ///672 CAMBIAR AQUIII MAAAR MAR MAR PONER La parte esaa de ls logica asi bn padre aqui empiezaaaaa
 
         /**
@@ -849,49 +849,6 @@ public ObservableList<Asignaciones> listarPorFecha(LocalDate fecha) {
 
 
 
-
-
-
-
-
-
-
-
-    private Asignaciones mapearFila(ResultSet rs) throws SQLException {
- 
-        Date fechaBD = rs.getDate("Fecha");
-        Time horaInicioBD = rs.getTime("HoraInicio");
-        Time horaTerminoBD = rs.getTime("HoraTermino");
- 
-        String carrera = rs.getString("Carrera");
-        if (carrera == null || carrera.isBlank()) carrera = "—";
- 
-        String materia = rs.getString("Materia");
-        if (materia == null || materia.isBlank()) materia = "—";
- 
-        String grupo = rs.getString("Grupo");
-        if (grupo == null || grupo.isBlank()) grupo = "—";
- 
-        Asignaciones asg = new Asignaciones(
-                "ASG-" + String.format("%04d", rs.getInt("ID_Asignacion")),
-                fechaBD.toLocalDate().format(FORMATO_FECHA_UI),
-                horaInicioBD.toLocalTime().toString().substring(0, 5),
-                horaTerminoBD.toLocalTime().toString().substring(0, 5),
-                rs.getString("NombreEspacio"),
-                rs.getString("TipoUsuario"),
-                rs.getString("NombreSolicitante"),
-                "—",
-                carrera,
-                materia,
-                grupo,
-                String.valueOf(rs.getInt("NumAlumnos")),
-                rs.getString("Actividad"),
-                rs.getString("Estado")
-        );
-        asg.setIdAsignacion(rs.getInt("ID_Asignacion"));
-        return asg;
-    }
-=======
 private Asignaciones mapearFila(ResultSet rs) throws SQLException {
 
     Date fechaBD = rs.getDate("Fecha");
@@ -930,8 +887,7 @@ private Asignaciones mapearFila(ResultSet rs) throws SQLException {
     asg.setCuatrimestre(cuatrimestreNulo ? "" : String.valueOf(cuatrimestreBD));
     return asg;
 }
->>>>>>> 135e54a9fa9304239b4930769232372cc5117136
- 
+
     // ============================================================
     //  ELIMINAR (borrar)
     // ============================================================

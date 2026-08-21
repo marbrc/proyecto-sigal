@@ -1,42 +1,70 @@
 /* =========================================================
    SIGAL - Estilos pantalla "Cerrar sesión"
-   Modal de confirmación con la misma paleta oscura y acentos
-   morado/azul/rosa que el resto del sistema (ver styles_profesores.css).
+   Modal de confirmación
+   PALETA: BLANCO + AZUL
    ========================================================= */
 
-/* Fondo oscurecido que cubre la pantalla de origen mientras el modal
-   está abierto. */
+
+/* =========================================================
+   FONDO OSCURECIDO DEL MODAL
+   ========================================================= */
+
 .logout-overlay {
-    -fx-background-color: rgba(2, 6, 20, 0.72);
+    -fx-background-color: rgba(15, 35, 75, 0.45);
     -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
 
-/* ===================== TARJETA ===================== */
+
+/* =========================================================
+   TARJETA DEL MODAL
+   BLANCA
+   ========================================================= */
+
 .logout-card {
-    -fx-background-color: #0d1226;
-    -fx-background-radius: 24;
-    -fx-border-color: rgba(124, 58, 237, 0.35);
-    -fx-border-radius: 24;
-    -fx-border-width: 1.4;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.55), 40, 0.25, 0, 14);
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20;
+    -fx-border-color: #D6E6F7;
+    -fx-border-radius: 20;
+    -fx-border-width: 1.2;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(30, 80, 140, 0.22),
+            28,
+            0.18,
+            0,
+            10
+        );
 }
 
-/* ===================== ICONO ===================== */
+
+/* =========================================================
+   ICONO DE CERRAR SESIÓN
+   AZUL
+   ========================================================= */
+
 .logout-icon-ring {
-    -fx-fill: transparent;
-    -fx-stroke-width: 3.5;
-    -fx-stroke: linear-gradient(to bottom right, #3b82f6, #7c3aed, #ec4899);
+    -fx-fill: #EAF4FF;
+    -fx-stroke: #2878D8;
+    -fx-stroke-width: 3;
 }
 
 .logout-icon-symbol {
     -fx-font-size: 42px;
     -fx-font-weight: bold;
-    -fx-text-fill: linear-gradient(to bottom, #fb7185, #e11d48);
+    -fx-text-fill: #2878D8;
 }
 
+
+/* =========================================================
+   DESTELLOS DECORATIVOS
+   AZULES
+   ========================================================= */
+
 .sparkle {
-    -fx-text-fill: #8b5cf6;
-    -fx-opacity: 0.8;
+    -fx-text-fill: #2878D8;
+    -fx-opacity: 0.75;
 }
 
 .sparkle-1 {
@@ -45,69 +73,151 @@
 
 .sparkle-2 {
     -fx-font-size: 10px;
-    -fx-text-fill: #60a5fa;
+    -fx-text-fill: #4BA3F2;
 }
 
 .sparkle-3 {
     -fx-font-size: 13px;
+    -fx-text-fill: #2878D8;
 }
 
-/* ===================== TEXTOS ===================== */
+
+/* =========================================================
+   TEXTOS
+   ========================================================= */
+
 .logout-title {
-    -fx-text-fill: white;
+    -fx-text-fill: #243B64;
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
 
 .logout-subtitle {
-    -fx-text-fill: rgba(255, 255, 255, 0.62);
+    -fx-text-fill: #667A96;
     -fx-font-size: 13.5px;
     -fx-line-spacing: 3;
 }
 
-/* ===================== SEPARADOR ===================== */
+
+/* =========================================================
+   SEPARADOR
+   AZUL
+   ========================================================= */
+
 .logout-divider-line {
-    -fx-background-color: linear-gradient(to right, rgba(59, 130, 246, 0), #7c3aed, rgba(236, 72, 153, 0));
+    -fx-background-color:
+        linear-gradient(
+            to right,
+            rgba(40, 120, 216, 0),
+            #2878D8,
+            rgba(75, 163, 242, 0)
+        );
 }
 
 .logout-divider-dot {
-    -fx-fill: #60a5fa;
-    -fx-effect: dropshadow(gaussian, rgba(96, 165, 250, 0.85), 8, 0.5, 0, 0);
+    -fx-fill: #4BA3F2;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(75, 163, 242, 0.55),
+            8,
+            0.35,
+            0,
+            0
+        );
 }
 
-/* ===================== BOTONES ===================== */
+
+/* =========================================================
+   BOTÓN CANCELAR
+   BLANCO CON BORDE AZUL
+   ========================================================= */
+
 .btn-cancelar {
-    -fx-background-color: rgba(255, 255, 255, 0.04);
-    -fx-background-radius: 12;
-    -fx-border-color: rgba(96, 165, 250, 0.4);
-    -fx-border-radius: 12;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10;
+
+    -fx-border-color: #2878D8;
+    -fx-border-radius: 10;
     -fx-border-width: 1.4;
-    -fx-text-fill: #60a5fa;
+
+    -fx-text-fill: #2878D8;
     -fx-font-size: 13.5px;
     -fx-font-weight: bold;
+
     -fx-cursor: hand;
     -fx-padding: 14 0 14 0;
 }
 
 .btn-cancelar:hover {
-    -fx-background-color: rgba(96, 165, 250, 0.12);
+    -fx-background-color: #EAF4FF;
+    -fx-border-color: #1F68C1;
+    -fx-text-fill: #1F68C1;
 }
 
+.btn-cancelar:pressed {
+    -fx-background-color: #DCEEFF;
+}
+
+
+/* =========================================================
+   BOTÓN CONFIRMAR
+   AZUL
+   ========================================================= */
+
 .btn-confirmar {
-    -fx-background-color: linear-gradient(to right, #2563eb, #7c3aed);
-    -fx-background-radius: 12;
+    -fx-background-color:
+        linear-gradient(
+            to right,
+            #2878D8,
+            #4BA3F2
+        );
+
+    -fx-background-radius: 10;
+
     -fx-text-fill: white;
     -fx-font-size: 13.5px;
     -fx-font-weight: bold;
+
     -fx-cursor: hand;
     -fx-padding: 14 0 14 0;
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 18, 0.25, 0, 5);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(40, 120, 216, 0.30),
+            14,
+            0.20,
+            0,
+            4
+        );
 }
 
 .btn-confirmar:hover {
-    -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+    -fx-background-color:
+        linear-gradient(
+            to right,
+            #3185E5,
+            #5BB0F5
+        );
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(40, 120, 216, 0.40),
+            16,
+            0.22,
+            0,
+            5
+        );
 }
 
 .btn-confirmar:pressed {
-    -fx-background-color: linear-gradient(to right, #1d4ed8, #6d28d9);
+    -fx-background-color:
+        linear-gradient(
+            to right,
+            #1F68C1,
+            #2878D8
+        );
 }

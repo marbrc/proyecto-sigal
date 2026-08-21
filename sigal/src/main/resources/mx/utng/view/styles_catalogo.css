@@ -1,12 +1,25 @@
 /* =========================================================
    SIGAL - Estilos pantalla "Catálogo Académico"
-   (fx_catalogo_academico.fxml)
+   fx_catalogo_academico.fxml
+
+   PALETA:
+   - Azul intenso
+   - Azul eléctrico
+   - Azul turquesa
+   - Azul cielo
+   Diseño moderno, limpio y vivo.
+   ========================================================= */
+
+
+/* =========================================================
+   SCROLL Y CONTENEDOR PRINCIPAL
    ========================================================= */
 
 .catalogo-scroll {
     -fx-background-color: transparent;
     -fx-background: transparent;
 }
+
 .catalogo-scroll > .viewport {
     -fx-background-color: transparent;
 }
@@ -16,36 +29,58 @@
     -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
 }
 
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
 .catalogo-page-title {
-    -fx-text-fill: white;
+    -fx-text-fill: #173B7A;
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
+
 .catalogo-page-subtitle {
-    -fx-text-fill: #9aa6c9;
+    -fx-text-fill: #58729D;
     -fx-font-size: 13px;
 }
 
-/* ---------------- TARJETAS GRANDES ---------------- */
+
+/* =========================================================
+   TARJETAS GRANDES
+   ========================================================= */
+
 .catalogo-tile {
     -fx-min-height: 200px;
     -fx-pref-height: 200px;
+
     -fx-background-radius: 20;
     -fx-border-radius: 20;
     -fx-border-width: 1;
+
     -fx-cursor: hand;
     -fx-padding: 24;
+
     -fx-content-display: TOP;
 }
+
+
+/* =========================================================
+   ICONOS DE LAS TARJETAS
+   ========================================================= */
 
 .tile-icon-box {
     -fx-min-width: 62px;
     -fx-min-height: 62px;
+
     -fx-max-width: 62px;
     -fx-max-height: 62px;
+
     -fx-background-radius: 999;
-    -fx-background-color: rgba(255,255,255,0.14);
+
+    -fx-background-color: rgba(255,255,255,0.25);
 }
+
 .tile-icon {
     -fx-font-size: 28px;
 }
@@ -57,98 +92,309 @@
 }
 
 .tile-desc {
-    -fx-text-fill: rgba(255,255,255,0.78);
+    -fx-text-fill: rgba(255,255,255,0.90);
     -fx-font-size: 12px;
     -fx-max-width: 240px;
 }
 
-/* ---- Materias: azul ---- */
+
+/* =========================================================
+   MATERIAS
+   Azul intenso
+   ========================================================= */
+
 .tile-materias {
-    -fx-background-color: linear-gradient(to bottom right, #1c4fd6, #2f8fff);
-    -fx-border-color: rgba(120,170,255,0.35);
-    -fx-effect: dropshadow(gaussian, rgba(47,143,255,0.35), 22, 0.15, 0, 6);
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #2563B8,
+            #5B9FE8
+        );
+
+    -fx-border-color: rgba(255,255,255,0.35);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(37,99,184,0.35),
+            18,
+            0.15,
+            0,
+            5
+        );
 }
+
 .tile-materias:hover {
-    -fx-background-color: linear-gradient(to bottom right, #2058e8, #4aa0ff);
-    -fx-effect: dropshadow(gaussian, rgba(47,143,255,0.55), 28, 0.2, 0, 8);
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #1D55A5,
+            #4F91E2
+        );
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(37,99,184,0.50),
+            22,
+            0.20,
+            0,
+            6
+        );
 }
 
-/* ---- Grupos: morado ---- */
+
+/* =========================================================
+   GRUPOS
+   Azul eléctrico / azul violeta
+   ========================================================= */
+
 .tile-grupos {
-    -fx-background-color: linear-gradient(to bottom right, #5b2fd6, #9457ff);
-    -fx-border-color: rgba(180,140,255,0.35);
-    -fx-effect: dropshadow(gaussian, rgba(148,87,255,0.35), 22, 0.15, 0, 6);
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #5367E8,
+            #866FE8
+        );
+
+    -fx-border-color: rgba(255,255,255,0.35);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(83,103,232,0.35),
+            18,
+            0.15,
+            0,
+            5
+        );
 }
+
 .tile-grupos:hover {
-    -fx-background-color: linear-gradient(to bottom right, #6a3af0, #a56bff);
-    -fx-effect: dropshadow(gaussian, rgba(148,87,255,0.55), 28, 0.2, 0, 8);
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #4359D8,
+            #755DE0
+        );
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(83,103,232,0.50),
+            22,
+            0.20,
+            0,
+            6
+        );
 }
 
-/* ---- Carreras: verde azulado ---- */
+
+/* =========================================================
+   CARRERAS
+   Azul turquesa / azul cielo
+   ========================================================= */
+
 .tile-carreras {
-    -fx-background-color: linear-gradient(to bottom right, #0f9b8e, #22c6b6);
-    -fx-border-color: rgba(120,220,205,0.35);
-    -fx-effect: dropshadow(gaussian, rgba(34,198,182,0.35), 22, 0.15, 0, 6);
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #168FA8,
+            #55C5D4
+        );
+
+    -fx-border-color: rgba(255,255,255,0.35);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(22,143,168,0.35),
+            18,
+            0.15,
+            0,
+            5
+        );
 }
+
 .tile-carreras:hover {
-    -fx-background-color: linear-gradient(to bottom right, #12b0a1, #35dcca);
-    -fx-effect: dropshadow(gaussian, rgba(34,198,182,0.55), 28, 0.2, 0, 8);
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #087E98,
+            #45B8CA
+        );
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(22,143,168,0.50),
+            22,
+            0.20,
+            0,
+            6
+        );
 }
 
-/* ---- Area academica: naranja/rosa ---- */
+
+/* =========================================================
+   ÁREA ACADÉMICA
+   Azul medio / azul celeste
+   ========================================================= */
+
 .tile-area {
-    -fx-background-color: linear-gradient(to bottom right, #d6572f, #ff8a5b);
-    -fx-border-color: rgba(255,180,140,0.35);
-    -fx-effect: dropshadow(gaussian, rgba(255,138,91,0.35), 22, 0.15, 0, 6);
-}
-.tile-area:hover {
-    -fx-background-color: linear-gradient(to bottom right, #e8622f, #ff9d70);
-    -fx-effect: dropshadow(gaussian, rgba(255,138,91,0.55), 28, 0.2, 0, 8);
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #2378C9,
+            #58A9E8
+        );
+
+    -fx-border-color: rgba(255,255,255,0.35);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(35,120,201,0.35),
+            18,
+            0.15,
+            0,
+            5
+        );
 }
 
-/* ---------------- PANTALLAS "EN CONSTRUCCION" DE CADA CATALOGO ---------------- */
+.tile-area:hover {
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #1769B8,
+            #4899DD
+        );
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(35,120,201,0.50),
+            22,
+            0.20,
+            0,
+            6
+        );
+}
+
+
+/* =========================================================
+   PANTALLAS "EN CONSTRUCCIÓN"
+   ========================================================= */
+
 .placeholder-root {
     -fx-background-color: transparent;
-    -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
+
+    -fx-font-family:
+        "Segoe UI",
+        "Century Gothic",
+        sans-serif;
 }
+
 .placeholder-card {
-    -fx-background-color: #0a1130;
+    -fx-background-color: #FFFFFF;
+
     -fx-background-radius: 20;
     -fx-border-radius: 20;
-    -fx-border-color: rgba(120,150,255,0.18);
+
+    -fx-border-color: #C8D9F0;
     -fx-border-width: 1;
+
     -fx-padding: 46;
 }
+
+
+/* =========================================================
+   ICONO DEL PLACEHOLDER
+   ========================================================= */
+
 .placeholder-icon-box {
     -fx-min-width: 76px;
     -fx-min-height: 76px;
+
     -fx-max-width: 76px;
     -fx-max-height: 76px;
+
     -fx-background-radius: 999;
-    -fx-background-color: rgba(79,195,255,0.14);
+
+    -fx-background-color: #E5F0FF;
 }
+
 .placeholder-icon {
     -fx-font-size: 34px;
 }
+
 .placeholder-title {
-    -fx-text-fill: white;
+    -fx-text-fill: #173B7A;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
 }
+
 .placeholder-desc {
-    -fx-text-fill: #9aa6c9;
+    -fx-text-fill: #58729D;
     -fx-font-size: 13px;
     -fx-max-width: 360px;
 }
+
+
+/* =========================================================
+   BOTÓN VOLVER AL CATÁLOGO
+   Azul vivo
+   ========================================================= */
+
 .btn-volver-catalogo {
-    -fx-background-color: linear-gradient(to right, #2f6bff, #7b2ff7);
+    -fx-background-color:
+        linear-gradient(
+            to right,
+            #1557D6,
+            #2878EA
+        );
+
     -fx-text-fill: white;
+
     -fx-font-weight: bold;
     -fx-font-size: 13px;
+
     -fx-background-radius: 10;
+
     -fx-padding: 12 22;
+
     -fx-cursor: hand;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(21,87,214,0.25),
+            10,
+            0.15,
+            0,
+            3
+        );
 }
+
 .btn-volver-catalogo:hover {
-    -fx-effect: dropshadow(gaussian, rgba(80,90,255,0.5), 16, 0.25, 0, 3);
+    -fx-background-color:
+        linear-gradient(
+            to right,
+            #0F4CC7,
+            #1D6FE0
+        );
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(21,87,214,0.45),
+            14,
+            0.20,
+            0,
+            3
+        );
+}
+
+.btn-volver-catalogo:pressed {
+    -fx-background-color: #0D47B5;
 }

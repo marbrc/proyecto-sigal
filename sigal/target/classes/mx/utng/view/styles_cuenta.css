@@ -1,252 +1,542 @@
+/* =========================================================
+   SIGAL - Estilos pantalla "Cuenta"
+   ---------------------------------------------------------
+   Tema: gris claro / blanco con azul grisáceo discreto
+   Sin colores neón ni brillos intensos
+   ========================================================= */
+
+
+/* =========================================================
+   FONDO GENERAL
+   ========================================================= */
+
 .root, .menu-root {
+
     -fx-font-family: "Segoe UI", "Century Gothic", sans-serif;
-    -fx-background-color: #060b22;
+
+    -fx-background-color: #eef1f4;
+
 }
 
 .menu-content-bg {
-    -fx-background-color: #060b22;
+
+    -fx-background-color: #eef1f4;
+
 }
 
-.scroll-pane, .scroll-pane .viewport, .scroll-pane > .viewport {
+.scroll-pane,
+.scroll-pane .viewport,
+.scroll-pane > .viewport {
+
     -fx-background-color: transparent;
+
     -fx-background: transparent;
+
 }
 
-/* ---------------- ENCABEZADO DE LA PANTALLA ---------------- */
+
+/* =========================================================
+   ENCABEZADO DE LA PANTALLA
+   ========================================================= */
 
 .panel-icon-box-blue {
-    -fx-background-color: rgba(79,195,255,0.14);
+
+    -fx-background-color: #e4ebf1;
+
     -fx-background-radius: 9;
+
     -fx-min-width: 34;
     -fx-min-height: 34;
+
     -fx-max-width: 34;
     -fx-max-height: 34;
+
 }
 
 .icon-stroke-blue {
-    -fx-stroke: #4fc3ff;
+
+    -fx-stroke: #647d91;
+
     -fx-fill: transparent;
+
     -fx-stroke-width: 1.4;
+
 }
 
 .cuenta-titulo {
-    -fx-text-fill: white;
+
+    -fx-text-fill: #263442;
+
     -fx-font-size: 22px;
+
     -fx-font-weight: bold;
+
 }
 
 .cuenta-subtitulo {
-    -fx-text-fill: rgba(255,255,255,0.75);
+
+    -fx-text-fill: #788694;
+
     -fx-font-size: 12px;
+
 }
+
+
+/* =========================================================
+   BANNER SUPERIOR
+   ========================================================= */
 
 .cuenta-banner {
-    -fx-background-color: linear-gradient(to right, #1f3a8f, #4f7fd6, #4fc3ff);
+
+    -fx-background-color: linear-gradient(
+        to right,
+        #d9e1e7,
+        #e5eaee,
+        #edf1f4
+    );
+
     -fx-background-radius: 16;
+
     -fx-min-height: 92;
+
     -fx-pref-height: 92;
+
     -fx-padding: 0 24 0 24;
+
 }
 
+
+/* =========================================================
+   TARJETA DE IDENTIDAD
+   ========================================================= */
+
 .cuenta-identidad-card {
-    -fx-background-color: rgba(15,22,50,0.92);
+
+    -fx-background-color: #f8fafb;
+
     -fx-background-radius: 16;
+
     -fx-border-radius: 16;
-    -fx-border-color: rgba(79,195,255,0.30);
+
+    -fx-border-color: #d5dde4;
+
     -fx-border-width: 1;
+
     -fx-padding: 16 22 16 22;
+
     -fx-translate-y: -30;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 18, 0.2, 0, 6);
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(40,55,70,0.12),
+        14,
+        0.12,
+        0,
+        4
+    );
+
 }
 
 .cuenta-identidad-nombre {
-    -fx-text-fill: white;
+
+    -fx-text-fill: #273542;
+
     -fx-font-size: 17px;
+
     -fx-font-weight: bold;
+
 }
 
+
+/* =========================================================
+   ICONOS DE PANELES
+   ========================================================= */
+
 .panel-icon-box-purple {
-    -fx-background-color: rgba(168,85,247,0.16);
+
+    -fx-background-color: #ece8ef;
+
     -fx-background-radius: 9;
+
     -fx-min-width: 30;
     -fx-min-height: 30;
+
     -fx-max-width: 30;
     -fx-max-height: 30;
+
 }
 
 .icon-stroke-purple {
-    -fx-stroke: #c586ff;
+
+    -fx-stroke: #75687d;
+
     -fx-fill: transparent;
+
     -fx-stroke-width: 1.4;
+
 }
 
-/* ---------------- TARJETAS ---------------- */
+
+/* =========================================================
+   TARJETAS
+   ========================================================= */
 
 .panel-card-compact {
-    -fx-background-color: rgba(15,22,50,0.75);
+
+    -fx-background-color: #f8fafb;
+
     -fx-background-radius: 14;
+
     -fx-border-radius: 14;
-    -fx-border-color: rgba(79,195,255,0.14);
+
+    -fx-border-color: #d7dfe5;
+
     -fx-border-width: 1;
+
     -fx-padding: 18 20 18 20;
+
 }
 
 .panel-card-compact-sm {
-    -fx-background-color: rgba(15,22,50,0.75);
+
+    -fx-background-color: #f8fafb;
+
     -fx-background-radius: 14;
+
     -fx-border-radius: 14;
-    -fx-border-color: rgba(79,195,255,0.14);
+
+    -fx-border-color: #d7dfe5;
+
     -fx-border-width: 1;
+
     -fx-padding: 12 16 12 16;
+
 }
 
+
+/* =========================================================
+   BORDES DESTACADOS
+   ========================================================= */
+
 .panel-glow-blue {
-    -fx-border-color: rgba(79,195,255,0.55);
-    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.35), 22, 0.25, 0, 0);
+
+    -fx-border-color: #b9cbd8;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(85,110,130,0.12),
+        12,
+        0.10,
+        0,
+        2
+    );
+
 }
 
 .panel-glow-purple {
-    -fx-border-color: rgba(168,85,247,0.55);
-    -fx-effect: dropshadow(gaussian, rgba(168,85,247,0.35), 22, 0.25, 0, 0);
+
+    -fx-border-color: #cec5d3;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(100,85,110,0.10),
+        12,
+        0.10,
+        0,
+        2
+    );
+
 }
 
+
+/* =========================================================
+   TÍTULOS DE PANELES
+   ========================================================= */
+
 .panel-title {
-    -fx-text-fill: white;
+
+    -fx-text-fill: #2c3945;
+
     -fx-font-size: 15px;
+
     -fx-font-weight: bold;
+
 }
 
 .panel-subtitle-small {
-    -fx-text-fill: #7c8bb5;
+
+    -fx-text-fill: #7b8791;
+
     -fx-font-size: 10.5px;
+
 }
 
-/* ---------------- AVATAR GRANDE ---------------- */
+
+/* =========================================================
+   AVATAR GRANDE
+   ========================================================= */
 
 .cuenta-avatar-circle {
-    -fx-background-color: linear-gradient(to bottom right, #4f7fd6, #4fc3ff);
-    -fx-border-color: rgba(255,255,255,0.5);
+
+    -fx-background-color: linear-gradient(
+        to bottom right,
+        #c7d3dc,
+        #e6ebef
+    );
+
+    -fx-border-color: #aebdc8;
+
     -fx-border-radius: 50%;
+
     -fx-background-radius: 50%;
+
     -fx-border-width: 2;
+
     -fx-min-width: 64;
     -fx-min-height: 64;
+
     -fx-max-width: 64;
     -fx-max-height: 64;
-    -fx-effect: dropshadow(gaussian, rgba(79,195,255,0.55), 16, 0.3, 0, 0);
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(60,75,90,0.15),
+        10,
+        0.12,
+        0,
+        2
+    );
+
 }
 
 .cuenta-avatar-iniciales {
-    -fx-text-fill: white;
+
+    -fx-text-fill: #526777;
+
     -fx-font-size: 20px;
+
     -fx-font-weight: bold;
+
 }
 
+
+/* =========================================================
+   INSIGNIA DEL ROL
+   ========================================================= */
+
 .cuenta-rol-badge {
-    -fx-background-color: rgba(120,150,255,0.16);
-    -fx-text-fill: #8fb3ff;
+
+    -fx-background-color: #e4ebf0;
+
+    -fx-text-fill: #5d7384;
+
     -fx-font-size: 10.5px;
+
     -fx-font-weight: bold;
+
     -fx-background-radius: 20;
+
     -fx-padding: 4 12 4 12;
+
 }
 
 .cuenta-nombre-completo {
-    -fx-text-fill: #e6eefc;
+
+    -fx-text-fill: #293743;
+
     -fx-font-size: 17px;
+
     -fx-font-weight: bold;
+
 }
 
 .cuenta-correo {
-    -fx-text-fill: #7c8bb5;
+
+    -fx-text-fill: #788692;
+
     -fx-font-size: 11.5px;
+
 }
 
-/* ---------------- CAMPOS ---------------- */
+
+/* =========================================================
+   CAMPOS
+   ========================================================= */
 
 .field-label {
-    -fx-text-fill: #9db4d1;
+
+    -fx-text-fill: #526472;
+
     -fx-font-size: 10.5px;
+
     -fx-font-weight: bold;
+
 }
 
 .field-input {
-    -fx-background-color: #0d1526;
-    -fx-text-fill: #e6eefc;
-    -fx-prompt-text-fill: #57708f;
+
+    -fx-background-color: #ffffff;
+
+    -fx-text-fill: #34424e;
+
+    -fx-prompt-text-fill: #9aa6af;
+
     -fx-background-radius: 7;
+
     -fx-border-radius: 7;
-    -fx-border-color: rgba(79,195,255,0.20);
+
+    -fx-border-color: #cbd5dc;
+
     -fx-border-width: 1;
+
     -fx-font-size: 11.5px;
+
     -fx-padding: 8 10 8 10;
+
 }
 
 .field-input:focused {
-    -fx-border-color: #4fc3ff;
+
+    -fx-border-color: #8da5b6;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(100,125,145,0.15),
+        6,
+        0.10,
+        0,
+        1
+    );
+
 }
 
 .field-input-sm {
-    -fx-background-color: #0d1526;
-    -fx-text-fill: #e6eefc;
-    -fx-prompt-text-fill: #57708f;
+
+    -fx-background-color: #ffffff;
+
+    -fx-text-fill: #34424e;
+
+    -fx-prompt-text-fill: #9aa6af;
+
     -fx-background-radius: 6;
+
     -fx-border-radius: 6;
-    -fx-border-color: rgba(79,195,255,0.20);
+
+    -fx-border-color: #cbd5dc;
+
     -fx-border-width: 1;
+
     -fx-font-size: 10.5px;
+
     -fx-padding: 5 8 5 8;
+
 }
 
 .field-input-sm:focused {
-    -fx-border-color: #4fc3ff;
+
+    -fx-border-color: #8da5b6;
+
 }
 
 .field-hint {
-    -fx-text-fill: #5a6690;
+
+    -fx-text-fill: #8b969f;
+
     -fx-font-size: 10px;
+
     -fx-font-style: italic;
+
 }
 
-/* ---------------- BOTONES ---------------- */
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+   ========================================================= */
 
 .btn-primary-compact {
-    -fx-background-color: linear-gradient(to right, #1f6fd6, #4fc3ff);
+
+    -fx-background-color: #6d8799;
+
     -fx-background-radius: 7;
+
     -fx-text-fill: white;
+
     -fx-font-weight: bold;
+
     -fx-font-size: 11.5px;
+
     -fx-padding: 8 18 8 18;
+
     -fx-cursor: hand;
+
 }
+
 .btn-primary-compact:hover {
-    -fx-background-color: linear-gradient(to right, #2a7ee6, #66cdff);
+
+    -fx-background-color: #5d788b;
+
 }
+
+
+/* =========================================================
+   BOTÓN SECUNDARIO
+   ========================================================= */
 
 .btn-secondary-compact {
-    -fx-background-color: transparent;
+
+    -fx-background-color: #ffffff;
+
     -fx-background-radius: 7;
-    -fx-border-color: rgba(157,180,209,0.35);
+
+    -fx-border-color: #c6d0d7;
+
     -fx-border-radius: 7;
+
     -fx-border-width: 1;
-    -fx-text-fill: #9db4d1;
+
+    -fx-text-fill: #657783;
+
     -fx-font-size: 11.5px;
+
     -fx-padding: 8 18 8 18;
+
     -fx-cursor: hand;
-}
-.btn-secondary-compact:hover {
-    -fx-background-color: rgba(157,180,209,0.08);
+
 }
 
-.btn-danger-compact {
-    -fx-background-color: linear-gradient(to right, #d63b3b, #ff6b6b);
-    -fx-background-radius: 7;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-size: 11.5px;
-    -fx-padding: 8 18 8 18;
-    -fx-cursor: hand;
+.btn-secondary-compact:hover {
+
+    -fx-background-color: #eef2f5;
+
+    -fx-border-color: #aebdc7;
+
 }
+
+
+/* =========================================================
+   BOTÓN DE PELIGRO
+   ========================================================= */
+
+.btn-danger-compact {
+
+    -fx-background-color: #c96b6b;
+
+    -fx-background-radius: 7;
+
+    -fx-text-fill: white;
+
+    -fx-font-weight: bold;
+
+    -fx-font-size: 11.5px;
+
+    -fx-padding: 8 18 8 18;
+
+    -fx-cursor: hand;
+
+}
+
 .btn-danger-compact:hover {
-    -fx-background-color: linear-gradient(to right, #e64d4d, #ff8080);
+
+    -fx-background-color: #b95b5b;
+
 }

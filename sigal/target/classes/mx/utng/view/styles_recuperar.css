@@ -1,25 +1,99 @@
 /* =========================================================
-   ESTILOS DE LA PANTALLA "RECUPERAR CONTRASEÑA" (fx_recuperar_contrasena.fxml)
-   Reutiliza las clases de styles_login.css y solo agrega lo propio.
+   ESTILOS DE LA PANTALLA "RECUPERAR CONTRASEÑA"
    ========================================================= */
 
-.recuperar-card {
-    -fx-min-width: 460;
+#rootRecuperar .recuperar-card .login-forgot-link:disabled {
+    -fx-opacity: 1.0;
+    -fx-text-fill: #003cac;
 }
 
-.recuperar-btn-secundario {
-    -fx-background-color: rgba(15,22,50,0.85);
+
+#rootRecuperar .recuperar-card {
+    -fx-min-width: 460;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 6);
+}
+
+
+
+#rootRecuperar .recuperar-card .login-forgot-link,
+#rootRecuperar .recuperar-card .login-forgot-link:visited,
+#rootRecuperar .recuperar-card .login-forgot-link:hover,
+#rootRecuperar .recuperar-card .login-forgot-link:focused {
+    -fx-text-fill: #2563eb;
+}
+
+#rootRecuperar .recuperar-card {
+    -fx-background-color: #ffffff !important;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 6);
+}
+
+#rootRecuperar .recuperar-card .login-title {
+    -fx-text-fill: #181717;
+}
+
+#rootRecuperar .recuperar-card .login-subtitle,
+#rootRecuperar .recuperar-card .login-info-text {
+    -fx-text-fill: #274fad;
+}
+
+#rootRecuperar .recuperar-card .field-label {
+    -fx-text-fill: #415fcd;
+}
+
+#rootRecuperar .recuperar-card .login-exclusive-text {
+    -fx-text-fill: #7a8296;
+}
+
+#rootRecuperar .recuperar-card .login-forgot-link {
+    -fx-text-fill: #2563eb;
+}
+#rootRecuperar .recuperar-card .login-forgot-link:hover {
+    -fx-text-fill: #1d4ed8;
+}
+
+#rootRecuperar .recuperar-card .input-box {
+    -fx-background-color: #f5f7fb;
+    -fx-background-radius: 10;
+    -fx-border-color: #d7dceb;
+    -fx-border-radius: 10;
+}
+#rootRecuperar .recuperar-card .input-field {
+    -fx-text-fill: #181717;
+}
+#rootRecuperar .recuperar-card .icon-muted {
+    -fx-background-color: #386beb;
+}
+
+#rootRecuperar .recuperar-card .login-submit-btn {
+    -fx-background-color: #2563eb;
     -fx-background-radius: 12;
-    -fx-border-color: rgba(120,150,255,0.35);
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+#rootRecuperar .recuperar-card .login-submit-btn:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+#rootRecuperar .recuperar-btn-secundario {
+    -fx-background-color: #f5f7fb;
+    -fx-background-radius: 12;
+    -fx-border-color: #d7dceb;
     -fx-border-radius: 12;
-    -fx-text-fill: #c7cfe8;
+    -fx-text-fill: #33384a;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
 }
-.recuperar-btn-secundario:hover {
-    -fx-border-color: #4fa3ff;
-    -fx-text-fill: #ffffff;
+#rootRecuperar .recuperar-btn-secundario:hover {
+    -fx-border-color: #2563eb;
+    -fx-text-fill: #2563eb;
 }
 
 .codigo-field {

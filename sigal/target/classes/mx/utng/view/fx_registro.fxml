@@ -2,11 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -17,164 +16,241 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="1024.0" prefWidth="1536.0" styleClass="login-root" stylesheets="@styles_registro.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.RegistroController">
+<StackPane fx:id="rootRegistro" style="-fx-background-color: linear-gradient(to bottom right, #16264a 0%, #0e1c3a 100%);" styleClass="login-root registro-root" stylesheets="@styles_login.css,@styles_registro.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.utng.controller.RegistroController">
 
-    <!-- TARJETA DE REGISTRO -->
-    <StackPane maxHeight="960.0" maxWidth="1460.0" styleClass="login-card">
+    <!-- BOTÓN REGRESAR A BIENVENIDA -->
+    <HBox alignment="TOP_LEFT" pickOnBounds="false" StackPane.alignment="TOP_LEFT">
 
-        <HBox>
+        <padding>
+            <Insets left="28.0" top="24.0" />
+        </padding>
 
-            <!-- ============ PANEL IZQUIERDO: FOTO + PRESENTACIÓN ============ -->
-            <StackPane prefWidth="640.0" styleClass="login-left">
+        <Button fx:id="btnRegresarBienvenida" onAction="#onRegresarBienvenida" styleClass="login-back-btn" text="←  Regresar" />
+    </HBox>
 
-                <!-- Degradado oscuro sobre la foto para que el texto se lea -->
-                <Region styleClass="login-left-overlay" />
 
-                <VBox alignment="CENTER" maxWidth="560.0" spacing="14.0">
-                    <padding>
-                        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-                    </padding>
+    <!-- CONTENIDO PRINCIPAL: PASO 1, FORMULARIO -->
+    <VBox fx:id="paneFormulario" alignment="CENTER" pickOnBounds="false">
+    <HBox alignment="CENTER" fillHeight="false" pickOnBounds="false">
 
-                    <Region maxHeight="10.0" VBox.vgrow="ALWAYS" />
+        <padding>
+            <Insets bottom="34.0" left="80.0" right="80.0" top="48.0" />
+        </padding>
 
-                    <ImageView fitHeight="220.0" fitWidth="220.0" preserveRatio="true" smooth="true">
-                        <image>
-                            <Image backgroundLoading="true" url="@assets/logo.png" />
-                        </image>
-                        <effect>
-                            <DropShadow color="#4fc3ff" radius="40" spread="0.15" />
-                        </effect>
-                    </ImageView>
 
-                    <VBox alignment="CENTER" spacing="4.0">
-                        <Label styleClass="login-tagline" text="SISTEMA DE GESTIÓN Y" />
-                        <Label styleClass="login-tagline" text="ASIGNACIÓN DE LABORATORIOS" />
-                    </VBox>
+        <!-- =========================
+             IZQUIERDA: PRESENTACIÓN
+             ========================= -->
 
-                    <Region maxWidth="90.0" minHeight="2.0" prefHeight="2.0" styleClass="login-divider" />
+        <VBox alignment="CENTER_LEFT" maxWidth="560.0" spacing="14.0" HBox.hgrow="ALWAYS">
 
-                    <Region VBox.vgrow="ALWAYS" />
+            <ImageView fitHeight="180.0" fitWidth="180.0" preserveRatio="true" smooth="true">
 
-                    <HBox alignment="CENTER_LEFT" maxWidth="480.0" spacing="14.0" styleClass="login-info-chip">
-                        <StackPane styleClass="login-info-icon-box">
-                            <Label styleClass="input-icon" text="👤+" textFill="WHITE" />
-                        </StackPane>
-                        <Label maxWidth="380.0" styleClass="login-info-text" text="Solo el personal autorizado puede registrarse en el sistema." wrapText="true" />
-                    </HBox>
+                <image>
+                    <Image backgroundLoading="true" url="@assets/logo.png" />
+                </image>
 
-                    <HBox alignment="CENTER_LEFT" maxWidth="480.0" spacing="12.0" />
-                    <HBox maxWidth="480.0">
-                        <Region prefWidth="72.0" />
-                    </HBox>
+            </ImageView>
 
-                </VBox>
-            </StackPane>
 
-            <!-- ============ PANEL DERECHO: FORMULARIO DE REGISTRO ============ -->
-            <VBox alignment="CENTER" prefWidth="820.0" spacing="0.0" styleClass="login-right">
+            <Region minHeight="18.0" prefHeight="18.0" />
+
+
+            <VBox spacing="4.0">
+
+                <Label styleClass="login-tagline" text="SISTEMA DE GESTIÓN Y" />
+
+                <Label styleClass="login-tagline" text="ASIGNACIÓN DE LABORATORIOS" />
+
+            </VBox>
+
+
+            <Region minHeight="16.0" prefHeight="16.0" />
+
+
+            <Label maxWidth="460.0" styleClass="login-info-text" text="Administra espacios, horarios y asignaciones del Edificio F en un solo lugar." wrapText="true" />
+
+
+            <Region minHeight="40.0" prefHeight="40.0" />
+
+
+            <HBox alignment="CENTER_LEFT" maxWidth="480.0" spacing="12.0">
+
+                <Region minHeight="30.0" prefWidth="1.0" styleClass="login-utng-sep" />
+
+                <Label styleClass="login-utng-text" text="UNIVERSIDAD TECNOLÓGICA DEL NORTE DE GUANAJUATO" wrapText="true" />
+
+            </HBox>
+
+        </VBox>
+
+
+        <Region minWidth="50.0" prefWidth="50.0" />
+
+
+        <!-- =========================
+             DERECHA: TARJETA REGISTRO
+             ========================= -->
+
+        <StackPane style="-fx-background-color: white; -fx-background-radius: 18;" styleClass="login-card registro-card">
+
+            <VBox alignment="CENTER" maxWidth="680.0" minWidth="680.0" spacing="0.0">
+
                 <padding>
-                    <Insets bottom="34.0" left="70.0" right="70.0" top="42.0" />
+                    <Insets bottom="28.0" left="38.0" right="38.0" top="28.0" />
                 </padding>
 
-                <HBox alignment="CENTER_LEFT" spacing="18.0">
-                    <StackPane styleClass="login-avatar-box">
-                        <Label styleClass="input-icon" text="👤☑" textFill="WHITE" />
-                    </StackPane>
-                    <VBox alignment="CENTER_LEFT" spacing="2.0">
-                        <Label styleClass="login-title" text="Crear cuenta" />
-                        <Label styleClass="login-subtitle" text="Complete la información para registrarse" />
-                    </VBox>
-                </HBox>
 
-                <Region minHeight="26.0" prefHeight="26.0" />
+                <Label styleClass="login-title" text="Crear cuenta" />
 
-                <!-- FORMULARIO EN GRIDPANE -->
-                <GridPane hgap="24.0" vgap="8.0">
+                <Label styleClass="login-subtitle" text="Completa tus datos para registrarte" />
+
+
+                <Region minHeight="20.0" prefHeight="20.0" />
+
+
+                <!-- FORMULARIO -->
+
+                <GridPane hgap="18.0" maxWidth="680.0" vgap="10.0">
+
                     <columnConstraints>
+
                         <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+
                         <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+
                     </columnConstraints>
 
-                    <!-- Fila 0: Nombre(s) / Apellido paterno -->
-                    <VBox spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+
+                    <!-- Nombre -->
+
+                    <VBox spacing="7.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+
                         <Label styleClass="field-label" text="Nombre(s)" />
-                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="input-box">
-                            <Label styleClass="input-icon" text="👤" textFill="WHITE" />
+
+                        <HBox alignment="CENTER_LEFT" styleClass="input-box">
+
                             <TextField fx:id="txtNombre" promptText="Ingrese su nombre(s)" styleClass="input-field" HBox.hgrow="ALWAYS" />
+
                         </HBox>
+
                     </VBox>
 
-                    <VBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+
+                    <!-- Apellido paterno -->
+
+                    <VBox spacing="7.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+
                         <Label styleClass="field-label" text="Apellido paterno" />
-                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="input-box">
-                            <Label styleClass="input-icon" text="👤" textFill="WHITE" />
+
+                        <HBox alignment="CENTER_LEFT" styleClass="input-box">
+
                             <TextField fx:id="txtApellidoPaterno" promptText="Ingrese su apellido paterno" styleClass="input-field" HBox.hgrow="ALWAYS" />
+
                         </HBox>
+
                     </VBox>
 
-                    <!-- Fila 1: Apellido materno / Usuario -->
-                    <VBox spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                        <VBox.margin><Insets top="18.0" /></VBox.margin>
+
+                    <!-- Apellido materno -->
+
+                    <VBox spacing="7.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+
                         <Label styleClass="field-label" text="Apellido materno" />
-                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="input-box">
-                            <Label styleClass="input-icon" text="👤" textFill="WHITE" />
+
+                        <HBox alignment="CENTER_LEFT" styleClass="input-box">
+
                             <TextField fx:id="txtApellidoMaterno" promptText="Ingrese su apellido materno" styleClass="input-field" HBox.hgrow="ALWAYS" />
+
                         </HBox>
+
                     </VBox>
 
-                    <VBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <VBox.margin><Insets top="18.0" /></VBox.margin>
+
+                    <!-- Usuario -->
+
+                    <VBox spacing="7.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+
                         <Label styleClass="field-label" text="Usuario" />
-                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="input-box">
-                            <Label styleClass="input-icon" text="👤" textFill="WHITE" />
+
+                        <HBox alignment="CENTER_LEFT" styleClass="input-box">
+
                             <TextField fx:id="txtNombreUsuario" promptText="Elige un nombre de usuario" styleClass="input-field" HBox.hgrow="ALWAYS" />
+
                         </HBox>
+
                     </VBox>
 
-                    <!-- Fila 2: Correo -->
-                    <VBox spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                        <VBox.margin><Insets top="18.0" /></VBox.margin>
+
+                    <!-- Correo -->
+
+                    <VBox spacing="7.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+
                         <Label styleClass="field-label" text="Correo" />
-                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="input-box">
-                            <Label styleClass="input-icon" text="✉" textFill="WHITE" />
+
+                        <HBox alignment="CENTER_LEFT" styleClass="input-box">
+
                             <TextField fx:id="txtCorreo" promptText="usuario@utng.edu.mx" styleClass="input-field" HBox.hgrow="ALWAYS" />
+
                         </HBox>
+
                     </VBox>
 
-                    <!-- Fila 3: Contraseña / Confirmar contraseña -->
-                    <VBox spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
-                        <VBox.margin><Insets top="18.0" /></VBox.margin>
+
+                    <!-- Contraseña -->
+
+                    <VBox spacing="7.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
+
                         <Label styleClass="field-label" text="Contraseña" />
-                        <HBox alignment="CENTER" spacing="12.0" styleClass="input-box">
-                            <Label styleClass="input-icon" text="🔒" textFill="WHITE" />
+
+                        <HBox alignment="CENTER" styleClass="input-box">
+
                             <StackPane HBox.hgrow="ALWAYS">
+
                                 <PasswordField fx:id="pwdContrasena" promptText="Ingrese su contraseña" styleClass="input-field" />
+
                                 <TextField fx:id="txtContrasenaVisible" managed="false" promptText="Ingrese su contraseña" styleClass="input-field" visible="false" />
+
                             </StackPane>
-                            <Button fx:id="btnToggleContrasena" onAction="#onToggleContrasena" styleClass="input-eye-btn">
-                                <graphic>
-                                    <Label style="-fx-text-fill: rgba(255,255,255,0.75); -fx-font-size: 15;" text="👁" />
-                                </graphic>
-                            </Button>
+
+
+                            <Button fx:id="btnToggleContrasena" onAction="#onToggleContrasena" styleClass="input-eye-btn" />
+                        <Region styleClass="icon-eye, icon-sm, icon-muted" />
+
                         </HBox>
+
                     </VBox>
 
-                    <VBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                        <VBox.margin><Insets top="18.0" /></VBox.margin>
+
+                    <!-- Confirmar contraseña -->
+
+                    <VBox spacing="7.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+
                         <Label styleClass="field-label" text="Confirmar contraseña" />
-                        <HBox alignment="CENTER" spacing="12.0" styleClass="input-box">
-                            <Label styleClass="input-icon" text="🔒" textFill="WHITE" />
+
+                        <HBox alignment="CENTER" styleClass="input-box">
+
                             <StackPane HBox.hgrow="ALWAYS">
+
                                 <PasswordField fx:id="pwdConfirmarContrasena" promptText="Confirme su contraseña" styleClass="input-field" />
+
                                 <TextField fx:id="txtConfirmarContrasenaVisible" managed="false" promptText="Confirme su contraseña" styleClass="input-field" visible="false" />
+
                             </StackPane>
+
+
                             <Button fx:id="btnToggleConfirmarContrasena" onAction="#onToggleConfirmarContrasena" styleClass="input-eye-btn">
+
                                 <graphic>
-                                    <Label style="-fx-text-fill: rgba(255,255,255,0.75); -fx-font-size: 15;" text="👁" />
+                                    <Region styleClass="icon-eye, icon-sm, icon-muted" />
                                 </graphic>
+
                             </Button>
+
                         </HBox>
+
                     </VBox>
+
 
                     <rowConstraints>
                         <RowConstraints />
@@ -182,27 +258,69 @@
                         <RowConstraints />
                         <RowConstraints />
                     </rowConstraints>
+
                 </GridPane>
 
-                <Region minHeight="26.0" prefHeight="26.0" />
-
-                <Button fx:id="btnRegistrarse" maxWidth="Infinity" onAction="#onRegistrarse" prefHeight="56.0" styleClass="login-submit-btn" text="[+]   Registrarse" />
-
-                <Region minHeight="14.0" prefHeight="14.0" />
-
-                <Button fx:id="btnVolverLogin" maxWidth="Infinity" onAction="#onVolverLogin" prefHeight="52.0" styleClass="login-secondary-btn" text="←   Volver al inicio de sesión" />
 
                 <Region minHeight="18.0" prefHeight="18.0" />
 
-                <HBox alignment="CENTER" spacing="8.0">
-                    <Region styleClass="icon-lock icon-tiny icon-muted" />
-                    <Label styleClass="login-exclusive-text" text="Acceso exclusivo para personal autorizado" />
-                </HBox>
 
-                <Region VBox.vgrow="ALWAYS" />
+                <!-- REGISTRARSE -->
+
+                <Button fx:id="btnRegistrarse" maxWidth="Infinity" onAction="#onRegistrarse" prefHeight="52.0" styleClass="login-submit-btn" text="Registrarse" />
+
+
+                <Region minHeight="12.0" prefHeight="12.0" />
+
+
+                <!-- VOLVER A LOGIN -->
+
+                <Button fx:id="btnVolverLogin" maxWidth="Infinity" onAction="#onVolverLogin" prefHeight="46.0" styleClass="login-register-btn" text="←  Volver al inicio de sesión" />
 
             </VBox>
 
-        </HBox>
-    </StackPane>
+        </StackPane>
+
+    </HBox>
+    </VBox>
+
+    <!-- CONTENIDO: PASO 2, VERIFICACIÓN DE CORREO -->
+    <VBox fx:id="paneVerificacion" alignment="CENTER" managed="false" pickOnBounds="false" visible="false">
+        <StackPane style="-fx-background-color: white; -fx-background-radius: 18;" styleClass="login-card registro-card">
+            <VBox alignment="CENTER" maxWidth="440.0" minWidth="440.0" spacing="0.0">
+                <padding>
+                    <Insets bottom="34.0" left="40.0" right="40.0" top="34.0" />
+                </padding>
+
+                <Label styleClass="login-title" text="Verifica tu correo" />
+                <Label fx:id="lblCorreoEnviado" styleClass="login-subtitle" text="Enviamos un código de 6 dígitos a tu correo" wrapText="true" />
+
+                <Region minHeight="22.0" prefHeight="22.0" />
+
+                <VBox spacing="10.0">
+                    <Label styleClass="field-label" text="Código de verificación" />
+                    <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="input-box">
+                        <TextField fx:id="txtCodigoVerificacion" promptText="Ingresa el código de 6 dígitos" styleClass="input-field" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </VBox>
+
+                <Region minHeight="14.0" prefHeight="14.0" />
+
+                <Label fx:id="lblTimerRegistro" styleClass="login-subtitle" text="" />
+
+                <Region minHeight="10.0" prefHeight="10.0" />
+
+                <Hyperlink fx:id="lnkReenviarCodigoRegistro" onAction="#onReenviarCodigoRegistro" styleClass="login-forgot-link" text="Reenviar código" />
+
+                <Region minHeight="18.0" prefHeight="18.0" />
+
+                <Button fx:id="btnVerificarCodigo" maxWidth="Infinity" onAction="#onVerificarCodigoRegistro" prefHeight="52.0" styleClass="login-submit-btn" text="Verificar y crear cuenta" />
+
+                <Region minHeight="14.0" prefHeight="14.0" />
+
+                <Button maxWidth="Infinity" onAction="#onRegresarFormulario" prefHeight="46.0" styleClass="login-register-btn" text="←  Regresar" />
+            </VBox>
+        </StackPane>
+    </VBox>
+
 </StackPane>
