@@ -21,7 +21,6 @@ import javafx.collections.ObservableList;
 import mx.utng.database.Conexion;
 import mx.utng.model.AsignacionHorario;
 import mx.utng.model.Asignaciones;
-import mx.utng.model.Consultas;
  
 /**
  * Acceso a datos de la pantalla "Asignaciones" (fx_asignaciones.fxml).
@@ -53,6 +52,19 @@ public class AsignacionDAO {
         }
         return mapa;
     }
+    public Integer obtenerCapacidadEspacio(int idEspacio) {
+    String sql = "SELECT CapacidadMaxima FROM tb_espacio WHERE ID_Espacio = ?";
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, idEspacio);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt("CapacidadMaxima");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
  
     public Map<String, Integer> listarProfesores() {
         Map<String, Integer> mapa = new LinkedHashMap<>();
@@ -75,7 +87,70 @@ public class AsignacionDAO {
         }
         return mapa;
     }
- 
+ public java.util.List<String> listarNombresPersonalPorTipo(String tipoPersonal) {
+    java.util.List<String> lista = new java.util.ArrayList<>();
+    String sql = "SELECT Nombre, ApellidoPaterno, ApellidoMaterno FROM tb_profesor "
+               + "WHERE TipoPersonal = ? ORDER BY Nombre";
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, tipoPersonal);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String nombreCompleto = (rs.getString("Nombre") + " "
+                        + rs.getString("ApellidoPaterno") + " "
+                        + rs.getString("ApellidoMaterno")).trim();
+                lista.add(nombreCompleto);
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
+public List<String> listarMateriasPorCuatrimestreYCarrera(int cuatrimestre, int idCarrera) {
+    List<String> lista = new ArrayList<>();
+    String sql = """
+            SELECT m.Nombre
+            FROM tb_materia_carrera mc
+            JOIN tb_materia m ON m.ID_Materia = mc.ID_Materia
+            WHERE mc.Cuatrimestre = ? AND mc.ID_Carrera = ?
+            ORDER BY m.Nombre
+            """;
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, cuatrimestre);
+        ps.setInt(2, idCarrera);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(rs.getString("Nombre"));
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
+public List<String> listarGruposPorCuatrimestre(int cuatrimestre) {
+    List<String> lista = new ArrayList<>();
+    String sql = "SELECT NombreGrupo FROM tb_grupo WHERE Cuatrimestre = ? ORDER BY NombreGrupo";
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, cuatrimestre);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(rs.getString("NombreGrupo"));
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
     /** Nombre -> ID_Carrera, para llenar/relacionar cmbCarrera con el catálogo real. */
     public Map<String, Integer> listarCarreras() {
         Map<String, Integer> mapa = new LinkedHashMap<>();
@@ -263,7 +338,14 @@ public class AsignacionDAO {
     //  tb_asignacion. Si el modelo ya trae el ID (porque el controller
     //  lo puso), se usa ese directo; si no, se busca por nombre.
     // ============================================================
- 
+ public Asignaciones buscarPorId(int idAsignacion) {
+    for (Asignaciones a : listarTodas()) {
+        if (a.getIdAsignacion() == idAsignacion) {
+            return a;
+        }
+    }
+    return null;
+}
     private Integer buscarIdMateria(Connection con, String nombreMateria) throws SQLException {
         if (nombreMateria == null || nombreMateria.isBlank()) return null;
         String sql = "SELECT ID_Materia FROM tb_materia WHERE Nombre = ?";
@@ -451,37 +533,39 @@ public class AsignacionDAO {
     //  LISTAR (tabla "Asignaciones registradas")
     // ============================================================
  
-    public ObservableList<Asignaciones> listarTodas() {
- 
-        ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
- 
-        String sql = """
-                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante,
-                       m.Nombre AS Materia, g.NombreGrupo AS Grupo,
-                       a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
-                       c.NombreCarrera AS Carrera, e.NombreEspacio
-                FROM tb_asignacion a
-                LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
-                LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
-                LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
-                INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
-                ORDER BY a.Fecha DESC, a.HoraInicio DESC
-                """;
- 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
- 
-            while (rs.next()) {
-                lista.add(mapearFila(rs));
-            }
- 
-        } catch (SQLException e) {
-            e.printStackTrace();
+public ObservableList<Asignaciones> listarTodas() {
+
+    ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
+
+    String sql = """
+            SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante,
+                   m.Nombre AS Materia, g.NombreGrupo AS Grupo,
+                   a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
+                   c.NombreCarrera AS Carrera, e.NombreEspacio,
+                   mc.Cuatrimestre AS Cuatrimestre
+            FROM tb_asignacion a
+            LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
+            LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
+            LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
+            LEFT JOIN tb_materia_carrera mc ON mc.ID_Materia = a.ID_Materia AND mc.ID_Carrera = a.ID_Carrera
+            INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
+            ORDER BY a.Fecha DESC, a.HoraInicio DESC
+            """;
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            lista.add(mapearFila(rs));
         }
- 
-        return lista;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return lista;
+}
  
     // ============================================================
     //  DASHBOARD (fx_inicio.fxml)
@@ -515,6 +599,47 @@ public class AsignacionDAO {
             return false;
         }
     }
+    /** Carreras que tienen al menos un grupo en el cuatrimestre indicado. */
+public Map<String, Integer> listarCarrerasPorCuatrimestre(int cuatrimestre) {
+    Map<String, Integer> mapa = new LinkedHashMap<>();
+    String sql = "SELECT DISTINCT c.ID_Carrera, c.NombreCarrera " +
+                 "FROM tb_carrera c " +
+                 "INNER JOIN tb_grupo g ON g.ID_Carrera = c.ID_Carrera " +
+                 "WHERE g.Cuatrimestre = ? " +
+                 "ORDER BY c.NombreCarrera";
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, cuatrimestre);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                mapa.put(rs.getString("NombreCarrera"), rs.getInt("ID_Carrera"));
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return mapa;
+}
+public List<String> listarGruposPorCuatrimestreYCarrera(int cuatrimestre, int idCarrera) {
+    List<String> lista = new ArrayList<>();
+    String sql = "SELECT NombreGrupo FROM tb_grupo WHERE Cuatrimestre = ? AND ID_Carrera = ? ORDER BY NombreGrupo";
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, cuatrimestre);
+        ps.setInt(2, idCarrera);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(rs.getString("NombreGrupo"));
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
+
+/** Grupos de un cuatrimestre Y carrera específicos. */
+
  
     /**
      * Inserción rápida usada por la pantalla de Horarios (clic directo sobre una
@@ -566,18 +691,19 @@ public class AsignacionDAO {
         ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
  
         String sql = """
-                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante,
-                       m.Nombre AS Materia, g.NombreGrupo AS Grupo,
-                       a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
-                       c.NombreCarrera AS Carrera, e.NombreEspacio
-                FROM tb_asignacion a
-                LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
-                LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
-                LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
-                INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
-                WHERE a.Fecha = CURDATE() AND a.Estado <> 'Cancelado'
-                ORDER BY a.HoraInicio ASC
-                """;
+        SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante,
+               m.Nombre AS Materia, g.NombreGrupo AS Grupo,
+               a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
+               c.NombreCarrera AS Carrera, e.NombreEspacio,
+               mc.Cuatrimestre AS Cuatrimestre
+        FROM tb_asignacion a
+        LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
+        LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
+        LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
+        LEFT JOIN tb_materia_carrera mc ON mc.ID_Materia = a.ID_Materia AND mc.ID_Carrera = a.ID_Carrera
+        INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
+        ORDER BY a.Fecha DESC, a.HoraInicio DESC
+        """;
  
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -598,41 +724,43 @@ public class AsignacionDAO {
      * Asignaciones de un dia especifico (para el calendario del Inicio:
      * al hacer clic en un dia se listan las asignaciones de esa fecha).
      */
-    public ObservableList<Asignaciones> listarPorFecha(LocalDate fecha) {
+public ObservableList<Asignaciones> listarPorFecha(LocalDate fecha) {
 
-        ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
+    ObservableList<Asignaciones> lista = FXCollections.observableArrayList();
 
-        String sql = """
-                SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante,
-                       m.Nombre AS Materia, g.NombreGrupo AS Grupo,
-                       a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
-                       c.NombreCarrera AS Carrera, e.NombreEspacio
-                FROM tb_asignacion a
-                LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
-                LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
-                LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
-                INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
-                WHERE a.Fecha = ? AND a.Estado <> 'Cancelado'
-                ORDER BY a.HoraInicio ASC
-                """;
+    String sql = """
+            SELECT a.ID_Asignacion, a.TipoUsuario, a.NombreSolicitante,
+                   m.Nombre AS Materia, g.NombreGrupo AS Grupo,
+                   a.NumAlumnos, a.Fecha, a.HoraInicio, a.HoraTermino, a.Actividad, a.Estado,
+                   c.NombreCarrera AS Carrera, e.NombreEspacio,
+                   mc.Cuatrimestre AS Cuatrimestre
+            FROM tb_asignacion a
+            LEFT JOIN tb_carrera c ON c.ID_Carrera = a.ID_Carrera
+            LEFT JOIN tb_grupo g ON g.ID_Grupo = a.ID_Grupo
+            LEFT JOIN tb_materia m ON m.ID_Materia = a.ID_Materia
+            LEFT JOIN tb_materia_carrera mc ON mc.ID_Materia = a.ID_Materia AND mc.ID_Carrera = a.ID_Carrera
+            INNER JOIN tb_espacio e ON e.ID_Espacio = a.ID_Espacio
+            WHERE a.Fecha = ? AND a.Estado <> 'Cancelado'
+            ORDER BY a.HoraInicio ASC
+            """;
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setDate(1, Date.valueOf(fecha));
+        ps.setDate(1, Date.valueOf(fecha));
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    lista.add(mapearFila(rs));
-                }
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(mapearFila(rs));
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
-        return lista;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return lista;
+}
 
     /**
      * Dias del mes (1-31) que tienen al menos una asignacion activa, para
@@ -669,6 +797,7 @@ public class AsignacionDAO {
         return dias;
     }
 
+<<<<<<< HEAD
     
     ///672 CAMBIAR AQUIII MAAAR MAR MAR PONER La parte esaa de ls logica asi bn padre aqui empiezaaaaa
 
@@ -762,6 +891,46 @@ public class AsignacionDAO {
         asg.setIdAsignacion(rs.getInt("ID_Asignacion"));
         return asg;
     }
+=======
+private Asignaciones mapearFila(ResultSet rs) throws SQLException {
+
+    Date fechaBD = rs.getDate("Fecha");
+    Time horaInicioBD = rs.getTime("HoraInicio");
+    Time horaTerminoBD = rs.getTime("HoraTermino");
+
+    String carrera = rs.getString("Carrera");
+    if (carrera == null || carrera.isBlank()) carrera = "—";
+
+    String materia = rs.getString("Materia");
+    if (materia == null || materia.isBlank()) materia = "—";
+
+    String grupo = rs.getString("Grupo");
+    if (grupo == null || grupo.isBlank()) grupo = "—";
+
+    int cuatrimestreBD = rs.getInt("Cuatrimestre");
+    boolean cuatrimestreNulo = rs.wasNull();
+
+    Asignaciones asg = new Asignaciones(
+            "ASG-" + String.format("%04d", rs.getInt("ID_Asignacion")),
+            fechaBD.toLocalDate().format(FORMATO_FECHA_UI),
+            horaInicioBD.toLocalTime().toString().substring(0, 5),
+            horaTerminoBD.toLocalTime().toString().substring(0, 5),
+            rs.getString("NombreEspacio"),
+            rs.getString("TipoUsuario"),
+            rs.getString("NombreSolicitante"),
+            "—",
+            carrera,
+            materia,
+            grupo,
+            String.valueOf(rs.getInt("NumAlumnos")),
+            rs.getString("Actividad"),
+            rs.getString("Estado")
+    );
+    asg.setIdAsignacion(rs.getInt("ID_Asignacion"));
+    asg.setCuatrimestre(cuatrimestreNulo ? "" : String.valueOf(cuatrimestreBD));
+    return asg;
+}
+>>>>>>> 135e54a9fa9304239b4930769232372cc5117136
  
     // ============================================================
     //  ELIMINAR (borrar)
@@ -848,125 +1017,4 @@ public class AsignacionDAO {
  
         return lista;
     }
-
-    public ObservableList<Consultas> buscarConFiltros(
-        String solicitante,
-        String tipoEspacio,
-        String espacio,
-        String estado,
-        String carrera,
-        String materia,
-        String grupo,
-        LocalDate fechaDesde,
-        LocalDate fechaHasta
-) {
-    ObservableList<Consultas> lista =
-            FXCollections.observableArrayList();
-
-    StringBuilder sql = new StringBuilder("""
-            SELECT 
-                a.HoraInicio,
-                a.HoraTermino,
-                e.NombreEspacio AS Espacio,
-                a.NombreSolicitante AS Solicitante,
-                g.NombreGrupo AS Grupo,
-                a.Estado,
-                a.Actividad AS Motivo,
-                c.NombreCarrera AS Carrera,
-                m.Nombre AS Materia
-            FROM tb_asignacion a
-            LEFT JOIN tb_carrera c
-                ON c.ID_Carrera = a.ID_Carrera
-            LEFT JOIN tb_grupo g
-                ON g.ID_Grupo = a.ID_Grupo
-            LEFT JOIN tb_materia m
-                ON m.ID_Materia = a.ID_Materia
-            INNER JOIN tb_espacio e
-                ON e.ID_Espacio = a.ID_Espacio
-            WHERE 1 = 1
-            """);
-
-    List<Object> parametros = new ArrayList<>();
-
-    if (solicitante != null && !solicitante.isBlank()) {
-        sql.append(" AND a.NombreSolicitante LIKE ?");
-        parametros.add("%" + solicitante + "%");
-    }
-
-    if (tipoEspacio != null && !tipoEspacio.isBlank()) {
-        sql.append(" AND e.TipoEspacio = ?");
-        parametros.add(tipoEspacio);
-    }
-
-    if (espacio != null && !espacio.isBlank()) {
-        sql.append(" AND e.NombreEspacio = ?");
-        parametros.add(espacio);
-    }
-
-    if (estado != null && !estado.isBlank()) {
-        sql.append(" AND a.Estado = ?");
-        parametros.add(estado);
-    }
-
-    if (carrera != null && !carrera.isBlank()) {
-        sql.append(" AND c.NombreCarrera = ?");
-        parametros.add(carrera);
-    }
-
-    if (materia != null && !materia.isBlank()) {
-        sql.append(" AND m.Nombre = ?");
-        parametros.add(materia);
-    }
-
-    if (grupo != null && !grupo.isBlank()) {
-        sql.append(" AND g.NombreGrupo = ?");
-        parametros.add(grupo);
-    }
-
-    if (fechaDesde != null) {
-        sql.append(" AND a.Fecha >= ?");
-        parametros.add(Date.valueOf(fechaDesde));
-    }
-
-    if (fechaHasta != null) {
-        sql.append(" AND a.Fecha <= ?");
-        parametros.add(Date.valueOf(fechaHasta));
-    }
-
-    sql.append("""
-            ORDER BY a.Fecha DESC, a.HoraInicio DESC
-            """);
-
-    try (Connection con = Conexion.conectar();
-         PreparedStatement ps = con.prepareStatement(sql.toString())) {
-
-        for (int i = 0; i < parametros.size(); i++) {
-            ps.setObject(i + 1, parametros.get(i));
-        }
-
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                String horario = rs.getTime("HoraInicio")
-                        + " - "
-                        + rs.getTime("HoraTermino");
-
-                lista.add(new Consultas(
-                        horario,
-                        rs.getString("Espacio"),
-                        rs.getString("Solicitante"),
-                        rs.getString("Grupo"),
-                        rs.getString("Estado"),
-                        rs.getString("Motivo"),
-                        rs.getString("Carrera"),
-                        rs.getString("Materia")
-                ));
-            }
-        }
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-
-    return lista;
-}
 }

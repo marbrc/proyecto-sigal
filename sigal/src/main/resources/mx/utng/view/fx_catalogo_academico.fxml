@@ -62,18 +62,6 @@
                     </graphic>
                 </Button>
 
-                <!-- AREA ACADEMICA -->
-                <Button fx:id="btnAreaAcademica" maxWidth="Infinity" onAction="#onAbrirAreaAcademica" styleClass="catalogo-tile, tile-area" HBox.hgrow="ALWAYS">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="10.0">
-                            <StackPane styleClass="tile-icon-box">
-                                <Label styleClass="tile-icon" text="🏫" />
-                            </StackPane>
-                            <Label styleClass="tile-title" text="Área Académica" />
-                            <Label styleClass="tile-desc" text="Administra las áreas académicas del edificio" textAlignment="CENTER" wrapText="true" />
-                        </VBox>
-                    </graphic>
-                </Button>
             </HBox>
 
         </VBox>

@@ -629,3 +629,9 @@ menu-content-bg {
     -fx-background-radius: 8;
     -fx-border-color: transparent;
 }
+.text-area .content {
+    -fx-text-fill: white;
+}
+.input-field .content {
+    -fx-text-fill: white;
+}

@@ -44,6 +44,7 @@ public class AsignacionesController implements Initializable {
     @FXML private ComboBox<String> cmbNombreSolicitante;
     @FXML private ComboBox<String> cmbTipoEspacio;
     @FXML private ComboBox<String> cmbEspacio;
+    @FXML private ComboBox<String> cmbCuatrimestre;
     @FXML private ComboBox<String> cmbCarrera;
     @FXML private ComboBox<String> cmbMateria;
     @FXML private ComboBox<String> cmbGrupo;
@@ -75,184 +76,176 @@ public class AsignacionesController implements Initializable {
 
     private static final int FILAS_POR_PAGINA = 10;
 
-    private static final String[] CARRERAS = {
-        "Licenciatura en Ingeniería en Tecnologías de la Información e Innovación Digital – Desarrollo de Software Multiplataforma",
-        "Licenciatura en Ingeniería en Tecnologías de la Información e Innovación Digital – Entornos Virtuales y Negocios Digitales",
-        "Redes Digitales",
-        "Diseño Gráfico"
-    };
-
     private final ObservableList<Asignaciones> listaAsignaciones = FXCollections.observableArrayList();
     private FilteredList<Asignaciones> asignacionesFiltradas;
 
     private final AsignacionDAO asignacionDAO = new AsignacionDAO();
     private Map<String, Integer> mapaEspacios = new LinkedHashMap<>();
+    private Map<String, Integer> mapaCarreras = new LinkedHashMap<>();
     private Asignaciones asignacionEnEdicion = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        cargarCombos();
         configurarColumnas();
+        cargarCombos();
         configurarBusqueda();
         cargarDatosReales();
-        tablaAsignaciones.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    // ============================================================
-    //  Combos y carga de datos
-    // ============================================================
-
-    
-
     private void cargarCombos() {
+        cmbSolicitante.setItems(FXCollections.observableArrayList("Profesor", "Administrativo", "Alumno", "Otro"));
 
-    // Combo de solicitantes
-   cmbSolicitante.setItems(FXCollections.observableArrayList("Profesor", "Administrativo", "Alumno", "Otro"));
+        cmbNombreSolicitante.setEditable(true);
+        cmbNombreSolicitante.getStyleClass().add("combo-box-editable");
 
-    cmbNombreSolicitante.setEditable(true);
-    cmbNombreSolicitante.getStyleClass().add("combo-box-editable");
+        cmbNombreSolicitante.setItems(
+            FXCollections.observableArrayList(asignacionDAO.listarNombresSolicitantes())
+        );
 
-    // Valores iniciales
-    cmbNombreSolicitante.setItems(
-        FXCollections.observableArrayList(
-            asignacionDAO.listarNombresSolicitantes()
-        )
-    );
+        cmbSolicitante.valueProperty().addListener((obs, valorAnterior, tipo) -> {
+            cmbNombreSolicitante.getSelectionModel().clearSelection();
+            cmbNombreSolicitante.setValue(null);
 
-    cmbSolicitante.valueProperty().addListener((obs, valorAnterior, tipo) -> {
+            if (cmbNombreSolicitante.isEditable()) {
+                cmbNombreSolicitante.getEditor().clear();
+            }
 
-        // Limpiar selección y texto escrito
-        cmbNombreSolicitante.getSelectionModel().clearSelection();
-        cmbNombreSolicitante.setValue(null);
+            if ("Profesor".equals(tipo) || "Administrativo".equals(tipo)) {
+                cmbNombreSolicitante.setItems(
+                    FXCollections.observableArrayList(asignacionDAO.listarNombresPersonalPorTipo(tipo))
+                );
+            } else {
+                cmbNombreSolicitante.setItems(
+                    FXCollections.observableArrayList(asignacionDAO.listarNombresSolicitantes())
+                );
+            }
+        });
 
-        if (cmbNombreSolicitante.isEditable()) {
-            cmbNombreSolicitante.getEditor().clear();
-        }
+        // Configurar Cuatrimestres
+        cmbCuatrimestre.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
 
-        if ("Maestro".equals(tipo)) {
-            cmbNombreSolicitante.setItems(
-                FXCollections.observableArrayList(
-                    asignacionDAO.listarNombresProfesores()
-                )
-            );
-        } else {
-            cmbNombreSolicitante.setItems(
-                FXCollections.observableArrayList(
-                    asignacionDAO.listarNombresSolicitantes()
-                )
-            );
-        }
-    });
+        // Carrera inicia deshabilitada hasta elegir Cuatrimestre
+        cmbCarrera.getItems().clear();
+        cmbCarrera.setDisable(true);
 
-    // Otros combos
-   cmbCarrera.setItems(FXCollections.observableArrayList(
-    asignacionDAO.listarCarreras().keySet()
-    ));
-    cmbMateria.setItems(FXCollections.observableArrayList(
-        asignacionDAO.listarMaterias()
-    ));
+        // Materia y Grupo inician deshabilitados hasta seleccionar Carrera + Cuatrimestre
+        cmbMateria.getItems().clear();
+        cmbMateria.setDisable(true);
+        cmbGrupo.getItems().clear();
+        cmbGrupo.setDisable(true);
 
-    cmbGrupo.setItems(
-        FXCollections.observableArrayList(
-            asignacionDAO.listarGrupos()
-        )
-    );
+        // Listeners dobles: disparan actualización cuando cambia Carrera o Cuatrimestre
+        cmbCuatrimestre.valueProperty().addListener((obs, oldVal, newVal) -> actualizarCarrerasPorCuatri());
+        cmbCarrera.valueProperty().addListener((obs, oldVal, newVal) -> actualizarMateriasYGrupos());
 
-    ObservableList<String> horas = generarHoras();
+        ObservableList<String> horas = generarHoras();
+        cmbHoraInicio.setItems(horas);
+        cmbHoraTermino.setItems(FXCollections.observableArrayList(horas));
 
-    cmbHoraInicio.setItems(horas);
-    cmbHoraTermino.setItems(
-        FXCollections.observableArrayList(horas)
-    );
+        cmbTipoEspacio.setItems(FXCollections.observableArrayList(
+            "Lab. de cómputo", "Aula común", "Especializado", "Sala múltiple"
+        ));
 
-    // Combo de tipos de espacio
-    cmbTipoEspacio.setItems(
-        FXCollections.observableArrayList(
-            "Lab. de cómputo",
-            "Aula común",
-            "Especializado",
-            "Sala múltiple"
-        )
-    );
-
-    
-    // El combo dependiente inicia deshabilitado
-    cmbEspacio.setDisable(true);
-    cmbEspacio.getItems().clear();
-
-    cmbTipoEspacio.valueProperty().addListener((obs, valorAnterior, tipo) -> {
-
-        // Limpiar combo dependiente
-        cmbEspacio.getSelectionModel().clearSelection();
+        cmbEspacio.setDisable(true);
         cmbEspacio.getItems().clear();
-        cmbEspacio.setValue(null);
 
-        if (cmbEspacio.isEditable()) {
-            cmbEspacio.getEditor().clear();
-        }
+        cmbTipoEspacio.valueProperty().addListener((obs, valorAnterior, tipo) -> {
+            cmbEspacio.getSelectionModel().clearSelection();
+            cmbEspacio.getItems().clear();
+            cmbEspacio.setValue(null);
 
-        // Si no hay tipo seleccionado, permanece deshabilitado
-        if (tipo == null || tipo.trim().isEmpty()) {
-            cmbEspacio.setDisable(true);
+            if (cmbEspacio.isEditable()) {
+                cmbEspacio.getEditor().clear();
+            }
+
+            if (tipo == null || tipo.trim().isEmpty()) {
+                cmbEspacio.setDisable(true);
+                return;
+            }
+
+            mapaEspacios = asignacionDAO.listarEspaciosPorTipo(tipo);
+            cmbEspacio.setItems(FXCollections.observableArrayList(mapaEspacios.keySet()));
+            cmbEspacio.setDisable(mapaEspacios.isEmpty());
+        });
+    }
+
+    private void actualizarCarrerasPorCuatri() {
+        String cuatriSel = cmbCuatrimestre.getValue();
+
+        cmbCarrera.getSelectionModel().clearSelection();
+        cmbCarrera.setValue(null);
+        cmbMateria.getSelectionModel().clearSelection();
+        cmbMateria.setValue(null);
+        cmbGrupo.getSelectionModel().clearSelection();
+        cmbGrupo.setValue(null);
+
+        if (cuatriSel == null || cuatriSel.isBlank()) {
+            cmbCarrera.getItems().clear();
+            cmbCarrera.setDisable(true);
+            cmbMateria.getItems().clear();
+            cmbMateria.setDisable(true);
+            cmbGrupo.getItems().clear();
+            cmbGrupo.setDisable(true);
             return;
         }
 
-        // Consultar espacios según el tipo seleccionado
-        mapaEspacios = asignacionDAO.listarEspaciosPorTipo(tipo);
+        int cuatri = Integer.parseInt(cuatriSel);
+        mapaCarreras = asignacionDAO.listarCarrerasPorCuatrimestre(cuatri);
+        cmbCarrera.setItems(FXCollections.observableArrayList(mapaCarreras.keySet()));
+        cmbCarrera.setDisable(mapaCarreras.isEmpty());
 
-        cmbEspacio.setItems(
-            FXCollections.observableArrayList(
-                mapaEspacios.keySet()
-            )
-        );
-
-        cmbEspacio.setDisable(mapaEspacios.isEmpty());
-    });
-}
-
-private ObservableList<String> generarHoras() {
-    return FXCollections.observableArrayList(
-        "8:00",
-        "8:50",
-        "9:00",
-        "9:50",
-        "10:00",
-        "10:50",
-        "11:00",
-        "11:50",
-        "12:20",
-        "13:10",
-        "13:15",
-        "14:05",
-        "14:10",
-        "15:00",
-        "15:10",
-        "16:00",
-        "16:00",
-        "16:50",
-        "17:00",
-        "17:50",
-        "17:50",
-        "18:20",
-        "18:20",
-        "19:10",
-        "19:10",
-        "20:00",
-        "20:05",
-        "20:55",
-        "21:00",
-        "21:50"
-    );
-}
-
-    private void cargarDatosReales() {
-        listaAsignaciones.setAll(asignacionDAO.listarTodas());
-        actualizarPaginacion();
+        cmbMateria.getItems().clear();
+        cmbMateria.setDisable(true);
+        cmbGrupo.getItems().clear();
+        cmbGrupo.setDisable(true);
     }
 
-    // ============================================================
-    //  Búsqueda y Paginación
-    // ============================================================
+    private void actualizarMateriasYGrupos() {
+        String carreraSel = cmbCarrera.getValue();
+        String cuatriSel = cmbCuatrimestre.getValue();
+
+        cmbMateria.getSelectionModel().clearSelection();
+        cmbMateria.setValue(null);
+        cmbGrupo.getSelectionModel().clearSelection();
+        cmbGrupo.setValue(null);
+
+        if (carreraSel == null || cuatriSel == null || cuatriSel.isBlank()) {
+            cmbMateria.getItems().clear();
+            cmbMateria.setDisable(true);
+            cmbGrupo.getItems().clear();
+            cmbGrupo.setDisable(true);
+            return;
+        }
+
+        int cuatri = Integer.parseInt(cuatriSel);
+        Integer idCarrera = mapaCarreras.get(carreraSel);
+
+        if (idCarrera != null) {
+            cmbMateria.setItems(FXCollections.observableArrayList(
+                    asignacionDAO.listarMateriasPorCuatrimestreYCarrera(cuatri, idCarrera)));
+            cmbGrupo.setItems(FXCollections.observableArrayList(
+                    asignacionDAO.listarGruposPorCuatrimestreYCarrera(cuatri, idCarrera)));
+        } else {
+            cmbMateria.getItems().clear();
+            cmbGrupo.getItems().clear();
+        }
+        cmbMateria.setDisable(cmbMateria.getItems().isEmpty());
+        cmbGrupo.setDisable(cmbGrupo.getItems().isEmpty());
+    }
+
+    private ObservableList<String> generarHoras() {
+        return FXCollections.observableArrayList(
+            "8:00", "8:50", "9:00", "9:50", "10:00", "10:50", "11:00", "11:50",
+            "12:20", "13:10", "13:15", "14:05", "14:10", "15:00", "15:10", "16:00",
+            "16:50", "17:00", "17:50", "18:20", "19:10", "20:00", "20:05", "20:55", "21:00", "21:50"
+        );
+    }
+
+private void cargarDatosReales() {
+    listaAsignaciones.setAll(asignacionDAO.listarTodas());
+    actualizarPaginacion();
+    tablaAsignaciones.refresh();  // fuerza el repintado de todas las celdas visibles
+}
 
     private void configurarBusqueda() {
         asignacionesFiltradas = new FilteredList<>(listaAsignaciones, a -> true);
@@ -275,16 +268,24 @@ private ObservableList<String> generarHoras() {
         }
     }
 
-    private void actualizarPaginacion() {
-        if (paginacion != null) {
-            int numPaginas = (int) Math.ceil((double) asignacionesFiltradas.size() / FILAS_POR_PAGINA);
-            paginacion.setPageCount(numPaginas == 0 ? 1 : numPaginas);
-            paginacion.setCurrentPageIndex(0);
-            paginacion.setPageFactory(this::crearPagina);
-        } else {
-            tablaAsignaciones.setItems(asignacionesFiltradas);
-        }
+private void actualizarPaginacion() {
+    if (paginacion != null) {
+        int numPaginas = (int) Math.ceil((double) asignacionesFiltradas.size() / FILAS_POR_PAGINA);
+        paginacion.setPageCount(numPaginas == 0 ? 1 : numPaginas);
+
+        int paginaActual = Math.min(paginacion.getCurrentPageIndex(), numPaginas - 1);
+        if (paginaActual < 0) paginaActual = 0;
+
+        paginacion.setCurrentPageIndex(paginaActual);
+        paginacion.setPageFactory(this::crearPagina);
+
+        // Forzamos la reconstrucción inmediata de la página visible,
+        // sin depender de que Pagination detecte el cambio por sí sola.
+        crearPagina(paginaActual);
+    } else {
+        tablaAsignaciones.setItems(asignacionesFiltradas);
     }
+}
 
     private Node crearPagina(int pageIndex) {
         int deIndex = pageIndex * FILAS_POR_PAGINA;
@@ -298,10 +299,6 @@ private ObservableList<String> generarHoras() {
         }
         return tablaAsignaciones;
     }
-
-    // ============================================================
-    //  Tabla y Columnas
-    // ============================================================
 
     private void configurarColumnas() {
         colId.setCellValueFactory(data -> data.getValue().idProperty());
@@ -326,7 +323,7 @@ private ObservableList<String> generarHoras() {
                 setText(tipo);
                 getStyleClass().removeAll("tag-profesor", "tag-administrativo", "tag-alumno");
                 switch (tipo) {
-                    case "Maestro" -> getStyleClass().add("tag-profesor");
+                    case "Maestro", "Profesor" -> getStyleClass().add("tag-profesor");
                     case "Administrativo" -> getStyleClass().add("tag-administrativo");
                     case "Alumno" -> getStyleClass().add("tag-alumno");
                     default -> getStyleClass().add("tag-administrativo");
@@ -386,8 +383,14 @@ private ObservableList<String> generarHoras() {
                 asignacion.getId() + " · " + asignacion.getEspacio() + " · " + asignacion.getFecha());
     }
 
-    private void onEditarAsignacion(Asignaciones asignacion) {
-        if (asignacion == null) return;
+private void onEditarAsignacion(Asignaciones asignacionFila) {
+    if (asignacionFila == null) return;
+
+    // Siempre recargamos desde la BD por si el objeto en memoria está desactualizado
+    Asignaciones asignacion = asignacionDAO.buscarPorId(asignacionFila.getIdAsignacion());
+    if (asignacion == null) asignacion = asignacionFila;
+
+    cmbSolicitante.setValue(asignacion.getTipoSolicitante());
 
         cmbSolicitante.setValue(asignacion.getTipoSolicitante());
         cmbNombreSolicitante.setValue(asignacion.getNombreSolicitante());
@@ -396,6 +399,9 @@ private ObservableList<String> generarHoras() {
         cmbTipoEspacio.setValue(tipoEspacio);
         cmbEspacio.setValue(asignacion.getEspacio());
 
+        if (asignacion.getCuatrimestre() != null) {
+            cmbCuatrimestre.setValue(asignacion.getCuatrimestre());
+        }
         cmbCarrera.setValue(asignacion.getCarrera());
         cmbMateria.setValue(asignacion.getMateria());
         cmbGrupo.setValue(asignacion.getGrupo());
@@ -433,112 +439,130 @@ private ObservableList<String> generarHoras() {
         });
     }
 
-    // ============================================================
-    //  Acciones del formulario
-    // ============================================================
-
-    @FXML
-    private void onGuardarAsignacion(ActionEvent event) {
-        if (cmbSolicitante.getValue() == null
-                || cmbNombreSolicitante.getValue() == null || cmbNombreSolicitante.getValue().isBlank()
-                || cmbTipoEspacio.getValue() == null
-                || cmbEspacio.getValue() == null
-                || cmbCarrera.getValue() == null
-                || cmbMateria.getValue() == null || cmbMateria.getValue().isBlank()
-                || cmbGrupo.getValue() == null
-                || txtNumAlumnos.getText().isBlank()
-                || dpFecha.getValue() == null
-                || cmbHoraInicio.getValue() == null
-                || cmbHoraTermino.getValue() == null
-                || txtActividad.getText().isBlank()) {
-            mostrarAlerta(AlertType.WARNING, "Campos incompletos",
-                    "Por favor llena todos los campos obligatorios (*) antes de guardar.");
-            return;
-        }
-
-        if (!txtNumAlumnos.getText().matches("\\d+")) {
-            mostrarAlerta(AlertType.WARNING, "Número de alumnos inválido",
-                    "Escribe solo números en \"Número de alumnos\".");
-            return;
-        }
-
-        if (cmbHoraTermino.getValue().compareTo(cmbHoraInicio.getValue()) <= 0) {
-            mostrarAlerta(AlertType.WARNING, "Horario inválido",
-                    "La hora de término debe ser posterior a la hora de inicio.");
-            return;
-        }
-        int idEspacioParaValidar = mapaEspacios.getOrDefault(cmbEspacio.getValue(), -1);
-int idAsignacionExcluir = (asignacionEnEdicion != null) ? asignacionEnEdicion.getIdAsignacion() : -1;
-
-boolean hayConflicto = asignacionDAO.existeConflictoHorario(
-        idEspacioParaValidar, dpFecha.getValue(),
-        cmbHoraInicio.getValue(), cmbHoraTermino.getValue(),
-        idAsignacionExcluir);
-
-if (hayConflicto) {
-    mostrarAlerta(AlertType.WARNING, "Horario ocupado",
-            "El espacio \"" + cmbEspacio.getValue() + "\" ya está asignado ese día en un horario "
-                    + "que se cruza con el que capturaste. Elige otro horario o espacio.");
-    return;
-}
-
-        int idEspacio = mapaEspacios.getOrDefault(cmbEspacio.getValue(), -1);
-        if (idEspacio == -1) {
-            mostrarAlerta(AlertType.ERROR, "Espacio inválido",
-                    "No se encontró el espacio seleccionado en la base de datos.");
-            return;
-        }
-
-        int idUsuarioActual = (menuController != null) ? menuController.getIdUsuarioActual() : 0;
-        if (idUsuarioActual <= 0) {
-            mostrarAlerta(AlertType.ERROR, "Sesión no encontrada",
-                    "No se pudo identificar al usuario en sesión. Vuelve a iniciar sesión e inténtalo de nuevo.");
-            return;
-        }
-
-        LocalDate fecha = dpFecha.getValue();
-        String fechaTexto = fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-        Asignaciones datosFormulario = new Asignaciones(
-                "",
-                fechaTexto,
-                cmbHoraInicio.getValue(),
-                cmbHoraTermino.getValue(),
-                cmbEspacio.getValue(),
-                cmbSolicitante.getValue(),
-                cmbNombreSolicitante.getValue(),
-                "—",
-                cmbCarrera.getValue(),
-                cmbMateria.getValue(),
-                cmbGrupo.getValue(),
-                txtNumAlumnos.getText(),
-                txtActividad.getText(),
-                "Asignado"
-        );
-
-        boolean guardada;
-        String mensajeExito;
-
-        if (asignacionEnEdicion != null) {
-            guardada = asignacionDAO.actualizar(asignacionEnEdicion.getIdAsignacion(),
-                    datosFormulario, idUsuarioActual, idEspacio);
-            datosFormulario.setId(asignacionEnEdicion.getId());
-            mensajeExito = "La asignación " + datosFormulario.getId() + " se actualizó correctamente.";
-        } else {
-            guardada = asignacionDAO.insertar(datosFormulario, idUsuarioActual, idEspacio);
-            mensajeExito = "La asignación se registró correctamente.";
-        }
-
-        if (!guardada) {
-            mostrarAlerta(AlertType.ERROR, "No se pudo guardar",
-                    "Ocurrió un problema al guardar la asignación en la base de datos.");
-            return;
-        }
-
-        cargarDatosReales();
-        onLimpiar(null);
-        mostrarAlerta(AlertType.INFORMATION, "Asignación guardada", mensajeExito);
+@FXML
+private void onGuardarAsignacion(ActionEvent event) {
+    if (cmbSolicitante.getValue() == null
+            || cmbNombreSolicitante.getValue() == null || cmbNombreSolicitante.getValue().isBlank()
+            || cmbTipoEspacio.getValue() == null
+            || cmbEspacio.getValue() == null
+            || cmbCuatrimestre.getValue() == null
+            || cmbCarrera.getValue() == null
+            || cmbMateria.getValue() == null || cmbMateria.getValue().isBlank()
+            || cmbGrupo.getValue() == null
+            || txtNumAlumnos.getText().isBlank()
+            || dpFecha.getValue() == null
+            || cmbHoraInicio.getValue() == null
+            || cmbHoraTermino.getValue() == null
+            || txtActividad.getText().isBlank()) {
+        mostrarAlerta(AlertType.WARNING, "Campos incompletos",
+                "Por favor llena todos los campos obligatorios (*) antes de guardar.");
+        return;
     }
+
+    if (!txtNumAlumnos.getText().matches("\\d+")) {
+        mostrarAlerta(AlertType.WARNING, "Número de alumnos inválido",
+                "Escribe solo números en \"Número de alumnos\".");
+        return;
+    }
+
+    // --- Validar que el espacio tenga capacidad suficiente ---
+    int idEspacioParaCapacidad = mapaEspacios.getOrDefault(cmbEspacio.getValue(), -1);
+    if (idEspacioParaCapacidad == -1) {
+        mostrarAlerta(AlertType.ERROR, "Espacio inválido",
+                "No se encontró el espacio seleccionado en la base de datos.");
+        return;
+    }
+
+    Integer capacidadMaxima = asignacionDAO.obtenerCapacidadEspacio(idEspacioParaCapacidad);
+    int numAlumnos = Integer.parseInt(txtNumAlumnos.getText());
+
+    if (capacidadMaxima != null && numAlumnos > capacidadMaxima) {
+        mostrarAlerta(AlertType.WARNING, "Capacidad excedida",
+                "El espacio \"" + cmbEspacio.getValue() + "\" tiene una capacidad máxima de "
+                        + capacidadMaxima + " personas, pero capturaste " + numAlumnos + ". "
+                        + "Elige un espacio con mayor capacidad o reduce el número de alumnos.");
+        return;
+    }
+
+    if (cmbHoraTermino.getValue().compareTo(cmbHoraInicio.getValue()) <= 0) {
+        mostrarAlerta(AlertType.WARNING, "Horario inválido",
+                "La hora de término debe ser posterior a la hora de inicio.");
+        return;
+    }
+
+    int idEspacioParaValidar = mapaEspacios.getOrDefault(cmbEspacio.getValue(), -1);
+    int idAsignacionExcluir = (asignacionEnEdicion != null) ? asignacionEnEdicion.getIdAsignacion() : -1;
+
+    boolean hayConflicto = asignacionDAO.existeConflictoHorario(
+            idEspacioParaValidar, dpFecha.getValue(),
+            cmbHoraInicio.getValue(), cmbHoraTermino.getValue(),
+            idAsignacionExcluir);
+
+    if (hayConflicto) {
+        mostrarAlerta(AlertType.WARNING, "Horario ocupado",
+                "El espacio \"" + cmbEspacio.getValue() + "\" ya está asignado ese día en un horario "
+                        + "que se cruza con el que capturaste. Elige otro horario o espacio.");
+        return;
+    }
+
+    int idEspacio = mapaEspacios.getOrDefault(cmbEspacio.getValue(), -1);
+    if (idEspacio == -1) {
+        mostrarAlerta(AlertType.ERROR, "Espacio inválido",
+                "No se encontró el espacio seleccionado en la base de datos.");
+        return;
+    }
+
+    int idUsuarioActual = (menuController != null) ? menuController.getIdUsuarioActual() : 0;
+    if (idUsuarioActual <= 0) {
+        mostrarAlerta(AlertType.ERROR, "Sesión no encontrada",
+                "No se pudo identificar al usuario en sesión. Vuelve a iniciar sesión e inténtalo de nuevo.");
+        return;
+    }
+
+    LocalDate fecha = dpFecha.getValue();
+    String fechaTexto = fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+    Asignaciones datosFormulario = new Asignaciones(
+            "",
+            fechaTexto,
+            cmbHoraInicio.getValue(),
+            cmbHoraTermino.getValue(),
+            cmbEspacio.getValue(),
+            cmbSolicitante.getValue(),
+            cmbNombreSolicitante.getValue(),
+            "",                              // profesor: sin usar por ahora
+            cmbCarrera.getValue(),
+            cmbMateria.getValue(),
+            cmbGrupo.getValue(),
+            txtNumAlumnos.getText(),
+            txtActividad.getText(),
+            "Asignado"
+    );
+    datosFormulario.setCuatrimestre(cmbCuatrimestre.getValue());
+
+    boolean guardada;
+    String mensajeExito;
+
+    if (asignacionEnEdicion != null) {
+        guardada = asignacionDAO.actualizar(asignacionEnEdicion.getIdAsignacion(),
+                datosFormulario, idUsuarioActual, idEspacio);
+        datosFormulario.setId(asignacionEnEdicion.getId());
+        mensajeExito = "La asignación " + datosFormulario.getId() + " se actualizó correctamente.";
+    } else {
+        guardada = asignacionDAO.insertar(datosFormulario, idUsuarioActual, idEspacio);
+        mensajeExito = "La asignación se registró correctamente.";
+    }
+
+    if (!guardada) {
+        mostrarAlerta(AlertType.ERROR, "No se pudo guardar",
+                "Ocurrió un problema al guardar la asignación en la base de datos.");
+        return;
+    }
+
+    cargarDatosReales();
+    onLimpiar(null);
+    mostrarAlerta(AlertType.INFORMATION, "Asignación guardada", mensajeExito);
+}
 
     @FXML
     private void onLimpiar(ActionEvent event) {
@@ -547,9 +571,14 @@ if (hayConflicto) {
         cmbTipoEspacio.setValue(null);
         cmbEspacio.setValue(null);
         cmbEspacio.setDisable(true);
+        cmbCuatrimestre.setValue(null);
         cmbCarrera.setValue(null);
+        cmbCarrera.getItems().clear();
+        cmbCarrera.setDisable(true);
         cmbMateria.setValue(null);
+        cmbMateria.setDisable(true);
         cmbGrupo.setValue(null);
+        cmbGrupo.setDisable(true);
         txtNumAlumnos.clear();
         dpFecha.setValue(null);
         cmbHoraInicio.setValue(null);
@@ -567,4 +596,3 @@ if (hayConflicto) {
         alerta.showAndWait();
     }
 }
-

@@ -310,5 +310,57 @@ public class UsuarioDAO {
         }
     }
 
+    public java.util.List<Usuario> listarUsuarios(int idExcluir) {
+        String sql = "SELECT * FROM tb_usuario WHERE ID_Usuario <> ? ORDER BY Nombre, ApellidoPaterno";
+        java.util.List<Usuario> lista = new java.util.ArrayList<>();
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idExcluir);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("ID_Usuario"));
+                u.setNombre(rs.getString("Nombre"));
+                u.setApellidoPaterno(rs.getString("ApellidoPaterno"));
+                u.setApellidoMaterno(rs.getString("ApellidoMaterno"));
+                u.setNombreUsuario(rs.getString("NombreUsuario"));
+                u.setCorreoElectronico(rs.getString("CorreoElectronico"));
+                u.setRol(rs.getString("Rol"));
+                u.setEstado(rs.getString("Estado"));
+                lista.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    /** "Elimina" (desactiva) la cuenta de un usuario: Estado = 'Inactivo'. Ya no puede iniciar sesión, pero conserva su historial. */
+    public boolean desactivarUsuario(int idUsuario) {
+        String sql = "UPDATE tb_usuario SET Estado = 'Inactivo' WHERE ID_Usuario = ?";
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /** Reactiva una cuenta previamente desactivada. */
+    public boolean reactivarUsuario(int idUsuario) {
+        String sql = "UPDATE tb_usuario SET Estado = 'Activo' WHERE ID_Usuario = ?";
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }
