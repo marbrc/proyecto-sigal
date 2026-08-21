@@ -32,7 +32,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
 import mx.utng.dao.CarreraDAO;
 import mx.utng.dao.MateriaCarreraDAO;
 import mx.utng.dao.MateriaDAO;

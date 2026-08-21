@@ -26,7 +26,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-
 import mx.utng.dao.CarreraDAO;
 import mx.utng.dao.GrupoDAO;
 import mx.utng.model.Grupo;
