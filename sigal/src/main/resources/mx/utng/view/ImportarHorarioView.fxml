@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.DatePicker?>
 
 <!--
     Pantalla emergente: Importar horario desde Excel
@@ -18,8 +19,7 @@
 <VBox fx:id="rootImportar"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.sigal.controller.ImportarHorarioController"
-      styleClass="modal-card"
+        fx:controller="mx.utng.controller.ImportarHorarioController"      styleClass="modal-card"
       spacing="4">
     <padding>
         <Insets top="20" right="24" bottom="20" left="24"/>
@@ -34,6 +34,18 @@
 
     <Label text="Los espacios importados quedarán fijos durante todo el cuatrimestre."
            styleClass="modal-subtitle" wrapText="true"/>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <VBox spacing="4">
+            <Label text="Inicio del cuatrimestre"/>
+            <DatePicker fx:id="dpInicioCuatrimestre"/>
+        </VBox>
+
+    <VBox spacing="4">
+        <Label text="Fin del cuatrimestre"/>
+        <DatePicker fx:id="dpFinCuatrimestre"/>
+    </VBox>
+</HBox>
 
     <Region minHeight="12"/>
 
@@ -87,3 +99,5 @@
                 onAction="#onValidarEImportar" disable="true"/>
     </HBox>
 </VBox>
+
+

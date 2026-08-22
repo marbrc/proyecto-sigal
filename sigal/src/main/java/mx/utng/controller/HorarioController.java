@@ -43,6 +43,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.stage.Window;
 import mx.utng.dao.AsignacionDAO;
 import mx.utng.dao.EspacioDAO;
 import mx.utng.model.AsignacionHorario;
@@ -60,9 +61,13 @@ public class HorarioController implements javafx.fxml.Initializable {
     @FXML private Button btnBuscar;
     @FXML private Button btnLimpiar;
     @FXML private Button btnNuevaAsignacion;
+
+    @FXML private Button btnImportarHorario;
     @FXML private ScrollPane scrollHorario;
     @FXML private VBox contenedorGrid;
     private MenuController menuController;
+
+    
     public void setMenuController(MenuController menuController) {
         this.menuController = menuController;
     }
@@ -1305,6 +1310,39 @@ public class HorarioController implements javafx.fxml.Initializable {
                     );
         }
     }
+
+
+ @FXML
+private void onImportarHorario() {
+    try {
+        Window window = btnImportarHorario.getScene().getWindow();
+
+        ImportarHorarioController.abrir(
+            window,
+            menuController.getIdUsuarioActual(),
+            () -> {
+                cargarDatosIniciales();
+                renderizar();
+            }
+        );
+
+    } catch (Exception e) {
+        e.printStackTrace();
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("No se pudo abrir la importación de horarios");
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+    }
+}
+
+
+
+
+
+
+
     @FXML
     private void onNuevaAsignacion() {
         Optional<String[]> resultado =
