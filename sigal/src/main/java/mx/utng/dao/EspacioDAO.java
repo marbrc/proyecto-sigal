@@ -22,7 +22,43 @@ import mx.utng.model.EspacioRegistro;
  * phpMyAdmin.
  */
 public class EspacioDAO {
- 
+
+
+        public EspacioRegistro buscarPorId(int idEspacio) {
+        String sql = """
+                SELECT ID_Espacio, ClaveEspacio, NombreEspacio, TipoEspacio,
+                       CapacidadMaxima, Estado, Descripcion
+                FROM tb_espacio
+                WHERE ID_Espacio = ?
+                """;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idEspacio);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    EspacioRegistro espacio = new EspacioRegistro(
+                            rs.getString("ClaveEspacio"),
+                            rs.getString("NombreEspacio"),
+                            rs.getString("TipoEspacio"),
+                            rs.getInt("CapacidadMaxima"),
+                            rs.getString("Estado"),
+                            rs.getString("Descripcion")
+                    );
+                    espacio.setIdEspacio(rs.getInt("ID_Espacio"));
+                    return espacio;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     // ============================================================
     //  LISTAR (tabla "Espacios registrados")
     // ============================================================
@@ -111,7 +147,7 @@ public class EspacioDAO {
     public boolean actualizar(int idEspacio, EspacioRegistro e) {
         String sql = """
                 UPDATE tb_espacio SET
-                    ClaveEspado = ?, NombreEspado = ?, TipoEspado = ?,
+                    ClaveEspacio = ?, NombreEspacio = ?, TipoEspacio = ?,
                     CapacidadMaxima = ?, Estado = ?, Descripcion = ?
                 WHERE ID_Espacio = ?
                 """;

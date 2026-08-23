@@ -9,17 +9,28 @@ import javafx.beans.property.StringProperty;
  */
 public class DetalleItem {
 
+    /** ID real en la base de datos (ID_Espacio / ID_Asignacion / ID_Aviso). -1 = fila nueva, aun no guardada. */
+    private int id;
+
     private final StringProperty nombre;
     private final StringProperty tipo;
     private final StringProperty capacidad;
     private final StringProperty estado;
 
     public DetalleItem(String nombre, String tipo, String capacidad, String estado) {
+        this(-1, nombre, tipo, capacidad, estado);
+    }
+
+    public DetalleItem(int id, String nombre, String tipo, String capacidad, String estado) {
+        this.id = id;
         this.nombre = new SimpleStringProperty(nombre);
         this.tipo = new SimpleStringProperty(tipo);
         this.capacidad = new SimpleStringProperty(capacidad);
         this.estado = new SimpleStringProperty(estado);
     }
+
+    public int getId() { return id; }
+    public void setId(int v) { id = v; }
 
     public String getNombre() { return nombre.get(); }
     public void setNombre(String v) { nombre.set(v); }

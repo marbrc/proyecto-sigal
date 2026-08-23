@@ -285,6 +285,28 @@ public List<Aviso> listarTodos() {
         return lista;
     }
 
+
+
+        /** Actualiza tipo, descripción y estado de un aviso (edición desde el modal del Dashboard). */
+    public boolean actualizarCampos(int idAviso, String tipoAviso, String descripcion, String estado) {
+        String sql = "UPDATE tb_aviso SET TipoAviso = ?, Descripcion = ?, Estado = ? WHERE ID_Aviso = ?";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, tipoAviso);
+            ps.setString(2, descripcion);
+            ps.setString(3, estado);
+            ps.setInt(4, idAviso);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // ============================================================
     //  ELIMINAR
     // ============================================================

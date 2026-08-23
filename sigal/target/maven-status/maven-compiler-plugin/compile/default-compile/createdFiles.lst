@@ -31,6 +31,7 @@ mx\utng\controller\ProfesoresController$RolBadgeCell.class
 mx\utng\controller\EspaciosController.class
 mx\utng\controller\AsignacionesController$3.class
 mx\utng\util\ReporteExportador.class
+mx\utng\controller\InicioController$TipoModal.class
 mx\utng\controller\LoginController.class
 mx\utng\model\EstadoCelda.class
 mx\utng\dao\MateriaCarreraDAO.class

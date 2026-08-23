@@ -203,9 +203,8 @@
                     <ListView fx:id="listaDetalle" prefHeight="380.0" styleClass="modal-list" VBox.vgrow="ALWAYS" />
 
                     <HBox alignment="CENTER_LEFT" spacing="14.0">
-                        <Button fx:id="btnAgregarFila" onAction="#onAgregarFila" styleClass="modal-btn-secondary" text="+  Agregar" />
+                        <Label styleClass="modal-hint" text="Para agregar o editar, usa la pantalla real de ese módulo (Espacios, Asignaciones o Avisos)." wrapText="true" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label styleClass="modal-hint" text="Doble clic en una tarjeta para editarla" />
                         <Button fx:id="btnGuardarCambios" onAction="#onGuardarCambios" styleClass="modal-btn-primary" text="Guardar cambios" />
                     </HBox>
                 </VBox>
