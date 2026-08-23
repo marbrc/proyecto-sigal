@@ -22,7 +22,7 @@
       fx:controller="mx.utng.controller.ResultadoImportacionController"
       styleClass="modal-card"
       spacing="4"
-      prefWidth="640">
+      prefWidth="820">
     <padding>
         <Insets top="20" right="24" bottom="20" left="24"/>
     </padding>
@@ -61,9 +61,14 @@
             <TableColumn fx:id="colErrEspacio" text="Espacio" prefWidth="110"/>
             <TableColumn fx:id="colErrDia" text="Día" prefWidth="80"/>
             <TableColumn fx:id="colErrHorario" text="Horario" prefWidth="100"/>
-            <TableColumn fx:id="colErrMotivo" text="Motivo" prefWidth="200"/>
+            <TableColumn fx:id="colErrMotivo" text="Motivo" prefWidth="370"/>
         </columns>
     </TableView>
+
+    <Region minHeight="6"/>
+    <Label text="Detalle de la fila seleccionada:" styleClass="resultado-section-title"/>
+    <Label fx:id="lblMotivoSeleccionado" text="Selecciona una fila de la tabla de errores para ver el motivo completo aquí."
+           wrapText="true" styleClass="modal-subtitle"/>
 
     <Region minHeight="16"/>
     <Separator/>

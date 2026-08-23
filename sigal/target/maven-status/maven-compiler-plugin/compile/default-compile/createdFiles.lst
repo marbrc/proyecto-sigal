@@ -26,6 +26,7 @@ mx\utng\controller\MenuController.class
 mx\utng\service\HorarioImportService$ResultadoImportacion.class
 mx\utng\controller\ImportarHorarioController.class
 mx\utng\controller\AvisosController$EstadoBadgeCell.class
+mx\utng\controller\ResultadoImportacionController$1.class
 mx\utng\model\Asignaciones.class
 mx\utng\controller\ProfesoresController$RolBadgeCell.class
 mx\utng\controller\EspaciosController.class

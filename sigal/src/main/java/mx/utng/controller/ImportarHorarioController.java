@@ -98,7 +98,7 @@ public class ImportarHorarioController {
             chooser.setInitialDirectory(carpetaInicialValida());
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
 
-            File destino = chooser.showSaveDialog(stage);
+            File destino = mostrarDialogoConReintento(() -> chooser.showSaveDialog(stage), chooser);
             if (destino == null) return;
 
             try (var in = getClass().getResourceAsStream(RUTA_PLANTILLA_RECURSO)) {
@@ -125,7 +125,7 @@ public class ImportarHorarioController {
             chooser.setInitialDirectory(carpetaInicialValida());
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
 
-            File archivo = chooser.showOpenDialog(stage);
+            File archivo = mostrarDialogoConReintento(() -> chooser.showOpenDialog(stage), chooser);
             if (archivo != null) establecerArchivoSeleccionado(archivo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,19 +134,53 @@ public class ImportarHorarioController {
     }
 
     /**
+     * Abre el dialogo de FileChooser y, si truena con "Location is not set."
+     * (bug de JavaFX en Windows cuando la carpeta inicial es una carpeta
+     * redirigida por OneDrive: Java la ve como directorio valido pero el
+     * dialogo nativo no la puede resolver), reintenta una vez sin carpeta
+     * inicial en vez de mostrar el error al usuario.
+     */
+    private File mostrarDialogoConReintento(java.util.function.Supplier<File> abrirDialogo, FileChooser chooser) {
+        try {
+            return abrirDialogo.get();
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage() != null && e.getMessage().contains("Location is not set")) {
+                chooser.setInitialDirectory(null);
+                return abrirDialogo.get();
+            }
+            throw e;
+        }
+    }
+
+    /**
      * Carpeta con la que arranca el explorador de archivos del FileChooser.
      * Si no se le da una carpeta valida (que exista de verdad en el disco),
      * algunos sistemas Windows truenan con "Location is not set." al abrir
-     * el dialogo. Aqui probamos la carpeta de Documentos y, si no existe,
-     * caemos a la carpeta de usuario (que siempre existe).
+     * el dialogo. Esto pasa sobre todo cuando Documentos esta redirigido a
+     * OneDrive: File.isDirectory() dice que si existe, pero el dialogo
+     * nativo no logra resolver la ruta. Por eso aqui resolvemos la ruta
+     * real (toRealPath) para confirmar que de verdad es accesible, y si
+     * falla caemos a la carpeta de usuario o, en ultimo caso, dejamos que
+     * el FileChooser use su carpeta por defecto (null).
      */
     private File carpetaInicialValida() {
         File documentos = new File(System.getProperty("user.home", "."), "Documents");
-        if (documentos.isDirectory()) {
+        if (esCarpetaAccesible(documentos)) {
             return documentos;
         }
         File home = new File(System.getProperty("user.home", "."));
-        return home.isDirectory() ? home : new File(".");
+        if (esCarpetaAccesible(home)) {
+            return home;
+        }
+        return null;
+    }
+
+    private boolean esCarpetaAccesible(File carpeta) {
+        try {
+            return carpeta.isDirectory() && carpeta.toPath().toRealPath() != null;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     private void onDragOver(DragEvent event) {

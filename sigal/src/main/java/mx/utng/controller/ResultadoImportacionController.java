@@ -2,6 +2,7 @@ package mx.utng.controller;
  
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
@@ -12,8 +13,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -24,17 +27,6 @@ import mx.utng.service.HorarioImportService.FilaHorario;
 import mx.utng.service.HorarioImportService.ResultadoImportacion;
 import mx.utng.service.HorarioImportService.ResultadoValidacion;
  
-/**
- * Controller de la ventana emergente "Resultado de la importación".
- * Se abre desde ImportarHorarioController una vez que el Excel fue validado:
- * muestra qué filas se importarán y cuáles quedaron fuera por error o conflicto.
- *
- * "Confirmar importación" llama a HorarioImportService.importar(...), que
- * inserta cada fila válida como una asignación real (tb_asignacion) para
- * cada fecha en la que cae ese día de la semana dentro del cuatrimestre.
- * Al terminar, dispara onExito para que HorarioController (y de ahí Inicio)
- * refresquen sus datos.
- */
 public class ResultadoImportacionController {
  
     @FXML private Button btnCerrar;
@@ -56,6 +48,7 @@ public class ResultadoImportacionController {
     @FXML private TableColumn<FilaConError, String> colErrDia;
     @FXML private TableColumn<FilaConError, String> colErrHorario;
     @FXML private TableColumn<FilaConError, String> colErrMotivo;
+    @FXML private Label lblMotivoSeleccionado;
  
     private Stage stage;
     private ResultadoValidacion resultado;
@@ -63,16 +56,6 @@ public class ResultadoImportacionController {
     private Runnable onExito;
     private final HorarioImportService importService = new HorarioImportService();
  
-    // ------------------------------------------------------------------
-    // Apertura de la ventana modal
-    // ------------------------------------------------------------------
- 
-    /**
-     * Abre esta pantalla como modal sobre la ventana dueña indicada.
-     * onExito se dispara cuando el usuario confirma la importación (para que
-     * ImportarHorarioController pueda cerrar su propia ventana y avisar a
-     * HorarioController que debe refrescar la cuadrícula).
-     */
     public static void abrir(Window owner, ResultadoValidacion resultado, int idUsuarioActual, Runnable onExito) {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -121,6 +104,40 @@ public class ResultadoImportacionController {
         colErrHorario.setCellValueFactory(d -> new ReadOnlyStringWrapper(
                 d.getValue().fila().horaInicio() + " - " + d.getValue().fila().horaFin()));
         colErrMotivo.setCellValueFactory(d -> new ReadOnlyStringWrapper(d.getValue().motivo()));
+
+        colErrMotivo.setCellFactory(col -> new TableCell<FilaConError, String>() {
+            private final Tooltip tooltip = new Tooltip();
+
+            @Override
+            protected void updateItem(String motivo, boolean vacio) {
+                super.updateItem(motivo, vacio);
+                if (vacio || motivo == null) {
+                    setText(null);
+                    setTooltip(null);
+                } else {
+                    setText(motivo);
+                    tooltip.setText(motivo);
+                    tooltip.setWrapText(true);
+                    tooltip.setMaxWidth(360);
+                    setTooltip(tooltip);
+                }
+            }
+        });
+
+        tablaErrores.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionada) -> {
+            if (seleccionada != null) {
+                lblMotivoSeleccionado.setText(seleccionada.motivo());
+                // La ventana no es redimensionable y su alto se calculo al
+                // abrirse (con el texto corto de "Selecciona una fila..."),
+                // asi que si el motivo ocupa mas lineas se ve cortado. Con
+                // sizeToScene() se ajusta la ventana al nuevo contenido.
+                Platform.runLater(() -> {
+                    if (stage != null) {
+                        stage.sizeToScene();
+                    }
+                });
+            }
+        });
     }
  
     private void cargarDatos() {
@@ -133,10 +150,6 @@ public class ResultadoImportacionController {
  
         btnConfirmarImportacion.setDisable(resultado.validas().isEmpty());
     }
- 
-    // ------------------------------------------------------------------
-    // Acciones
-    // ------------------------------------------------------------------
  
     @FXML
     private void onConfirmarImportacion() {

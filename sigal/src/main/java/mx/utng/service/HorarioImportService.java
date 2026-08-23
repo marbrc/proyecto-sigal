@@ -227,7 +227,7 @@ public class HorarioImportService {
 
             for (LocalDate fecha : fechas) {
                 boolean ok = asignacionDAO.insertarRapido(
-                        idUsuario, fila.idEspacio(), fecha, horaInicio, horaFin, "Grupo", fila.grupo(), "");
+                    idUsuario, fila.idEspacio(), fecha, horaInicio, horaFin, "Otro", fila.grupo(), "");
                 if (ok) {
                     insertadas++;
                 } else {

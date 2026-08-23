@@ -2,7 +2,7 @@
 --
 -- Host: 127.0.0.1    Database: db_sigal
 -- ------------------------------------------------------
--- Server version	5.5.5-10.4.32-MariaDB
+-- Server version	8.0.46
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,14 +23,16 @@ DROP TABLE IF EXISTS `tb_aviso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_aviso` (
-  `ID_Aviso` int(11) NOT NULL AUTO_INCREMENT,
+  `ID_Aviso` int NOT NULL AUTO_INCREMENT,
   `FechaHora` datetime NOT NULL,
-  `TipoAviso` varchar(30) NOT NULL,
-  `Descripcion` varchar(255) NOT NULL,
-  `Estado` varchar(20) NOT NULL,
-  `Comentarios` varchar(255) DEFAULT NULL,
-  `ID_Espacio` int(11) DEFAULT NULL,
-  `ID_Usuario` int(11) NOT NULL,
+  `HoraInicio` varchar(5) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `HoraTermino` varchar(5) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `TipoAviso` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
+  `Descripcion` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `Estado` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `Comentarios` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ID_Espacio` int DEFAULT NULL,
+  `ID_Usuario` int NOT NULL,
   PRIMARY KEY (`ID_Aviso`),
   KEY `ID_Espacio` (`ID_Espacio`),
   KEY `ID_Usuario` (`ID_Usuario`),
@@ -57,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-15 20:25:46
+-- Dump completed on 2026-08-23
