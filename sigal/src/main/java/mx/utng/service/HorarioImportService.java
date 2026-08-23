@@ -75,9 +75,9 @@ public class HorarioImportService {
                     "El rango del cuatrimestre es demasiado largo (máximo " + MAX_SEMANAS_CUATRIMESTRE + " semanas).");
         }
 
-        Map<String, Integer> catalogoEspacios = new LinkedHashMap<>();
+        Map<String, EspacioRegistro> catalogoEspacios = new LinkedHashMap<>();
         for (EspacioRegistro e : espacioDAO.listarTodos()) {
-            catalogoEspacios.put(normalizar(e.getNombre()), e.getIdEspacio());
+            catalogoEspacios.put(normalizar(e.getNombre()), e);
         }
         if (catalogoEspacios.isEmpty()) {
             throw new IllegalStateException(
@@ -88,15 +88,16 @@ public class HorarioImportService {
         List<FilaConError> conError = new ArrayList<>();
         int totalFilas = 0;
 
-        try (FileInputStream fis = new FileInputStream(archivo);
-             Workbook workbook = WorkbookFactory.create(fis)) {
+        try {
+            try (FileInputStream fis = new FileInputStream(archivo);
+                 Workbook workbook = WorkbookFactory.create(fis)) {
 
-            Sheet sheet = workbook.getSheetAt(0);
+                Sheet sheet = workbook.getSheetAt(0);
 
-            for (Row row : sheet) {
-                if (row.getRowNum() == 0) {
-                    continue;
-                }
+                for (Row row : sheet) {
+                    if (row.getRowNum() == 0) {
+                        continue;
+                    }
 
                 String tipoEspacio = texto(row, COL_TIPO_ESPACIO);
                 String nombreEspacio = texto(row, COL_NOMBRE_ESPACIO);
@@ -116,17 +117,29 @@ public class HorarioImportService {
 
                 Integer idEspacio = null;
                 if (nombreEspacio.isBlank()) {
-                    errores.add("Falta el nombre del espacio.");
+                    errores.add("Fila " + numeroFila + ", columna \"Nombre del espacio\": está vacía.");
                 } else {
-                    idEspacio = catalogoEspacios.get(normalizar(nombreEspacio));
-                    if (idEspacio == null) {
-                        errores.add("El espacio \"" + nombreEspacio + "\" no existe en el catálogo.");
+                    EspacioRegistro espacio = catalogoEspacios.get(normalizar(nombreEspacio));
+                    if (espacio == null) {
+                        errores.add("Fila " + numeroFila + ", columna \"Nombre del espacio\": \"" + nombreEspacio
+                                + "\" no existe en el catálogo (revisa que esté escrito exactamente igual, "
+                                + "incluyendo mayúsculas/minúsculas y espacios).");
+                    } else {
+                        idEspacio = espacio.getIdEspacio();
+                        if (tipoEspacio.isBlank()) {
+                            errores.add("Fila " + numeroFila + ", columna \"Tipo de espacio\": está vacía.");
+                        } else if (!normalizar(tipoEspacio).equals(normalizar(espacio.getTipo()))) {
+                            errores.add("Fila " + numeroFila + ", columna \"Tipo de espacio\": escribiste \""
+                                    + tipoEspacio + "\", pero \"" + nombreEspacio + "\" está registrado como \""
+                                    + espacio.getTipo() + "\" en el catálogo.");
+                        }
                     }
                 }
 
                 String diaCanon = canonizarDia(diaTexto);
                 if (diaCanon == null) {
-                    errores.add("El día \"" + diaTexto + "\" no es válido (usa Lunes a Sábado).");
+                    errores.add("Fila " + numeroFila + ", columna \"Día\": \"" + diaTexto
+                            + "\" no es válido (usa Lunes, Martes, Miércoles, Jueves, Viernes o Sábado).");
                 }
 
                 LocalTime horaInicio = null;
@@ -134,19 +147,22 @@ public class HorarioImportService {
                 try {
                     horaInicio = parseHora(horaInicioTexto);
                 } catch (DateTimeParseException e) {
-                    errores.add("La hora de inicio \"" + horaInicioTexto + "\" no tiene un formato válido (ej. 8:00).");
+                    errores.add("Fila " + numeroFila + ", columna \"Hora de inicio\": \"" + horaInicioTexto
+                            + "\" no tiene un formato válido (ej. 8:00).");
                 }
                 try {
                     horaFin = parseHora(horaFinTexto);
                 } catch (DateTimeParseException e) {
-                    errores.add("La hora de fin \"" + horaFinTexto + "\" no tiene un formato válido (ej. 8:50).");
+                    errores.add("Fila " + numeroFila + ", columna \"Hora de fin\": \"" + horaFinTexto
+                            + "\" no tiene un formato válido (ej. 8:50).");
                 }
                 if (horaInicio != null && horaFin != null && !horaInicio.isBefore(horaFin)) {
-                    errores.add("La hora de inicio debe ser antes que la hora de fin.");
+                    errores.add("Fila " + numeroFila
+                            + ": la \"Hora de inicio\" debe ser antes que la \"Hora de fin\".");
                 }
 
                 if (grupo.isBlank()) {
-                    errores.add("Falta el grupo.");
+                    errores.add("Fila " + numeroFila + ", columna \"Grupo\": está vacía.");
                 }
 
                 FilaHorario fila = new FilaHorario(
@@ -178,6 +194,22 @@ public class HorarioImportService {
 
                 validas.add(fila);
             }
+        }
+        } catch (IOException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            // Apache POI a veces truena con errores internos poco claros (ej.
+            // "Location is not set.") cuando el .xlsx no se pudo abrir de
+            // verdad: esta seguido pasa si el archivo vive en OneDrive como
+            // "solo en la nube" (no descargado), si esta abierto en Excel al
+            // mismo tiempo, o si el archivo esta corrupto/no es un .xlsx real.
+            throw new IOException(
+                    "No se pudo abrir el archivo Excel. Verifica que: (1) el archivo esté completamente "
+                            + "descargado en tu equipo y no sea un archivo 'solo en la nube' de OneDrive, "
+                            + "(2) no esté abierto en Excel u otro programa en este momento, y "
+                            + "(3) sea un archivo .xlsx válido (no .xls ni .csv renombrado). "
+                            + "Detalle técnico: " + e.getClass().getSimpleName()
+                            + (e.getMessage() != null ? ": " + e.getMessage() : ""), e);
         }
 
         return new ResultadoValidacion(totalFilas, validas, conError, inicioCuatrimestre, finCuatrimestre);

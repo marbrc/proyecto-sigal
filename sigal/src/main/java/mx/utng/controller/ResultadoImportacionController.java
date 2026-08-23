@@ -18,8 +18,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import mx.utng.service.HorarioImportService;
 import mx.utng.service.HorarioImportService.FilaConError;
 import mx.utng.service.HorarioImportService.FilaHorario;
+import mx.utng.service.HorarioImportService.ResultadoImportacion;
 import mx.utng.service.HorarioImportService.ResultadoValidacion;
  
 /**
@@ -27,10 +29,11 @@ import mx.utng.service.HorarioImportService.ResultadoValidacion;
  * Se abre desde ImportarHorarioController una vez que el Excel fue validado:
  * muestra qué filas se importarán y cuáles quedaron fuera por error o conflicto.
  *
- * NOTA: "Confirmar importación" todavía NO inserta en la base de datos real
- * (AsignacionDAO / EspacioDAO). Se deja marcado con TODO; el resto de la
- * pantalla (tablas, resumen, callback de éxito hacia HorarioController) ya
- * está completo y navegable.
+ * "Confirmar importación" llama a HorarioImportService.importar(...), que
+ * inserta cada fila válida como una asignación real (tb_asignacion) para
+ * cada fecha en la que cae ese día de la semana dentro del cuatrimestre.
+ * Al terminar, dispara onExito para que HorarioController (y de ahí Inicio)
+ * refresquen sus datos.
  */
 public class ResultadoImportacionController {
  
@@ -58,6 +61,7 @@ public class ResultadoImportacionController {
     private ResultadoValidacion resultado;
     private int idUsuarioActual;
     private Runnable onExito;
+    private final HorarioImportService importService = new HorarioImportService();
  
     // ------------------------------------------------------------------
     // Apertura de la ventana modal
@@ -136,17 +140,21 @@ public class ResultadoImportacionController {
  
     @FXML
     private void onConfirmarImportacion() {
-        // TODO (siguiente paso): reemplazar este aviso por la inserción real de
-        // resultado.validas() usando AsignacionDAO / EspacioDAO, asociando
-        // idUsuarioActual como quien hizo la importación.
-        Alert alert = new Alert(AlertType.INFORMATION);
+        btnConfirmarImportacion.setDisable(true);
+
+        ResultadoImportacion resultadoImportacion = importService.importar(
+                resultado.validas(), resultado.inicioCuatrimestre(), resultado.finCuatrimestre(), idUsuarioActual);
+
+        AlertType tipo = resultadoImportacion.fallidas() == 0 ? AlertType.INFORMATION : AlertType.WARNING;
+        Alert alert = new Alert(tipo);
         alert.initOwner(stage);
-        alert.setTitle("Importación lista");
+        alert.setTitle("Importación terminada");
         alert.setHeaderText(null);
         alert.setContentText(
-                resultado.validas().size()
-                        + " fila(s) están validadas y listas para insertarse en el horario. "
-                        + "La escritura en la base de datos se conecta en el siguiente paso.");
+                "Se crearon " + resultadoImportacion.insertadas() + " asignación(es) en el horario."
+                        + (resultadoImportacion.fallidas() > 0
+                                ? "\n" + resultadoImportacion.fallidas() + " no se pudieron guardar (revisa la consola)."
+                                : ""));
         alert.showAndWait();
  
         if (onExito != null) {

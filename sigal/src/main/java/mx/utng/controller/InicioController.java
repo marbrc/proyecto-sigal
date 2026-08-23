@@ -65,7 +65,6 @@ public class InicioController {
     @FXML private Label lblModalTitulo;
     @FXML private Label lblModalSubtitulo;
     @FXML private Button btnCerrarModal;
-    @FXML private Button btnGuardarCambios;
     @FXML private ListView<DetalleItem> listaDetalle;
  
  
@@ -577,12 +576,7 @@ public class InicioController {
             Label badge = new Label(item.getEstado());
             badge.getStyleClass().add(claseBadge(item.getEstado()));
  
- 
-            Button btnEliminar = new Button("🗑");
-            btnEliminar.getStyleClass().add("detail-btn-icon-danger");
-            btnEliminar.setOnAction(e -> eliminarItem(item));
- 
-            encabezado.getChildren().addAll(nombre, badge, btnEliminar);
+            encabezado.getChildren().addAll(nombre, badge);
  
             HBox datos = new HBox(28.0);
             datos.getChildren().add(campoLectura(etiqueta2, item.getTipo()));
@@ -806,53 +800,6 @@ public class InicioController {
     //====================================================
     // METODOS AUXILIARES
     //====================================================
- 
-    /**
-     * TODO: aqui conectamos mi DAO para guardar listaDetalle.getItems()
-     * en tu base de datos real (INSERT/UPDATE/DELETE segun
-     * corresponda comparando contra el estado previo)
-     */
-    @FXML
-    private void onGuardarCambios(ActionEvent event) {
-        int totalFilas = listaDetalle.getItems().size();
-        System.out.println("Guardar cambios -> " + totalFilas + " tarjetas");
- 
-        mostrarNotificacion(
-                "Cambios guardados",
-                "Se guardaron " + totalFilas + " registros correctamente.",
-                Alert.AlertType.INFORMATION);
- 
-        actualizarDashboard();
-    }
- 
-    /**
-     * Elimina de verdad el registro (espacio/asignacion/aviso) segun el
-     * tipo de modal abierto, y solo si la base de datos confirma el
-     * borrado quita la tarjeta de la lista y refresca el Dashboard.
-     */
-    private void eliminarItem(DetalleItem item) {
-        if (item.getId() <= 0) {
-            // Fila nueva que nunca se guardo en la BD: solo quitarla localmente.
-            listaDetalle.getItems().remove(item);
-            return;
-        }
- 
-        boolean eliminado = switch (modalActual) {
-            case ESPACIOS, DISPONIBLES -> espacioDAO.eliminar(item.getId());
-            case ASIGNACIONES -> asignacionDAO.eliminar(item.getId());
-            case AVISOS -> avisoDAO.eliminar(item.getId());
-        };
- 
-        if (eliminado) {
-            listaDetalle.getItems().remove(item);
-            actualizarDashboard();
-        } else {
-            mostrarNotificacion(
-                    "No se pudo eliminar",
-                    "Este registro no se puede eliminar (puede tener datos relacionados, por ejemplo un espacio con asignaciones).",
-                    Alert.AlertType.WARNING);
-        }
-    }
  
     /**
      * Guarda en la base de datos real los 4 campos editables de una
