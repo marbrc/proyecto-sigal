@@ -70,11 +70,11 @@
                 </HBox>
 
                 <VBox spacing="2.0">
-                    <Label styleClass="field-label" text="Nombre(s) *" />
+                    <Label styleClass="field-label" text="Nombre(s)" />
                     <TextField fx:id="txtNombre" promptText="Ej. María" styleClass="field-input-sm" />
                 </VBox>
                 <VBox spacing="2.0">
-                    <Label styleClass="field-label" text="Apellido paterno *" />
+                    <Label styleClass="field-label" text="Apellido paterno" />
                     <TextField fx:id="txtApellidoPaterno" promptText="Ej. González" styleClass="field-input-sm" />
                 </VBox>
                 <VBox spacing="2.0">
@@ -82,15 +82,15 @@
                     <TextField fx:id="txtApellidoMaterno" promptText="Ej. Ramírez" styleClass="field-input-sm" />
                 </VBox>
                 <VBox spacing="2.0">
-                    <Label styleClass="field-label" text="Nombre de usuario *" />
+                    <Label styleClass="field-label" text="Nombre de usuario" />
                     <TextField fx:id="txtNombreUsuario" promptText="Ej. maria.gonzalez" styleClass="field-input-sm" />
                 </VBox>
                 <VBox spacing="2.0">
-                    <Label styleClass="field-label" text="Correo electrónico *" />
+                    <Label styleClass="field-label" text="Correo electrónico" />
                     <TextField fx:id="txtCorreo" promptText="Ej. maria.gonzalez@utng.edu.mx" styleClass="field-input-sm" />
                 </VBox>
 
-                <Label styleClass="field-hint" text="* Campos obligatorios" />
+                <Label styleClass="field-hint" text="Deja en blanco los campos que no quieras cambiar" />
 
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <Button fx:id="btnGuardarDatos" onAction="#onGuardarDatos" styleClass="btn-primary-compact" text="Guardar cambios" />
@@ -116,14 +116,22 @@
                 </VBox>
                 <VBox spacing="2.0">
                     <Label styleClass="field-label" text="Nueva contraseña *" />
-                    <PasswordField fx:id="txtContrasenaNueva" promptText="Mínimo 6 caracteres" styleClass="field-input-sm" />
+                    <StackPane>
+                        <PasswordField fx:id="txtContrasenaNueva" promptText="Mínimo 6 caracteres" styleClass="field-input-sm" />
+                        <TextField fx:id="txtContrasenaNuevaVisible" promptText="Mínimo 6 caracteres" styleClass="field-input-sm" managed="false" visible="false" />
+                        <Button fx:id="btnVerContrasenaNueva" onAction="#onToggleVerContrasenaNueva" styleClass="btn-eye-toggle" text="👁" StackPane.alignment="CENTER_RIGHT" />
+                    </StackPane>
                 </VBox>
                 <VBox spacing="2.0">
                     <Label styleClass="field-label" text="Confirmar nueva contraseña *" />
-                    <PasswordField fx:id="txtConfirmarContrasena" promptText="Repite la nueva contraseña" styleClass="field-input-sm" />
+                    <StackPane>
+                        <PasswordField fx:id="txtConfirmarContrasena" promptText="Repite la nueva contraseña" styleClass="field-input-sm" />
+                        <TextField fx:id="txtConfirmarContrasenaVisible" promptText="Repite la nueva contraseña" styleClass="field-input-sm" managed="false" visible="false" />
+                        <Button fx:id="btnVerConfirmarContrasena" onAction="#onToggleVerConfirmarContrasena" styleClass="btn-eye-toggle" text="👁" StackPane.alignment="CENTER_RIGHT" />
+                    </StackPane>
                 </VBox>
 
-                                <Region VBox.vgrow="ALWAYS" />
+                <Region VBox.vgrow="ALWAYS" />
                 <Separator />
 
                 <VBox alignment="CENTER_LEFT" spacing="8.0">
@@ -141,16 +149,10 @@
             </HBox>
             <Label fx:id="lblEstadoCuentaActual" styleClass="field-hint" text="Estado actual: Activo" wrapText="true" />
 
-            <HBox spacing="16.0">
-                <VBox spacing="6.0" HBox.hgrow="ALWAYS">
-                    <Label styleClass="field-hint" text="La desactivación es temporal: no podrás iniciar sesión hasta que se reactive." wrapText="true" />
-                    <Button fx:id="btnDesactivarMiCuenta" onAction="#onDesactivarMiCuenta" maxWidth="Infinity" styleClass="btn-secondary-compact" text="Desactivar mi cuenta temporalmente" />
-                </VBox>
-                <VBox spacing="6.0" HBox.hgrow="ALWAYS">
-                    <Label styleClass="field-hint" text="Eliminar tu cuenta es permanente y no se puede deshacer." wrapText="true" />
-                    <Button fx:id="btnEliminarMiCuenta" onAction="#onEliminarMiCuenta" maxWidth="Infinity" styleClass="btn-danger-compact" text="Eliminar mi cuenta" />
-                </VBox>
-            </HBox>
+            <VBox spacing="6.0">
+                <Label styleClass="field-hint" text="Eliminar tu cuenta es permanente y no se puede deshacer." wrapText="true" />
+                <Button fx:id="btnEliminarMiCuenta" onAction="#onEliminarMiCuenta" maxWidth="Infinity" styleClass="btn-danger-compact" text="Eliminar mi cuenta" />
+            </VBox>
         </VBox>
 
     </VBox>

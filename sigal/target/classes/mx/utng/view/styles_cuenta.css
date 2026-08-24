@@ -23,6 +23,39 @@
     -fx-background-color: #eef1f4;
 
 }
+.icon-eye {
+    -fx-shape: "M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 144.17 144.17 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z";
+    -fx-scale-shape: true;
+    -fx-background-color: #93a0c4;
+    -fx-min-width: 16px;
+    -fx-min-height: 16px;
+    -fx-pref-width: 16px;
+    -fx-pref-height: 16px;
+    -fx-max-width: 16px;
+    -fx-max-height: 16px;
+}
+.icon-sm   { -fx-min-width: 16; -fx-min-height: 16; -fx-max-width: 16; -fx-max-height: 16; }
+.icon-muted  { -fx-background-color: #93a0c4; }
+ 
+.input-eye-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 4px;
+    -fx-min-width: 28px;
+    -fx-min-height: 28px;
+    -fx-pref-width: 28px;
+    -fx-pref-height: 28px;
+    -fx-max-width: 28px;
+    -fx-max-height: 28px;
+}
+.input-eye-btn:hover {
+    -fx-background-color: #eaf1ff;
+    -fx-background-radius: 6;
+}
+.input-eye-btn:hover .icon-eye {
+    -fx-background-color: #2f7dff;
+}
 
 .scroll-pane,
 .scroll-pane .viewport,
