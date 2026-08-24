@@ -2,8 +2,10 @@ package mx.utng.controller;
  
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
  
@@ -14,7 +16,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -121,27 +122,29 @@ public class AsignacionesController implements Initializable {
             }
         });
  
-        // Configurar Cuatrimestres
-        cmbCuatrimestre.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
- 
-        // Carrera inicia deshabilitada hasta elegir Cuatrimestre
-        cmbCarrera.getItems().clear();
-        cmbCarrera.setDisable(true);
- 
-        // Materia y Grupo inician deshabilitados hasta seleccionar Carrera + Cuatrimestre
+        // Cadena dependiente: Carrera -> Cuatrimestre -> Materia -> Grupo
+        mapaCarreras = asignacionDAO.listarCarreras();
+        cmbCarrera.setItems(FXCollections.observableArrayList(mapaCarreras.keySet()));
+        cmbCarrera.setDisable(mapaCarreras.isEmpty());
+
+        cmbCuatrimestre.setItems(FXCollections.observableArrayList(
+                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
+        cmbCuatrimestre.setDisable(true);
+
         cmbMateria.getItems().clear();
         cmbMateria.setDisable(true);
         cmbGrupo.getItems().clear();
         cmbGrupo.setDisable(true);
- 
-        // Listeners dobles: disparan actualización cuando cambia Carrera o Cuatrimestre
-        cmbCuatrimestre.valueProperty().addListener((obs, oldVal, newVal) -> actualizarCarrerasPorCuatri());
-        cmbCarrera.valueProperty().addListener((obs, oldVal, newVal) -> actualizarMateriasYGrupos());
- 
+
+        cmbCarrera.valueProperty().addListener((obs, oldVal, newVal) -> actualizarCuatrimestrePorCarrera());
+        cmbCuatrimestre.valueProperty().addListener((obs, oldVal, newVal) -> actualizarMateriasPorCarreraYCuatri());
+        cmbMateria.valueProperty().addListener((obs, oldVal, newVal) -> actualizarGruposPorCarreraYCuatri());
+
+        // Mismos extremos horarios que utiliza el módulo Horarios.
         ObservableList<String> horas = generarHoras();
-        cmbHoraInicio.setItems(horas);
+        cmbHoraInicio.setItems(FXCollections.observableArrayList(horas));
         cmbHoraTermino.setItems(FXCollections.observableArrayList(horas));
- 
+
         cmbTipoEspacio.setItems(FXCollections.observableArrayList(
             "Lab. de cómputo", "Aula común", "Especializado", "Sala múltiple"
         ));
@@ -169,77 +172,96 @@ public class AsignacionesController implements Initializable {
         });
     }
  
-    private void actualizarCarrerasPorCuatri() {
-        String cuatriSel = cmbCuatrimestre.getValue();
- 
-        cmbCarrera.getSelectionModel().clearSelection();
-        cmbCarrera.setValue(null);
+    private void actualizarCuatrimestrePorCarrera() {
+        String carreraSel = cmbCarrera.getValue();
+
+        cmbCuatrimestre.getSelectionModel().clearSelection();
+        cmbCuatrimestre.setValue(null);
         cmbMateria.getSelectionModel().clearSelection();
         cmbMateria.setValue(null);
         cmbGrupo.getSelectionModel().clearSelection();
         cmbGrupo.setValue(null);
- 
-        if (cuatriSel == null || cuatriSel.isBlank()) {
-            cmbCarrera.getItems().clear();
-            cmbCarrera.setDisable(true);
-            cmbMateria.getItems().clear();
-            cmbMateria.setDisable(true);
-            cmbGrupo.getItems().clear();
-            cmbGrupo.setDisable(true);
-            return;
-        }
- 
-        int cuatri = Integer.parseInt(cuatriSel);
-        mapaCarreras = asignacionDAO.listarCarrerasPorCuatrimestre(cuatri);
-        cmbCarrera.setItems(FXCollections.observableArrayList(mapaCarreras.keySet()));
-        cmbCarrera.setDisable(mapaCarreras.isEmpty());
- 
+
         cmbMateria.getItems().clear();
-        cmbMateria.setDisable(true);
         cmbGrupo.getItems().clear();
+        cmbMateria.setDisable(true);
         cmbGrupo.setDisable(true);
+
+        boolean carreraValida = carreraSel != null
+                && !carreraSel.isBlank()
+                && mapaCarreras.containsKey(carreraSel);
+        cmbCuatrimestre.setDisable(!carreraValida);
     }
- 
-    private void actualizarMateriasYGrupos() {
+
+    private void actualizarMateriasPorCarreraYCuatri() {
         String carreraSel = cmbCarrera.getValue();
         String cuatriSel = cmbCuatrimestre.getValue();
- 
+
         cmbMateria.getSelectionModel().clearSelection();
         cmbMateria.setValue(null);
         cmbGrupo.getSelectionModel().clearSelection();
         cmbGrupo.setValue(null);
- 
-        if (carreraSel == null || cuatriSel == null || cuatriSel.isBlank()) {
+        cmbGrupo.getItems().clear();
+        cmbGrupo.setDisable(true);
+
+        if (carreraSel == null || carreraSel.isBlank()
+                || cuatriSel == null || cuatriSel.isBlank()) {
             cmbMateria.getItems().clear();
             cmbMateria.setDisable(true);
-            cmbGrupo.getItems().clear();
+            return;
+        }
+
+        Integer idCarrera = mapaCarreras.get(carreraSel);
+        if (idCarrera == null) {
+            cmbMateria.getItems().clear();
+            cmbMateria.setDisable(true);
+            return;
+        }
+
+        int cuatri = Integer.parseInt(cuatriSel);
+        List<String> materias = asignacionDAO.listarMateriasPorCuatrimestreYCarrera(cuatri, idCarrera);
+        cmbMateria.setItems(FXCollections.observableArrayList(materias));
+        cmbMateria.setDisable(materias.isEmpty());
+    }
+
+    private void actualizarGruposPorCarreraYCuatri() {
+        String carreraSel = cmbCarrera.getValue();
+        String cuatriSel = cmbCuatrimestre.getValue();
+        String materiaSel = cmbMateria.getValue();
+
+        cmbGrupo.getSelectionModel().clearSelection();
+        cmbGrupo.setValue(null);
+        cmbGrupo.getItems().clear();
+
+        if (materiaSel == null || materiaSel.isBlank()
+                || carreraSel == null || carreraSel.isBlank()
+                || cuatriSel == null || cuatriSel.isBlank()) {
             cmbGrupo.setDisable(true);
             return;
         }
- 
-        int cuatri = Integer.parseInt(cuatriSel);
+
         Integer idCarrera = mapaCarreras.get(carreraSel);
- 
-        if (idCarrera != null) {
-            cmbMateria.setItems(FXCollections.observableArrayList(
-                    asignacionDAO.listarMateriasPorCuatrimestreYCarrera(cuatri, idCarrera)));
-            cmbGrupo.setItems(FXCollections.observableArrayList(
-                    asignacionDAO.listarGruposPorCuatrimestreYCarrera(cuatri, idCarrera)));
-        } else {
-            cmbMateria.getItems().clear();
-            cmbGrupo.getItems().clear();
+        if (idCarrera == null) {
+            cmbGrupo.setDisable(true);
+            return;
         }
-        cmbMateria.setDisable(cmbMateria.getItems().isEmpty());
-        cmbGrupo.setDisable(cmbGrupo.getItems().isEmpty());
+
+        int cuatri = Integer.parseInt(cuatriSel);
+        List<String> grupos = asignacionDAO.listarGruposPorCuatrimestreYCarrera(cuatri, idCarrera);
+        cmbGrupo.setItems(FXCollections.observableArrayList(grupos));
+        cmbGrupo.setDisable(grupos.isEmpty());
     }
- 
+
     private ObservableList<String> generarHoras() {
+        // Mismos extremos horarios que utiliza HorarioController.
         return FXCollections.observableArrayList(
-            "8:00", "8:50", "9:00", "9:50", "10:00", "10:50", "11:00", "11:50",
-            "12:20", "13:10", "13:15", "14:05", "14:10", "15:00", "15:10", "16:00",
-            "16:50", "17:00", "17:50", "18:20", "19:10", "20:00", "20:05", "20:55", "21:00", "21:50"
+                "8:00", "8:50", "9:00", "9:50", "10:00", "10:50",
+                "11:00", "11:50", "12:20", "13:10", "13:15", "14:05",
+                "14:10", "15:00", "15:10", "16:00", "16:50", "17:00", "17:50",
+                "18:20", "19:10", "20:00", "20:05", "20:55", "21:00", "22:00"
         );
     }
+
  
 private void cargarDatosReales() {
     listaAsignaciones.setAll(asignacionDAO.listarTodas());
@@ -249,7 +271,7 @@ private void cargarDatosReales() {
  
     private void configurarBusqueda() {
         asignacionesFiltradas = new FilteredList<>(listaAsignaciones, a -> true);
- 
+
         txtBuscar.textProperty().addListener((obs, antes, texto) -> {
             String filtro = texto == null ? "" : texto.trim().toLowerCase();
             asignacionesFiltradas.setPredicate(asignacion -> {
@@ -262,44 +284,55 @@ private void cargarDatosReales() {
             });
             actualizarPaginacion();
         });
- 
+
         if (paginacion != null) {
-            paginacion.setPageFactory(this::crearPagina);
+            // Pagination solo muestra los controles. La TableView permanece en su
+            // contenedor original; devolver la misma TableView desde pageFactory
+            // hacía que JavaFX la reparentara y por eso desaparecía.
+            paginacion.setPageFactory(pageIndex -> new javafx.scene.layout.Region());
+            paginacion.currentPageIndexProperty().addListener(
+                    (obs, anterior, actual) -> mostrarPagina(actual.intValue()));
         }
     }
- 
-private void actualizarPaginacion() {
-    if (paginacion != null) {
-        int numPaginas = (int) Math.ceil((double) asignacionesFiltradas.size() / FILAS_POR_PAGINA);
-        paginacion.setPageCount(numPaginas == 0 ? 1 : numPaginas);
- 
-        int paginaActual = Math.min(paginacion.getCurrentPageIndex(), numPaginas - 1);
+
+    private void actualizarPaginacion() {
+        if (paginacion == null) {
+            tablaAsignaciones.setItems(asignacionesFiltradas);
+            return;
+        }
+
+        int numPaginas = Math.max(1,
+                (int) Math.ceil((double) asignacionesFiltradas.size() / FILAS_POR_PAGINA));
+        paginacion.setPageCount(numPaginas);
+
+        int paginaActual = Math.min(
+                paginacion.getCurrentPageIndex(),
+                numPaginas - 1
+        );
         if (paginaActual < 0) paginaActual = 0;
- 
-        paginacion.setCurrentPageIndex(paginaActual);
-        paginacion.setPageFactory(this::crearPagina);
- 
-        // Forzamos la reconstrucción inmediata de la página visible,
-        // sin depender de que Pagination detecte el cambio por sí sola.
-        crearPagina(paginaActual);
-    } else {
-        tablaAsignaciones.setItems(asignacionesFiltradas);
-    }
-}
- 
-    private Node crearPagina(int pageIndex) {
-        int deIndex = pageIndex * FILAS_POR_PAGINA;
-        int paraIndex = Math.min(deIndex + FILAS_POR_PAGINA, asignacionesFiltradas.size());
- 
-        if (deIndex > asignacionesFiltradas.size()) {
-            tablaAsignaciones.setItems(FXCollections.observableArrayList());
-        } else {
-            tablaAsignaciones.setItems(FXCollections.observableArrayList(
-                    asignacionesFiltradas.subList(deIndex, paraIndex)));
+
+        if (paginacion.getCurrentPageIndex() != paginaActual) {
+            paginacion.setCurrentPageIndex(paginaActual);
         }
-        return tablaAsignaciones;
+
+        mostrarPagina(paginaActual);
     }
- 
+
+    private void mostrarPagina(int pageIndex) {
+        if (asignacionesFiltradas == null) return;
+
+        int inicio = Math.max(0, pageIndex * FILAS_POR_PAGINA);
+        int fin = Math.min(inicio + FILAS_POR_PAGINA, asignacionesFiltradas.size());
+
+        if (inicio >= asignacionesFiltradas.size()) {
+            tablaAsignaciones.setItems(FXCollections.observableArrayList());
+            return;
+        }
+
+        tablaAsignaciones.setItems(FXCollections.observableArrayList(
+                asignacionesFiltradas.subList(inicio, fin)));
+    }
+
     private void configurarColumnas() {
         colId.setCellValueFactory(data -> data.getValue().idProperty());
         colFecha.setCellValueFactory(data -> data.getValue().fechaProperty());
@@ -397,10 +430,12 @@ private void onEditarAsignacion(Asignaciones asignacionFila) {
         cmbTipoEspacio.setValue(tipoEspacio);
         cmbEspacio.setValue(asignacion.getEspacio());
  
-        if (asignacion.getCuatrimestre() != null) {
+        // Precargar en el mismo orden de dependencia del formulario:
+        // Carrera -> Cuatrimestre -> Materia -> Grupo.
+        cmbCarrera.setValue(asignacion.getCarrera());
+        if (asignacion.getCuatrimestre() != null && !asignacion.getCuatrimestre().isBlank()) {
             cmbCuatrimestre.setValue(asignacion.getCuatrimestre());
         }
-        cmbCarrera.setValue(asignacion.getCarrera());
         cmbMateria.setValue(asignacion.getMateria());
         cmbGrupo.setValue(asignacion.getGrupo());
         txtNumAlumnos.setText(asignacion.getNumAlumnos());
@@ -444,6 +479,9 @@ private void onGuardarAsignacion(ActionEvent event) {
             || cmbTipoEspacio.getValue() == null
             || cmbEspacio.getValue() == null
             || cmbCuatrimestre.getValue() == null
+            || cmbCarrera.getValue() == null
+            || cmbMateria.getValue() == null || cmbMateria.getValue().isBlank()
+            || cmbGrupo.getValue() == null
             || txtNumAlumnos.getText().isBlank()
             || dpFecha.getValue() == null
             || cmbHoraInicio.getValue() == null
@@ -469,9 +507,23 @@ private void onGuardarAsignacion(ActionEvent event) {
     }
  
     Integer capacidadMaxima = asignacionDAO.obtenerCapacidadEspacio(idEspacioParaCapacidad);
-    int numAlumnos = Integer.parseInt(txtNumAlumnos.getText());
- 
-    if (capacidadMaxima != null && numAlumnos > capacidadMaxima) {
+    int numAlumnos;
+    try {
+        numAlumnos = Integer.parseInt(txtNumAlumnos.getText().trim());
+    } catch (NumberFormatException ex) {
+        mostrarAlerta(AlertType.WARNING, "Número de alumnos inválido",
+                "La cantidad de alumnos no es válida.");
+        return;
+    }
+
+    if (capacidadMaxima == null) {
+        mostrarAlerta(AlertType.ERROR, "Capacidad no disponible",
+                "No se pudo consultar la capacidad máxima del espacio seleccionado. "
+                        + "La asignación no puede guardarse hasta verificar ese dato.");
+        return;
+    }
+
+    if (numAlumnos > capacidadMaxima) {
         mostrarAlerta(AlertType.WARNING, "Capacidad excedida",
                 "El espacio \"" + cmbEspacio.getValue() + "\" tiene una capacidad máxima de "
                         + capacidadMaxima + " personas, pero capturaste " + numAlumnos + ". "
@@ -479,7 +531,12 @@ private void onGuardarAsignacion(ActionEvent event) {
         return;
     }
  
-    if (cmbHoraTermino.getValue().compareTo(cmbHoraInicio.getValue()) <= 0) {
+    LocalTime horaInicio = LocalTime.parse(
+            cmbHoraInicio.getValue(), DateTimeFormatter.ofPattern("H:mm"));
+    LocalTime horaTermino = LocalTime.parse(
+            cmbHoraTermino.getValue(), DateTimeFormatter.ofPattern("H:mm"));
+
+    if (!horaInicio.isBefore(horaTermino)) {
         mostrarAlerta(AlertType.WARNING, "Horario inválido",
                 "La hora de término debe ser posterior a la hora de inicio.");
         return;
@@ -566,13 +623,14 @@ private void onGuardarAsignacion(ActionEvent event) {
         cmbTipoEspacio.setValue(null);
         cmbEspacio.setValue(null);
         cmbEspacio.setDisable(true);
-        cmbCuatrimestre.setValue(null);
         cmbCarrera.setValue(null);
-        cmbCarrera.getItems().clear();
-        cmbCarrera.setDisable(true);
+        cmbCuatrimestre.setValue(null);
+        cmbCuatrimestre.setDisable(true);
         cmbMateria.setValue(null);
+        cmbMateria.getItems().clear();
         cmbMateria.setDisable(true);
         cmbGrupo.setValue(null);
+        cmbGrupo.getItems().clear();
         cmbGrupo.setDisable(true);
         txtNumAlumnos.clear();
         dpFecha.setValue(null);
