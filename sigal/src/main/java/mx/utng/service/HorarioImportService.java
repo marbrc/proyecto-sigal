@@ -24,7 +24,13 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import mx.utng.dao.AsignacionDAO;
 import mx.utng.dao.EspacioDAO;
+import mx.utng.dao.MateriaDAO;
+import mx.utng.dao.GrupoDAO;
+import mx.utng.dao.UsuarioDAO;
 import mx.utng.model.EspacioRegistro;
+import mx.utng.model.Materia;
+import mx.utng.model.Grupo;
+import mx.utng.model.Usuario;
 
 public class HorarioImportService {
 
@@ -34,6 +40,10 @@ public class HorarioImportService {
     private static final int COL_HORA_INICIO = 3;
     private static final int COL_HORA_FIN = 4;
     private static final int COL_GRUPO = 5;
+    private static final int COL_MATERIA = 6;
+
+    /** Etiqueta automática que identifica las asignaciones creadas por el importador de Excel. */
+    private static final String TIPO_USUARIO_IMPORTACION = "Horario fijo";
 
     private static final String[] DIAS = {
             "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
@@ -50,15 +60,26 @@ public class HorarioImportService {
 
     private final EspacioDAO espacioDAO;
     private final AsignacionDAO asignacionDAO;
+    private final MateriaDAO materiaDAO;
+    private final GrupoDAO grupoDAO;
+    private final UsuarioDAO usuarioDAO;
     private final DataFormatter formatter = new DataFormatter(Locale.forLanguageTag("es-MX"));
 
     public HorarioImportService() {
-        this(new EspacioDAO(), new AsignacionDAO());
+        this(new EspacioDAO(), new AsignacionDAO(), new MateriaDAO(), new GrupoDAO(), new UsuarioDAO());
     }
 
     public HorarioImportService(EspacioDAO espacioDAO, AsignacionDAO asignacionDAO) {
+        this(espacioDAO, asignacionDAO, new MateriaDAO(), new GrupoDAO(), new UsuarioDAO());
+    }
+
+    public HorarioImportService(EspacioDAO espacioDAO, AsignacionDAO asignacionDAO,
+            MateriaDAO materiaDAO, GrupoDAO grupoDAO, UsuarioDAO usuarioDAO) {
         this.espacioDAO = espacioDAO;
         this.asignacionDAO = asignacionDAO;
+        this.materiaDAO = materiaDAO;
+        this.grupoDAO = grupoDAO;
+        this.usuarioDAO = usuarioDAO;
     }
 
     public ResultadoValidacion validar(File archivo, LocalDate inicioCuatrimestre, LocalDate finCuatrimestre)
@@ -84,6 +105,16 @@ public class HorarioImportService {
                     "No hay espacios registrados en el catálogo. Registra al menos un espacio antes de importar.");
         }
 
+        Map<String, Integer> catalogoGrupos = new LinkedHashMap<>();
+        for (Grupo g : grupoDAO.listarGrupos()) {
+            catalogoGrupos.put(normalizar(g.getNombreGrupo()), g.getIdGrupo());
+        }
+
+        Map<String, Integer> catalogoMaterias = new LinkedHashMap<>();
+        for (Materia m : materiaDAO.listarMaterias()) {
+            catalogoMaterias.put(normalizar(m.getNombre()), m.getIdMateria());
+        }
+
         List<FilaHorario> validas = new ArrayList<>();
         List<FilaConError> conError = new ArrayList<>();
         int totalFilas = 0;
@@ -105,9 +136,11 @@ public class HorarioImportService {
                 String horaInicioTexto = texto(row, COL_HORA_INICIO);
                 String horaFinTexto = texto(row, COL_HORA_FIN);
                 String grupo = texto(row, COL_GRUPO);
+                String materia = texto(row, COL_MATERIA);
 
                 if (tipoEspacio.isBlank() && nombreEspacio.isBlank() && diaTexto.isBlank()
-                        && horaInicioTexto.isBlank() && horaFinTexto.isBlank() && grupo.isBlank()) {
+                        && horaInicioTexto.isBlank() && horaFinTexto.isBlank() && grupo.isBlank()
+                        && materia.isBlank()) {
                     continue;
                 }
 
@@ -161,8 +194,24 @@ public class HorarioImportService {
                             + ": la \"Hora de inicio\" debe ser antes que la \"Hora de fin\".");
                 }
 
+                Integer idGrupo = null;
                 if (grupo.isBlank()) {
                     errores.add("Fila " + numeroFila + ", columna \"Grupo\": está vacía.");
+                } else {
+                    idGrupo = catalogoGrupos.get(normalizar(grupo));
+                    if (idGrupo == null) {
+                        errores.add("Fila " + numeroFila + ", columna \"Grupo\": \"" + grupo
+                                + "\" no existe en el catálogo de grupos (revisa que esté escrito exactamente igual).");
+                    }
+                }
+
+                Integer idMateria = null;
+                if (!materia.isBlank()) {
+                    idMateria = catalogoMaterias.get(normalizar(materia));
+                    if (idMateria == null) {
+                        errores.add("Fila " + numeroFila + ", columna \"Materia\": \"" + materia
+                                + "\" no existe en el catálogo de materias (revisa que esté escrito exactamente igual).");
+                    }
                 }
 
                 FilaHorario fila = new FilaHorario(
@@ -172,7 +221,10 @@ public class HorarioImportService {
                         horaInicio != null ? formatoHora(horaInicio) : horaInicioTexto,
                         horaFin != null ? formatoHora(horaFin) : horaFinTexto,
                         grupo,
-                        idEspacio != null ? idEspacio : 0);
+                        materia,
+                        idEspacio != null ? idEspacio : 0,
+                        idGrupo != null ? idGrupo : 0,
+                        idMateria != null ? idMateria : 0);
 
                 if (!errores.isEmpty()) {
                     conError.add(new FilaConError(numeroFila, fila, String.join(" ", errores)));
@@ -220,6 +272,12 @@ public class HorarioImportService {
         int insertadas = 0;
         int fallidas = 0;
 
+        String nombreUsuario = TIPO_USUARIO_IMPORTACION;
+        Usuario u = usuarioDAO.obtenerPorId(idUsuario);
+        if (u != null && u.getNombre() != null && !u.getNombre().isBlank()) {
+            nombreUsuario = (u.getNombre() + " " + u.getApellidoPaterno()).trim();
+        }
+
         for (FilaHorario fila : filas) {
             List<LocalDate> fechas = ocurrenciasDeDia(fila.dia(), inicioCuatrimestre, finCuatrimestre);
             LocalTime horaInicio = parseHora(fila.horaInicio());
@@ -227,7 +285,10 @@ public class HorarioImportService {
 
             for (LocalDate fecha : fechas) {
                 boolean ok = asignacionDAO.insertarRapido(
-                    idUsuario, fila.idEspacio(), fecha, horaInicio, horaFin, "Otro", fila.grupo(), "");
+                    idUsuario, fila.idEspacio(), fecha, horaInicio, horaFin,
+                    TIPO_USUARIO_IMPORTACION, nombreUsuario,
+                    fila.idGrupo() > 0 ? fila.idGrupo() : null,
+                    fila.idMateria() > 0 ? fila.idMateria() : null);
                 if (ok) {
                     insertadas++;
                 } else {
@@ -346,7 +407,7 @@ public class HorarioImportService {
     }
 
     public record FilaHorario(String tipoEspacio, String nombreEspacio, String dia, String horaInicio,
-            String horaFin, String grupo, int idEspacio) { }
+            String horaFin, String grupo, String materia, int idEspacio, int idGrupo, int idMateria) { }
 
     public record FilaConError(int numeroFila, FilaHorario fila, String motivo) { }
 

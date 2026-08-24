@@ -639,48 +639,63 @@ public List<String> listarGruposPorCuatrimestreYCarrera(int cuatrimestre, int id
     return lista;
 }
 
-/** Grupos de un cuatrimestre Y carrera específicos. */
 
- 
     /**
      * Inserción rápida usada por la pantalla de Horarios (clic directo sobre una
-     * celda libre): solo pide lo indispensable. Grupo y Carrera quedan en NULL
-     * (son opcionales en tb_asignacion); Materia es opcional y se resuelve por
-     * nombre contra tb_materia si se captura.
+     * celda libre) y por el importador de Excel. Carrera queda en NULL (es
+     * opcional en tb_asignacion). Materia y Grupo son opcionales: si el
+     * llamador ya trae el ID resuelto (importador), se usa directo; si no,
+     * quedan en NULL.
      */
     public boolean insertarRapido(int idUsuario, int idEspacio, LocalDate fecha,
                                    LocalTime horaInicio, LocalTime horaTermino,
-                                   String tipoSolicitante, String nombreSolicitante, String materia) {
- 
+                                   String tipoSolicitante, String nombreSolicitante,
+                                   Integer idGrupo, Integer idMateria) {
+
         String sql = """
                 INSERT INTO tb_asignacion
-                    (TipoUsuario, NombreSolicitante, ID_Materia, Fecha, HoraInicio, HoraTermino,
+                    (TipoUsuario, NombreSolicitante, ID_Materia, ID_Grupo, Fecha, HoraInicio, HoraTermino,
                      Estado, ID_Usuario, ID_Espacio)
-                VALUES (?, ?, ?, ?, ?, ?, 'Asignado', ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, 'Asignado', ?, ?)
                 """;
- 
-        try (Connection con = Conexion.conectar()) {
- 
-            Integer idMateria = (materia == null || materia.isBlank()) ? null : buscarIdMateria(con, materia);
- 
-            try (PreparedStatement ps = con.prepareStatement(sql)) {
- 
-                ps.setString(1, tipoSolicitante);
-                ps.setString(2, nombreSolicitante);
-                if (idMateria == null) {
-                    ps.setNull(3, Types.INTEGER);
-                } else {
-                    ps.setInt(3, idMateria);
-                }
-                ps.setDate(4, Date.valueOf(fecha));
-                ps.setTime(5, Time.valueOf(horaInicio));
-                ps.setTime(6, Time.valueOf(horaTermino));
-                ps.setInt(7, idUsuario);
-                ps.setInt(8, idEspacio);
- 
-                return ps.executeUpdate() > 0;
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, tipoSolicitante);
+            ps.setString(2, nombreSolicitante);
+            if (idMateria == null) {
+                ps.setNull(3, Types.INTEGER);
+            } else {
+                ps.setInt(3, idMateria);
             }
- 
+            if (idGrupo == null) {
+                ps.setNull(4, Types.INTEGER);
+            } else {
+                ps.setInt(4, idGrupo);
+            }
+            ps.setDate(5, Date.valueOf(fecha));
+            ps.setTime(6, Time.valueOf(horaInicio));
+            ps.setTime(7, Time.valueOf(horaTermino));
+            ps.setInt(8, idUsuario);
+            ps.setInt(9, idEspacio);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /** Sobrecarga de compatibilidad: resuelve el nombre de la materia contra tb_materia. */
+    public boolean insertarRapido(int idUsuario, int idEspacio, LocalDate fecha,
+                                   LocalTime horaInicio, LocalTime horaTermino,
+                                   String tipoSolicitante, String nombreSolicitante, String materia) {
+        try (Connection con = Conexion.conectar()) {
+            Integer idMateria = (materia == null || materia.isBlank()) ? null : buscarIdMateria(con, materia);
+            return insertarRapido(idUsuario, idEspacio, fecha, horaInicio, horaTermino,
+                    tipoSolicitante, nombreSolicitante, null, idMateria);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
