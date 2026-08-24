@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
@@ -125,6 +126,15 @@
 
             </VBox>
 
+        </HBox>
+
+        <!-- Manuales del sistema -->
+        <HBox alignment="CENTER" spacing="16.0" styleClass="card">
+            <padding>
+                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+            </padding>
+            <Button fx:id="btnManualUsuario" onAction="#onAbrirManualUsuario" styleClass="btn-guardar" text="📘 Manual de usuario (PDF)" />
+            <Button fx:id="btnManualInstalacion" onAction="#onAbrirManualInstalacion" styleClass="btn-guardar" text="🛠 Manual de instalación (PDF)" />
         </HBox>
 
         <Label styleClass="footer-text" text="SIGAL © 2026 - Sistema de Gestión y Asignación de Laboratorios">
