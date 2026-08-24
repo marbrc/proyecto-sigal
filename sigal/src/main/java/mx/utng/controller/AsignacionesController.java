@@ -444,9 +444,6 @@ private void onGuardarAsignacion(ActionEvent event) {
             || cmbTipoEspacio.getValue() == null
             || cmbEspacio.getValue() == null
             || cmbCuatrimestre.getValue() == null
-            || cmbCarrera.getValue() == null
-            || cmbMateria.getValue() == null || cmbMateria.getValue().isBlank()
-            || cmbGrupo.getValue() == null
             || txtNumAlumnos.getText().isBlank()
             || dpFecha.getValue() == null
             || cmbHoraInicio.getValue() == null

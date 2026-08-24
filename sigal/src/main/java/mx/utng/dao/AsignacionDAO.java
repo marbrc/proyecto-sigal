@@ -414,36 +414,23 @@ public List<String> listarGruposPorCuatrimestre(int cuatrimestre) {
  
         try (Connection con = Conexion.conectar()) {
  
-            Integer idMateria = resolverIdMateria(con, a);
+                        Integer idMateria = resolverIdMateria(con, a);
             Integer idGrupo = resolverIdGrupo(con, a);
             Integer idCarrera = resolverIdCarrera(con, a);
- 
-            if (idMateria == null) {
-                System.err.println("[Asignaciones] No se encontró la materia \"" + a.getMateria() + "\" en tb_materia.");
-                return false;
-            }
-            if (idGrupo == null) {
-                System.err.println("[Asignaciones] No se encontró el grupo \"" + a.getGrupo() + "\" en tb_grupo.");
-                return false;
-            }
-            if (idCarrera == null) {
-                System.err.println("[Asignaciones] No se encontró la carrera \"" + a.getCarrera() + "\" en tb_carrera.");
-                return false;
-            }
- 
+
             try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
- 
+
                 ps.setString(1, a.getTipoSolicitante());
                 ps.setString(2, a.getNombreSolicitante());
-                ps.setInt(3, idMateria);
-                ps.setInt(4, idGrupo);
+                if (idMateria != null) ps.setInt(3, idMateria); else ps.setNull(3, Types.INTEGER);
+                if (idGrupo != null) ps.setInt(4, idGrupo); else ps.setNull(4, Types.INTEGER);
                 ps.setInt(5, Integer.parseInt(a.getNumAlumnos()));
                 ps.setDate(6, Date.valueOf(LocalDate.parse(a.getFecha(), FORMATO_FECHA_UI)));
                 ps.setTime(7, Time.valueOf(a.getHoraInicio() + ":00"));
                 ps.setTime(8, Time.valueOf(a.getHoraTermino() + ":00"));
                 ps.setString(9, a.getActividad());
                 ps.setString(10, "Asignado");
-                ps.setInt(11, idCarrera);
+                if (idCarrera != null) ps.setInt(11, idCarrera); else ps.setNull(11, Types.INTEGER);
                 ps.setInt(12, idUsuario);
                 ps.setInt(13, idEspacio);
  
@@ -485,35 +472,22 @@ public List<String> listarGruposPorCuatrimestre(int cuatrimestre) {
  
         try (Connection con = Conexion.conectar()) {
  
-            Integer idMateria = resolverIdMateria(con, a);
+                        Integer idMateria = resolverIdMateria(con, a);
             Integer idGrupo = resolverIdGrupo(con, a);
             Integer idCarrera = resolverIdCarrera(con, a);
- 
-            if (idMateria == null) {
-                System.err.println("[Asignaciones] No se encontró la materia \"" + a.getMateria() + "\" en tb_materia.");
-                return false;
-            }
-            if (idGrupo == null) {
-                System.err.println("[Asignaciones] No se encontró el grupo \"" + a.getGrupo() + "\" en tb_grupo.");
-                return false;
-            }
-            if (idCarrera == null) {
-                System.err.println("[Asignaciones] No se encontró la carrera \"" + a.getCarrera() + "\" en tb_carrera.");
-                return false;
-            }
- 
+
             try (PreparedStatement ps = con.prepareStatement(sql)) {
- 
+
                 ps.setString(1, a.getTipoSolicitante());
                 ps.setString(2, a.getNombreSolicitante());
-                ps.setInt(3, idMateria);
-                ps.setInt(4, idGrupo);
+                if (idMateria != null) ps.setInt(3, idMateria); else ps.setNull(3, Types.INTEGER);
+                if (idGrupo != null) ps.setInt(4, idGrupo); else ps.setNull(4, Types.INTEGER);
                 ps.setInt(5, Integer.parseInt(a.getNumAlumnos()));
                 ps.setDate(6, Date.valueOf(LocalDate.parse(a.getFecha(), FORMATO_FECHA_UI)));
                 ps.setTime(7, Time.valueOf(a.getHoraInicio() + ":00"));
                 ps.setTime(8, Time.valueOf(a.getHoraTermino() + ":00"));
                 ps.setString(9, a.getActividad());
-                ps.setInt(10, idCarrera);
+                if (idCarrera != null) ps.setInt(10, idCarrera); else ps.setNull(10, Types.INTEGER);
                 ps.setInt(11, idUsuario);
                 ps.setInt(12, idEspacio);
                 ps.setInt(13, idAsignacion);
