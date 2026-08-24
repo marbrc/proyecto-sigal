@@ -24,12 +24,12 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import mx.utng.dao.AsignacionDAO;
 import mx.utng.dao.EspacioDAO;
-import mx.utng.dao.MateriaDAO;
 import mx.utng.dao.GrupoDAO;
+import mx.utng.dao.MateriaDAO;
 import mx.utng.dao.UsuarioDAO;
 import mx.utng.model.EspacioRegistro;
-import mx.utng.model.Materia;
 import mx.utng.model.Grupo;
+import mx.utng.model.Materia;
 import mx.utng.model.Usuario;
 
 public class HorarioImportService {
@@ -206,13 +206,18 @@ public class HorarioImportService {
                 }
 
                 Integer idMateria = null;
-                if (!materia.isBlank()) {
-                    idMateria = catalogoMaterias.get(normalizar(materia));
-                    if (idMateria == null) {
-                        errores.add("Fila " + numeroFila + ", columna \"Materia\": \"" + materia
+
+                if (materia.isBlank()) {
+                    errores.add("Fila " + numeroFila + ", columna \"Materia\": está vacía.");
+                } else {
+                        idMateria = catalogoMaterias.get(normalizar(materia));
+
+                        if (idMateria == null) {
+                            errores.add("Fila " + numeroFila + ", columna \"Materia\": \"" + materia
                                 + "\" no existe en el catálogo de materias (revisa que esté escrito exactamente igual).");
-                    }
+                        }
                 }
+                
 
                 FilaHorario fila = new FilaHorario(
                         tipoEspacio,

@@ -100,7 +100,7 @@
                         </graphic>
                     </Button>
 
-                    <Button fx:id="navProfesores" contentDisplay="GRAPHIC_ONLY" maxWidth="Infinity" onAction="#onNavGenerico" styleClass="nav-item" text="Profesores">
+                    <Button fx:id="navProfesores" contentDisplay="GRAPHIC_ONLY" maxWidth="Infinity" onAction="#onNavGenerico" styleClass="nav-item" text="Personal">
                         <graphic>
                             <HBox alignment="CENTER_LEFT" spacing="12.0">
                                 <Group>

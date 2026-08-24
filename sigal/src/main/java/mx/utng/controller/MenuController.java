@@ -204,7 +204,7 @@ public class MenuController {
                 break;
             case "fx_profesores":
                 titulo = "Profesores";
-                descripcion = "Consulta y administra el catálogo de profesores";
+                descripcion = "Consulta y administra el catálogo del Personal";
                 break;
             case "fx_horarios":
                 titulo = "Horarios";
