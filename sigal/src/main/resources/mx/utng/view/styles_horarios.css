@@ -573,3 +573,9 @@
     -fx-text-fill: #1f6fd6;
     -fx-underline: true;
 }
+
+.week-label {
+    -fx-text-fill: #1f4f9d;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}

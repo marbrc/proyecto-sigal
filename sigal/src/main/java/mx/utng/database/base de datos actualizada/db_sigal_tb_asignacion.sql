@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `tb_asignacion`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_asignacion` (
   `ID_Asignacion` int(11) NOT NULL AUTO_INCREMENT,
-  `TipoUsuario` enum('Profesor','Administrativo','Alumno','Otro') NOT NULL,
+  `TipoUsuario` enum('Profesor','Administrativo','Alumno','Otro','Horario fijo')
   `NombreSolicitante` varchar(100) DEFAULT NULL,
   `ID_Materia` int(11) DEFAULT NULL,
   `NumAlumnos` int(11) DEFAULT NULL,

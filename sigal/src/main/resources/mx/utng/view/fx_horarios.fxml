@@ -54,6 +54,14 @@
 
     <Region minHeight="16.0" prefHeight="16.0" />
 
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+    <Label fx:id="lblSemanaActual"
+           styleClass="semana-actual"
+           text="Semana actual" />
+    </HBox>
+
+    <Region minHeight="10.0" prefHeight="10.0" />
+
     <!-- ==== LEYENDA + NUEVA ASIGNACIÓN ==== -->
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <Label styleClass="legend-title" text="Estado:" />

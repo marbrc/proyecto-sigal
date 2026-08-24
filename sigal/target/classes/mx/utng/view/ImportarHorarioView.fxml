@@ -60,8 +60,8 @@
     </HBox>
 
     <StackPane styleClass="info-box">
-        <Label text="Columnas: Tipo de espacio · Nombre del espacio · Día · Hora de inicio · Hora de término · Grupo"
-               wrapText="true" styleClass="info-box-text"/>
+        <Label text="Columnas: Tipo de espacio · Nombre del espacio · Día · Hora de inicio · Hora de término · Grupo · Materia" 
+            wrapText="true" styleClass="info-box-text"/>
     </StackPane>
 
     <Region minHeight="12"/>

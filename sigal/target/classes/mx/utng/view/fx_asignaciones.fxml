@@ -66,7 +66,7 @@
 
     <!-- Fila 2: Carrera, Cuatrimestre, Materia, Grupo, Alumnos -->
     <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-        <Label styleClass="field-label" text="Carrera *" />
+        <Label styleClass="field-label" text="Carrera " />
         <ComboBox fx:id="cmbCarrera" maxWidth="Infinity" promptText="Seleccionar carrera" styleClass="field-combo" />
     </VBox>
     <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -74,12 +74,12 @@
         <ComboBox fx:id="cmbCuatrimestre" maxWidth="Infinity" promptText="Cuatri" styleClass="field-combo" />
     </VBox>
     <VBox spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-    <Label styleClass="field-label" text="Materia *" />
+    <Label styleClass="field-label" text="Materia " />
     <ComboBox fx:id="cmbMateria" maxWidth="Infinity" promptText="Elige carrera y cuatrimestre" styleClass="field-combo" />
 </VBox>
 
     <VBox spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
-        <Label styleClass="field-label" text="Grupo *" />
+        <Label styleClass="field-label" text="Grupo " />
         <ComboBox fx:id="cmbGrupo" maxWidth="Infinity" promptText="Seleccionar grupo" styleClass="field-combo" />
     </VBox>
     <VBox spacing="3.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
