@@ -1,23 +1,32 @@
 package mx.utng.controller;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import mx.utng.dao.AsignacionDAO;
 import mx.utng.dao.ConsultaDAO;
 import mx.utng.model.Consultas;
+import mx.utng.model.Reporte;
+import mx.utng.util.ReporteExportador;
+
 
 /**
  * Controller de fx_consultas.fxml.
@@ -276,14 +285,98 @@ private void limpiar() {
     // =========================================================
     // TODO: todavía no exporta de verdad a Excel/PDF. Cuando me
     // digas en qué formato lo quieres, lo conectamos aquí.
-    @FXML
-    private void onExportar() {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+@FXML
+private void onExportar() {
+
+    if (tblResultados.getItems() == null || tblResultados.getItems().isEmpty()) {
+        Alert alerta = new Alert(Alert.AlertType.WARNING);
         alerta.setHeaderText(null);
-        alerta.setContentText("La exportación todavía no está conectada. Dime en qué formato "
-                + "quieres exportar (Excel, PDF, CSV) y lo agregamos.");
+        alerta.setContentText("No hay datos para exportar.");
         alerta.showAndWait();
+        return;
     }
+
+    List<String> opciones = List.of("PDF", "Excel", "Word");
+
+    ChoiceDialog<String> dialogo = new ChoiceDialog<>("PDF", opciones);
+    dialogo.setTitle("Exportar reporte");
+    dialogo.setHeaderText(null);
+    dialogo.setContentText("Selecciona el formato de exportación:");
+
+    Optional<String> resultado = dialogo.showAndWait();
+    if (resultado.isEmpty()) {
+        return;
+    }
+
+    String formato = resultado.get();
+
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setInitialFileName("reporte_ocupacion");
+
+    switch (formato) {
+        case "PDF" -> fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Archivo PDF", "*.pdf"));
+        case "Excel" -> fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Libro de Excel", "*.xlsx"));
+        case "Word" -> fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Documento de Word", "*.docx"));
+    }
+
+    Stage stage = (Stage) btnExportar.getScene().getWindow();
+    File destino = fileChooser.showSaveDialog(stage);
+    if (destino == null) {
+        return;
+    }
+
+    try {
+        String rangoTexto = "Desde: "
+                + (dtDesde.getValue() == null ? "-" : dtDesde.getValue().format(FORMATO_FECHA))
+                + " Hasta: "
+                + (dtHasta.getValue() == null ? "-" : dtHasta.getValue().format(FORMATO_FECHA));
+
+        ObservableList<Reporte> datos = convertirAReporte(tblResultados.getItems());
+
+        switch (formato) {
+            case "PDF" -> ReporteExportador.exportarPDF(null, datos, rangoTexto, destino);
+            case "Excel" -> ReporteExportador.exportarExcel(null, datos, rangoTexto, destino);
+            case "Word" -> ReporteExportador.exportarWord(null, datos, rangoTexto, destino);
+        }
+
+        Alert exito = new Alert(Alert.AlertType.INFORMATION);
+        exito.setHeaderText(null);
+        exito.setContentText("Reporte exportado correctamente en formato " + formato + ".");
+        exito.showAndWait();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        Alert error = new Alert(Alert.AlertType.ERROR);
+        error.setHeaderText(null);
+        error.setContentText("Ocurrió un error al exportar el reporte: " + e.getMessage());
+        error.showAndWait();
+    }
+}
+
+private ObservableList<Reporte> convertirAReporte(ObservableList<Consultas> datos) {
+    ObservableList<Reporte> convertido = FXCollections.observableArrayList();
+
+    for (Consultas c : datos) {
+        Reporte r = new Reporte(
+        "",
+        c.getHorario(),
+        c.getEspacio(),
+        c.getSolicitante(),
+        c.getGrupo(),
+        c.getEstado(),
+        c.getMotivo(),
+        c.getCarrera(),
+        c.getMateria()
+);
+convertido.add(r);
+    }
+
+    return convertido;
+}
+
 
     // =========================================================
     // UTILIDADES
