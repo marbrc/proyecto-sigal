@@ -65,6 +65,7 @@ public class HorarioController implements javafx.fxml.Initializable {
     @FXML private Button btnImportarHorario;
     @FXML private ScrollPane scrollHorario;
     @FXML private VBox contenedorGrid;
+    @FXML private Label lblSemanaActual;
     private MenuController menuController;
 
     
@@ -383,6 +384,7 @@ public class HorarioController implements javafx.fxml.Initializable {
         }
     }
     private void renderizar() {
+        actualizarLabelSemana();
         contenedorGrid.getChildren().clear();
         celdas.clear();
         celdaAsignacion.clear();
@@ -401,6 +403,49 @@ public class HorarioController implements javafx.fxml.Initializable {
         renderizarGrid(
                 diasVisibles
         );
+    }
+    /**
+     * Calcula la semana (lunes a sábado) correspondiente a la fecha
+     * seleccionada y actualiza el rótulo "Semana actual" del encabezado
+     * para que siempre refleje, en tiempo real, qué semana se está
+     * mostrando en la pantalla.
+     */
+    private void actualizarLabelSemana() {
+        if (lblSemanaActual == null) {
+            return;
+        }
+        LocalDate lunes = lunesDeLaSemana();
+        LocalDate sabado = lunes.plusDays(5);
+        LocalDate hoy = LocalDate.now();
+        boolean esLaSemanaDeHoy =
+                !hoy.isBefore(lunes) && !hoy.isAfter(sabado);
+        String prefijo = esLaSemanaDeHoy ? "Semana actual: del " : "Semana del ";
+        lblSemanaActual.setText(prefijo + formatoRangoSemana(lunes, sabado));
+    }
+    private String formatoRangoSemana(
+            LocalDate inicio,
+            LocalDate fin) {
+        String mesInicio = nombreMesMinuscula(inicio);
+        String mesFin = nombreMesMinuscula(fin);
+        if (inicio.getYear() != fin.getYear()) {
+            return inicio.getDayOfMonth() + " de " + mesInicio + " de " + inicio.getYear()
+                    + " al " + fin.getDayOfMonth() + " de " + mesFin + " de " + fin.getYear();
+        }
+        if (inicio.getMonth() != fin.getMonth()) {
+            return inicio.getDayOfMonth() + " de " + mesInicio
+                    + " al " + fin.getDayOfMonth() + " de " + mesFin + " de " + fin.getYear();
+        }
+        return inicio.getDayOfMonth() + " al " + fin.getDayOfMonth()
+                + " de " + mesFin + " de " + fin.getYear();
+    }
+    private String nombreMesMinuscula(LocalDate fecha) {
+        return fecha.getMonth()
+                .getDisplayName(TextStyle.FULL, new Locale("es", "MX"));
+    }
+    private String nombreMesCortoEs(LocalDate fecha) {
+        String mes = fecha.getMonth()
+                .getDisplayName(TextStyle.SHORT, new Locale("es", "MX"));
+        return mes.endsWith(".") ? mes.substring(0, mes.length() - 1) : mes;
     }
     private List<String> diaSeleccionadoParaVistaDiaria() {
         LocalDate fecha =
@@ -636,9 +681,16 @@ public class HorarioController implements javafx.fxml.Initializable {
         for (int i = 0;
                 i < dias.size();
                 i++) {
+            String diaNombre = dias.get(i);
+            LocalDate fechaDia = fechaParaDia(diaNombre);
+            String textoEncabezado =
+                    fechaDia == null
+                            ? diaNombre
+                            : diaNombre + "\n" + fechaDia.getDayOfMonth()
+                                    + " " + nombreMesCortoEs(fechaDia);
             grid.add(
                     celdaEncabezado(
-                            dias.get(i)
+                            textoEncabezado
                     ),
                     i + 1,
                     fila
@@ -722,6 +774,10 @@ public class HorarioController implements javafx.fxml.Initializable {
         l.setAlignment(
                 Pos.CENTER
         );
+        l.setTextAlignment(
+                javafx.scene.text.TextAlignment.CENTER
+        );
+        l.setWrapText(true);
         return l;
     }
     private void alturaEncabezado(

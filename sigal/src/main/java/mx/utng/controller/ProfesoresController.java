@@ -1,3 +1,4 @@
+
 package mx.utng.controller;
 
 import java.net.URL;
@@ -73,6 +74,10 @@ public class ProfesoresController implements Initializable {
 
     private Map<String, Integer> mapaUsuarios = new LinkedHashMap<>();
 
+    // Referencia al menú, para saber qué usuario tiene la sesión iniciada
+    // y así permitir vincular solo ese usuario al personal.
+    private MenuController menuController;
+
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 
     private static final String[] ROLES = {
@@ -107,12 +112,52 @@ public class ProfesoresController implements Initializable {
         configurarTabla();
         configurarFiltros();
 
+        cmbUsuario.valueProperty().addListener((obs, oldV, newV) -> validarUsuarioVinculado(newV));
+
         actualizarContador();
     }
 
     private void cargarUsuariosDisponibles() {
         mapaUsuarios = profesorDAO.listarUsuariosParaVincular();
         cmbUsuario.setItems(FXCollections.observableArrayList(mapaUsuarios.keySet()));
+    }
+
+    /**
+     * Recibe la referencia al MenuController (llamado desde MenuController.cargarModulo())
+     * para poder saber, mediante getIdUsuarioActual(), cuál es el usuario en sesión y así
+     * restringir a qué usuario se puede vincular el personal.
+     */
+    public void setMenuController(MenuController menuController) {
+        this.menuController = menuController;
+    }
+
+    /**
+     * Busca en mapaUsuarios el texto del combo ("usuario — Nombre (Rol)") que
+     * corresponde al usuario en sesión.
+     */
+    private String obtenerTextoUsuarioSesion() {
+        if (menuController == null) return null;
+        int idSesion = menuController.getIdUsuarioActual();
+        return mapaUsuarios.entrySet().stream()
+                .filter(entry -> entry.getValue() == idSesion)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Si el usuario seleccionado en el combo no es el usuario en sesión,
+     * muestra una advertencia. onGuardar() vuelve a validar esto antes de
+     * guardar, para que no se pueda registrar personal vinculado a otro usuario.
+     */
+    private void validarUsuarioVinculado(String seleccionado) {
+        if (menuController == null || seleccionado == null) return;
+        Integer idSeleccionado = mapaUsuarios.get(seleccionado);
+        if (idSeleccionado != null && idSeleccionado != menuController.getIdUsuarioActual()) {
+            mostrarAlerta(AlertType.WARNING, "Usuario no permitido",
+                    "Solo puedes vincular tu propio usuario al personal. "
+                            + "Selecciona tu usuario para poder guardar.");
+        }
     }
 
     private void cargarDatosIniciales() {
@@ -203,6 +248,12 @@ public class ProfesoresController implements Initializable {
         if (idUsuario == null) {
             mostrarAlerta(AlertType.ERROR, "Usuario no válido",
                     "El usuario seleccionado ya no está disponible. Actualiza la lista e inténtalo de nuevo.");
+            return;
+        }
+
+        if (menuController != null && idUsuario != menuController.getIdUsuarioActual()) {
+            mostrarAlerta(AlertType.WARNING, "Usuario no permitido",
+                    "Solo puedes vincular tu propio usuario al personal. No se puede guardar.");
             return;
         }
 

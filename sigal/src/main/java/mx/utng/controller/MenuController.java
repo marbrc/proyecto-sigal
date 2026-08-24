@@ -1,3 +1,4 @@
+
 package mx.utng.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -203,10 +204,10 @@ public class MenuController {
                 descripcion = "Administra los espacios disponibles en el Edificio F";
                 break;
             case "fx_profesores":
-                titulo = "Profesores";
-                descripcion = "Consulta y administra el catálogo del Personal";
+                titulo = "Personal";
+                descripcion = "Cosulta y administra el catálogo del personal ";
                 break;
-            case "fx_horarios":
+                        case "fx_horarios":
                 titulo = "Horarios";
                 descripcion = "Visualiza y organiza los horarios por espacio";
                 break;
@@ -636,6 +637,8 @@ public class MenuController {
                 carrerasController.setMenuController(this);
             } else if (controlador instanceof AreaAcademicaController areaAcademicaController) {
                 areaAcademicaController.setMenuController(this);
+            } else if (controlador instanceof ProfesoresController profesoresController) {
+                profesoresController.setMenuController(this);
             } else if (controlador instanceof PlaceholderController placeholderController) {
                 placeholderController.configurar(nombreFxml, this);
             }

@@ -285,6 +285,17 @@
     -fx-alignment: CENTER;
     -fx-border-color: #d2deef;
     -fx-border-width: 0 1 1 0;
+    -fx-line-spacing: 2;
+}
+
+/* =========================================================
+   RÓTULO "SEMANA ACTUAL" (arriba de la tabla)
+   ========================================================= */
+
+.semana-actual {
+    -fx-text-fill: #2165ad;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
 }
 
 /* =========================================================

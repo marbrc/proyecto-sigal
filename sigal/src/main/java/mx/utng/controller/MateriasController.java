@@ -119,6 +119,8 @@ public class MateriasController implements Initializable {
         cargarCarrerasDisponibles();
         cargarProfesoresDisponibles();
 
+        configurarFiltroMateriaPorCarreraYCuatrimestre();
+
         cmbFiltroCarrera.getItems().add("Todas las carreras");
         cmbFiltroCarrera.getItems().addAll(mapaCarreras.keySet());
         cmbFiltroCarrera.setValue("Todas las carreras");
@@ -136,17 +138,66 @@ public class MateriasController implements Initializable {
 
     private void cargarMateriasDisponibles() {
         Map<String, Integer> mapa = new LinkedHashMap<>();
+
         for (Materia m : materiaDAO.listarMaterias()) {
             mapa.put(m.getNombre(), m.getIdMateria());
         }
+
         mapaMaterias = mapa;
-        cmbMateria.setItems(FXCollections.observableArrayList(mapaMaterias.keySet()));
+
+        cmbMateria.getItems().clear();
+        cmbMateria.setValue(null);
     }
 
     private void cargarCarrerasDisponibles() {
         mapaCarreras = carreraDAO.listarCarrerasParaVincular();
         cmbCarrera.setItems(FXCollections.observableArrayList(mapaCarreras.keySet()));
     }
+    
+    private void actualizarMateriasFiltradas() {
+
+    String carreraSeleccionada = cmbCarrera.getValue();
+    Integer cuatrimestreSeleccionado = cmbCuatrimestre.getValue();
+
+    // Mientras no estén seleccionados ambos filtros,
+    // no mostramos materias.
+    if (carreraSeleccionada == null || cuatrimestreSeleccionado == null) {
+        cmbMateria.getItems().clear();
+        cmbMateria.setValue(null);
+        return;
+    }
+
+    Integer idCarrera = mapaCarreras.get(carreraSeleccionada);
+
+    if (idCarrera == null) {
+        cmbMateria.getItems().clear();
+        cmbMateria.setValue(null);
+        return;
+    }
+
+    ObservableList<String> materiasFiltradas = FXCollections.observableArrayList();
+
+    for (MateriaCarrera mc : materiaCarreraDAO.filtrar(idCarrera, cuatrimestreSeleccionado)) {
+
+        if (mc.getNombreMateria() != null) {
+            materiasFiltradas.add(mc.getNombreMateria());
+        }
+    }
+
+    cmbMateria.setItems(materiasFiltradas);
+    cmbMateria.setValue(null);
+}
+
+    private void configurarFiltroMateriaPorCarreraYCuatrimestre() {
+
+    cmbCarrera.valueProperty().addListener((obs, anterior, nuevo) -> {
+        actualizarMateriasFiltradas();
+    });
+
+    cmbCuatrimestre.valueProperty().addListener((obs, anterior, nuevo) -> {
+        actualizarMateriasFiltradas();
+    });
+}
 
     private void cargarProfesoresDisponibles() {
         mapaProfesores = materiaCarreraDAO.listarProfesoresParaVincular();
